@@ -1,4 +1,4 @@
-package nl.bd.eindopdrachtjava.models.entityModels;
+package nl.bd.eindopdrachtjava.models.entities;
 
 import lombok.*;
 

@@ -1,6 +1,6 @@
 package nl.bd.eindopdrachtjava.repositories;
 
-import nl.bd.eindopdrachtjava.models.entityModels.Artist;
+import nl.bd.eindopdrachtjava.models.entities.Artist;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface ArtistRepository extends JpaRepository<Artist, Long> {

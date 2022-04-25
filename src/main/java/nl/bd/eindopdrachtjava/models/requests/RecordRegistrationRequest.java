@@ -2,8 +2,10 @@ package nl.bd.eindopdrachtjava.models.requests;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import nl.bd.eindopdrachtjava.models.entityModels.Artist;
 
+/**
+ * Wrapper class to easily hand 9 variables to the registerRecord method.
+ */
 @AllArgsConstructor
 @Getter
 public class RecordRegistrationRequest {

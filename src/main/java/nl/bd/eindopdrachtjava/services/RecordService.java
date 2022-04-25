@@ -1,7 +1,7 @@
 package nl.bd.eindopdrachtjava.services;
 
 import lombok.AllArgsConstructor;
-import nl.bd.eindopdrachtjava.models.entityModels.Record;
+import nl.bd.eindopdrachtjava.models.entities.Record;
 import nl.bd.eindopdrachtjava.models.requests.RecordRegistrationRequest;
 import nl.bd.eindopdrachtjava.repositories.ArtistRepository;
 import nl.bd.eindopdrachtjava.repositories.RecordRepository;
@@ -48,7 +48,7 @@ public class RecordService {
 
     /**
      * Method to register a new record using the builder design pattern to make it easier to see what is actually
-     * happening. I'm also using a wrapper class when registering the record so that I dont have to pass this method 9
+     * happening. I'm also using a wrapper class when registering the record so that I don't have to pass this method 9
      * different variables.
      */
     public Record registerRecord(RecordRegistrationRequest recordRegistrationRequest){
@@ -66,4 +66,21 @@ public class RecordService {
         return recordRepository.save(record);
     }
 
+    public Record updateRecord(Record newRecord, RecordRegistrationRequest recordRegistrationRequest, Long recordId){
+        return recordRepository.findById(recordId).map(record -> {
+            record.setArtist(artistRepository.findArtistByArtistName(recordRegistrationRequest.getArtistName()));
+            record.setTitle(recordRegistrationRequest.getTitle());
+            record.setGenre(recordRegistrationRequest.getGenre());
+            record.setLabel(recordRegistrationRequest.getLabel());
+            record.setColor(recordRegistrationRequest.getColor());
+            record.setYear(recordRegistrationRequest.getYear());
+            record.setCountry(recordRegistrationRequest.getCountry());
+            record.setShaped(recordRegistrationRequest.isShaped());
+            record.setPicturedisk(recordRegistrationRequest.isPicturedisk());
+            return recordRepository.save(record);
+        }).orElseGet(() -> {
+            newRecord.setRecordId(recordId);
+            return recordRepository.save(newRecord);
+        });
+    }
 }
