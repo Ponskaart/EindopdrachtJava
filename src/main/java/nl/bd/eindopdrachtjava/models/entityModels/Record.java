@@ -36,7 +36,9 @@ public class Record {
      * changing the column name, or making the contents non-nullable.
      */
     @Column
-    private String artist;
+    @ManyToOne
+    @JoinColumn(name = "artist_Id")
+    private Artist artist;
 
     @Column
     private String title;

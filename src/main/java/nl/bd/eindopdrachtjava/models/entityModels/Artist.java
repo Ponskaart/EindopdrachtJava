@@ -1,11 +1,15 @@
 package nl.bd.eindopdrachtjava.models.entityModels;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+
+import java.util.HashSet;
+import java.util.Set;
 
 import static javax.persistence.GenerationType.IDENTITY;
 
@@ -24,4 +28,14 @@ public class Artist {
     @Column
     private String artistName;
 
+    @Column
+    private int established;
+
+    /**
+     * The @JsonIgnore annotation is used to prevent a recursive loop when the relationship between artist and record is
+     * accessed in the api.
+     */
+    @JsonIgnore
+    @OneToMany(mappedBy = "artist")
+    private Set<Record> records = new HashSet<>();
 }
