@@ -40,6 +40,13 @@ public class RecordService {
     }
 
     /**
+     * Returns a list of records with a specific genre
+     */
+    public List<Record> getRecordsByGenre(){
+        return recordRepository.findRecordByGenre();
+    }
+
+    /**
      * Method to register a new record using the builder design pattern to make it easier to see what is actually
      * happening. I'm also using a wrapper class when registering the record so that I dont have to pass this method 9
      * different variables.

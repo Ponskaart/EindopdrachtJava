@@ -7,5 +7,6 @@ import java.util.List;
 
 public interface RecordRepository extends JpaRepository<Record, Long> {
     List<Record> findRecordByArtist();
+    List<Record> findRecordByGenre();
     Record findRecordByTitle();
 }
