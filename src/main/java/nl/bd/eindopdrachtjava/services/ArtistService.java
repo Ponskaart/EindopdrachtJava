@@ -19,5 +19,11 @@ public class ArtistService {
     public List<Artist> getAllArtists() {
         return artistRepository.findAll();
     }
-    
+
+    /**
+     * Method that retrieves al artists in a specific year.
+     */
+    public List<Artist> getArtistsByYearEstablished(int year) {
+        return artistRepository.findArtistByEstablished(year);
+    }
 }
