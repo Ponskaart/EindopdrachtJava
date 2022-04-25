@@ -19,10 +19,24 @@ public class RecordService {
     private ArtistRepository artistRepository;
 
     /**
-     *Method retrieves all Record entities from the database and returns them as a list.
+     * Method retrieves all Record entities from the database and returns them as a list.
      */
     public List<Record> getAllRecords() {
         return recordRepository.findAll();
+    }
+
+    /**
+     * Returns all records of a specific artist
+     */
+    public List<Record> getRecordsByArtist(){
+        return recordRepository.findRecordByArtist();
+    }
+
+    /**
+     * Returns a record with a specific title
+     */
+    public Record getRecordByTitle(){
+        return recordRepository.findRecordByTitle();
     }
 
     /**

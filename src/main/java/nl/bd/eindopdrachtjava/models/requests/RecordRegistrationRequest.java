@@ -18,5 +18,3 @@ public class RecordRegistrationRequest {
     private final boolean isShaped;
     private final boolean isPicturedisk;
 }
-
-
