@@ -86,4 +86,11 @@ public class RecordService {
             return recordRepository.save(newRecord);
         });
     }
+
+    /**
+     * Deletes a record with a specific id
+     */
+    public void deleteRecord(Long recordId){
+        recordRepository.deleteById(recordId);
+    }
 }
