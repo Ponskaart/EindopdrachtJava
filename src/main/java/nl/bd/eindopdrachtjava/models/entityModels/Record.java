@@ -1,9 +1,6 @@
 package nl.bd.eindopdrachtjava.models.entityModels;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 
@@ -12,7 +9,8 @@ import static javax.persistence.GenerationType.IDENTITY;
 /**
  * Lombok annotations reduce the amount of boilerplate code needed to run the application, here we make lombok generate
  * our getters, setters and constructors with the @AllArgsConstructor, @Getter and @Setter annotations. I also use
- * the @NoArgsConstructor annotation to generate a default constructor which requires no arguments.
+ * the @NoArgsConstructor annotation to generate a default constructor which requires no arguments. Using the @Builder
+ * annotation I am able to easily create a builder design pattern.
  */
 @AllArgsConstructor
 @NoArgsConstructor
@@ -20,6 +18,7 @@ import static javax.persistence.GenerationType.IDENTITY;
 @Setter
 @Entity
 @Table
+@Builder
 public class Record {
     /**
      * Marking recordId with @Id annotation to generate a primary key for the database. The IDENTITY strategy in
