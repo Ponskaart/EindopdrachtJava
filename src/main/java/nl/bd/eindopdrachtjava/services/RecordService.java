@@ -66,6 +66,9 @@ public class RecordService {
         return recordRepository.save(record);
     }
 
+    /**
+     * Updates a Record with new data, creates new record if record id does not exist.
+     */
     public Record updateRecord(Record newRecord, RecordRegistrationRequest recordRegistrationRequest, Long recordId){
         return recordRepository.findById(recordId).map(record -> {
             record.setArtist(artistRepository.findArtistByArtistName(recordRegistrationRequest.getArtistName()));
