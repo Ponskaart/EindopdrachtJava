@@ -14,9 +14,8 @@ public class ArtistService {
     private ArtistRepository artistRepository;
 
     /**
-     * Method to register a new record using the builder design pattern to make it easier to see what is actually
-     * happening. I'm also using a wrapper class when registering the record so that I don't have to pass this method 9
-     * different variables.
+     * Method to register a new artist using the builder design pattern to make it easier to see what is actually
+     * happening.
      */
     public Artist registerArtist(ArtistRegistrationRequest artistRegistrationRequest){
         Artist artist = Artist.builder()
@@ -38,6 +37,14 @@ public class ArtistService {
      */
     public List<Artist> getArtistsByYearEstablished(int established) {
         return artistRepository.findArtistByEstablished(established);
+    }
+
+    public Artist getArtistByArtistId(Long artistId){
+        return artistRepository.findById(artistId).get();
+    }
+
+    public Artist getArtistByArtistName(String artistName){
+        return artistRepository.findArtistByArtistName(artistName);
     }
 
     /**

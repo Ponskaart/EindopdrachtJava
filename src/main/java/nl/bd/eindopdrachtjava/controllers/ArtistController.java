@@ -37,6 +37,16 @@ public class ArtistController {
         return artistService.getArtistsByYearEstablished(established);
     }
 
-//    TODO add method to search for artist by name.
-//    TODO add method to search for artist by Id.
+    /**
+     * Method shows an artist with a specific Id.
+     */
+    @GetMapping("/artist/{artistId}")
+    public Artist getArtistByArtistId(@PathVariable Long artistId){
+        return artistService.getArtistByArtistId(artistId);
+    }
+
+    @GetMapping("artist/{artistName}")
+    public Artist getArtistByArtistName(@PathVariable String artistName){
+        return artistService.getArtistByArtistName(artistName);
+    }
 }
