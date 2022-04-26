@@ -15,12 +15,16 @@ import java.util.List;
 @Service
 @AllArgsConstructor
 public class RecordService {
-//    TODO make repo's final.
-    private RecordRepository recordRepository;
-    private ArtistRepository artistRepository;
 
-//    TODO add method that searches for records by Id.
+    private final RecordRepository recordRepository;
+    private final ArtistRepository artistRepository;
 
+    /**
+     * Searches for record with specific Id.
+     */
+    public Record getRecordById(Long recordId){
+        return recordRepository.findById(recordId).get();
+    }
     /**
      * Method retrieves all Record entities from the database and returns them as a list.
      */
@@ -31,22 +35,22 @@ public class RecordService {
     /**
      * Returns all records of a specific artist
      */
-    public List<Record> getRecordsByArtist(){
-        return recordRepository.findRecordByArtist();
+    public List<Record> getRecordsByArtist(Long artistId){
+        return recordRepository.findByArtistId(artistId);
     }
 
     /**
      * Returns a record with a specific title
      */
-    public Record getRecordByTitle(){
-        return recordRepository.findRecordByTitle();
+    public Record getRecordByTitle(String title){
+        return recordRepository.findRecordByTitle(title);
     }
 
     /**
      * Returns a list of records with a specific genre
      */
-    public List<Record> getRecordsByGenre(){
-        return recordRepository.findRecordByGenre();
+    public List<Record> getRecordsByGenre(String genre){
+        return recordRepository.findRecordByGenre(genre);
     }
 
     /**
