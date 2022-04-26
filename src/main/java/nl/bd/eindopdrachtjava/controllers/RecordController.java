@@ -29,6 +29,38 @@ public class RecordController {
     }
 
     /**
+     * Shows all records of a specific artist.
+     * */
+    @GetMapping("/record/{artistId}")
+    public List<Record> getRecordsByArtist(@PathVariable Long artistId){
+        return recordService.getRecordsByArtist(artistId);
+    }
+
+    /**
+     * Shows record with specific Id.
+     */
+    @GetMapping("/record/{recordId}")
+    public Record getRecordById(@PathVariable Long recordId){
+        return recordService.getRecordById(recordId);
+    }
+
+    /**
+     * Shows record with specific title.
+     */
+    @GetMapping("/record/{title}")
+    public Record getRecordByTitle(@PathVariable String title){
+        return recordService.getRecordByTitle(title);
+    }
+
+    /**
+     * Shows all records with a specific genre.
+     * */
+    @GetMapping("/record/{genre}")
+    public List<Record> getRecordsByGenre(@PathVariable String genre){
+        return recordService.getRecordsByGenre(genre);
+    }
+
+    /**
      * Endpoint uses data provided by the user in the recordRegistrationRequest to fill a new Record entiry and saves it
      * in the database.
      */
@@ -53,9 +85,4 @@ public class RecordController {
     public void deleteRecord(@PathVariable Long recordId){
         recordService.deleteRecord(recordId);
     }
-
-//    TODO add method to search for record by title.
-//    TODO add method to search for record by Id.
-//    TODO add method to show all records of a specific genre.
-//    TODO add method to shows all records from a specific artist.
 }
