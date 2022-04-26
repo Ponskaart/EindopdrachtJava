@@ -15,6 +15,7 @@ import java.util.List;
 @Service
 @AllArgsConstructor
 public class RecordService {
+//    TODO make repo's final
     private RecordRepository recordRepository;
     private ArtistRepository artistRepository;
 
