@@ -8,6 +8,9 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+/**
+ * Service layer with methods to facilitate CRUD operations
+ */
 @Service
 @AllArgsConstructor
 public class ArtistService {
@@ -39,16 +42,22 @@ public class ArtistService {
         return artistRepository.findArtistByEstablished(established);
     }
 
+    /**
+     * Method searches repo for artist by Id.
+     */
     public Artist getArtistByArtistId(Long artistId){
         return artistRepository.findById(artistId).get();
     }
 
+    /**
+     * Method searches repo for artist by name.
+     */
     public Artist getArtistByArtistName(String artistName){
         return artistRepository.findArtistByArtistName(artistName);
     }
 
     /**
-     * Deletes an Arist with a specific id
+     * Deletes an Arist with a specific Id.
      */
     public void deleteArtist(Long artistId){
         artistRepository.deleteById(artistId);
