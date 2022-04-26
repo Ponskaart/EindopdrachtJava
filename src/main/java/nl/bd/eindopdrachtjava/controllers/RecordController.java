@@ -61,7 +61,7 @@ public class RecordController {
     }
 
     /**
-     * Endpoint uses data provided by the user in the recordRegistrationRequest to fill a new Record entiry and saves it
+     * Endpoint uses data provided by the user in the recordRegistrationRequest to fill a new Record entity and saves it
      * in the database.
      */
     @PostMapping("/record")
