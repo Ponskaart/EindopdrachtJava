@@ -1,4 +1,4 @@
-package nl.bd.eindopdrachtjava.models.entityModels;
+package nl.bd.eindopdrachtjava.models.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
@@ -12,7 +12,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 import static javax.persistence.GenerationType.IDENTITY;
-
 
 @AllArgsConstructor
 @NoArgsConstructor
