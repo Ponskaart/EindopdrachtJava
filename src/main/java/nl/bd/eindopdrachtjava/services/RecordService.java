@@ -15,9 +15,11 @@ import java.util.List;
 @Service
 @AllArgsConstructor
 public class RecordService {
-//    TODO make repo's final
+//    TODO make repo's final.
     private RecordRepository recordRepository;
     private ArtistRepository artistRepository;
+
+//    TODO add method that searches for records by Id.
 
     /**
      * Method retrieves all Record entities from the database and returns them as a list.

@@ -53,4 +53,9 @@ public class RecordController {
     public void deleteRecord(@PathVariable Long recordId){
         recordService.deleteRecord(recordId);
     }
+
+//    TODO add method to search for record by title.
+//    TODO add method to search for record by Id.
+//    TODO add method to show all records of a specific genre.
+//    TODO add method to shows all records from a specific artist.
 }
