@@ -1,10 +1,7 @@
 package nl.bd.eindopdrachtjava.models.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 
@@ -19,6 +16,7 @@ import static javax.persistence.GenerationType.IDENTITY;
 @Setter
 @Entity
 @Table
+@Builder
 public class Artist {
     @Id
     @GeneratedValue(strategy = IDENTITY)

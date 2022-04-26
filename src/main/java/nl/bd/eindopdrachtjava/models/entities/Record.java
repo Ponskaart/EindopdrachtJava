@@ -34,7 +34,7 @@ public class Record {
      * Should I at a later date want to change the specifications of a specific column, I can do it easily. For example
      * changing the column name, or making the contents non-nullable.
      */
-    @Column
+
     @ManyToOne
     @JoinColumn(name = "artist_Id")
     private Artist artist;
