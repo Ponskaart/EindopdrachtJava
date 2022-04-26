@@ -2,12 +2,10 @@ package nl.bd.eindopdrachtjava.controllers;
 
 import lombok.AllArgsConstructor;
 import nl.bd.eindopdrachtjava.models.entities.Artist;
+import nl.bd.eindopdrachtjava.models.requests.ArtistRegistrationRequest;
 import nl.bd.eindopdrachtjava.repositories.ArtistRepository;
 import nl.bd.eindopdrachtjava.services.ArtistService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -17,6 +15,11 @@ import java.util.List;
 public class ArtistController {
     private final ArtistRepository artistRepository;
     private final ArtistService artistService;
+
+    @PostMapping("artist")
+    public Artist registerArtist(@RequestBody ArtistRegistrationRequest artistRegistrationRequest){
+        return artistService.registerArtist(artistRegistrationRequest);
+    }
 
     /**
      * Method shows all registered artists.
