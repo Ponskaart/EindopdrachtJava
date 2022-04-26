@@ -36,7 +36,9 @@ public class Record {
      */
 
     @ManyToOne
-    @JoinColumn(name = "artist_Id")
+    @JoinColumn
+            (name = "artist_Id",
+                    referencedColumnName = "artist_Id")
     private Artist artist;
 
     @Column

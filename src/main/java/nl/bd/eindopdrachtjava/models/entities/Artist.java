@@ -20,6 +20,10 @@ import static javax.persistence.GenerationType.IDENTITY;
 public class Artist {
     @Id
     @GeneratedValue(strategy = IDENTITY)
+    @Column(
+            name = "artist_Id",
+            updatable = false
+    )
     private Long artistId;
 
     @Column

@@ -26,13 +26,13 @@ public class RecordController {
         return recordService.getAllRecords();
     }
 
-//    /**
-//     * Shows all records of a specific artist.
-//     * */
-//    @GetMapping("/record/{artistId}")
-//    public List<Record> getRecordsByArtist(@PathVariable Long artistId){
-//        return recordService.getRecordsByArtist(artistId);
-//    }
+    /**
+     * Shows all records of a specific artist.
+     * */
+    @GetMapping("/record/{artistId}")
+    public List<Record> getRecordsByArtist(@PathVariable Long artistId){
+        return recordService.getRecordsByArtist(artistId);
+    }
 
     /**
      * Shows record with specific Id.

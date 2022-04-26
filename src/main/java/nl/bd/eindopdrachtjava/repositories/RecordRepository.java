@@ -14,7 +14,7 @@ public interface RecordRepository extends JpaRepository<Record, Long> {
      */
 //    TODO change queries to proper queries.
 //    TODO fix finding artist by Id query.
-//    List<Record> findByArtistId(Long artistId);
+    List<Record> findByArtistArtistId(Long artistId);
     List<Record> findRecordByGenre(String genre);
     Record findRecordByTitle(String title);
 }
