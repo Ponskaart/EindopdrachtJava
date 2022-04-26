@@ -2,7 +2,6 @@ package nl.bd.eindopdrachtjava.controllers;
 
 import lombok.AllArgsConstructor;
 import nl.bd.eindopdrachtjava.models.requests.RecordRegistrationRequest;
-import nl.bd.eindopdrachtjava.repositories.RecordRepository;
 import nl.bd.eindopdrachtjava.services.RecordService;
 import nl.bd.eindopdrachtjava.models.entities.Record;
 import org.springframework.web.bind.annotation.*;
@@ -16,7 +15,6 @@ import java.util.List;
 @RequestMapping(path = "recordstore")
 @AllArgsConstructor
 public class RecordController {
-    private final RecordRepository recordRepository;
     private final RecordService recordService;
 
     /**
@@ -28,13 +26,13 @@ public class RecordController {
         return recordService.getAllRecords();
     }
 
-    /**
-     * Shows all records of a specific artist.
-     * */
-    @GetMapping("/record/{artistId}")
-    public List<Record> getRecordsByArtist(@PathVariable Long artistId){
-        return recordService.getRecordsByArtist(artistId);
-    }
+//    /**
+//     * Shows all records of a specific artist.
+//     * */
+//    @GetMapping("/record/{artistId}")
+//    public List<Record> getRecordsByArtist(@PathVariable Long artistId){
+//        return recordService.getRecordsByArtist(artistId);
+//    }
 
     /**
      * Shows record with specific Id.

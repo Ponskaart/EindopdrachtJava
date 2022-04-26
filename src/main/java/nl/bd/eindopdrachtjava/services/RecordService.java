@@ -15,7 +15,6 @@ import java.util.List;
 @Service
 @AllArgsConstructor
 public class RecordService {
-
     private final RecordRepository recordRepository;
     private final ArtistRepository artistRepository;
 
@@ -32,12 +31,12 @@ public class RecordService {
         return recordRepository.findAll();
     }
 
-    /**
-     * Returns all records of a specific artist
-     */
-    public List<Record> getRecordsByArtist(Long artistId){
-        return recordRepository.findByArtistId(artistId);
-    }
+//    /**
+//     * Returns all records of a specific artist
+//     */
+//    public List<Record> getRecordsByArtist(Long artistId){
+//        return recordRepository.findByArtistId(artistId);
+//    }
 
     /**
      * Returns a record with a specific title
