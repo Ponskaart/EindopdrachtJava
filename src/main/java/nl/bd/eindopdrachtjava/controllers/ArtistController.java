@@ -16,7 +16,7 @@ public class ArtistController {
     private final ArtistRepository artistRepository;
     private final ArtistService artistService;
 
-    @PostMapping("artist")
+    @PostMapping("/artist")
     public Artist registerArtist(@RequestBody ArtistRegistrationRequest artistRegistrationRequest){
         return artistService.registerArtist(artistRegistrationRequest);
     }
@@ -45,8 +45,13 @@ public class ArtistController {
         return artistService.getArtistByArtistId(artistId);
     }
 
-    @GetMapping("artist/{artistName}")
+    @GetMapping("/artist/{artistName}")
     public Artist getArtistByArtistName(@PathVariable String artistName){
         return artistService.getArtistByArtistName(artistName);
+    }
+
+    @DeleteMapping("/artist/{artistId}")
+    public void deleteArtist(@PathVariable Long artistId){
+        artistService.deleteArtist(artistId);
     }
 }
