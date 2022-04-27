@@ -10,6 +10,12 @@ import java.util.Set;
 
 import static javax.persistence.GenerationType.IDENTITY;
 
+/**
+ * Lombok annotations reduce the amount of boilerplate code needed to run the application, here we make lombok generate
+ * our getters, setters and constructors with the @AllArgsConstructor, @Getter and @Setter annotations. I also use
+ * the @NoArgsConstructor annotation to generate a default constructor which requires no arguments. Using the @Builder
+ * annotation I am able to easily create a builder design pattern.
+ */
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
