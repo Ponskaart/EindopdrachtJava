@@ -1,10 +1,12 @@
 package nl.bd.eindopdrachtjava.controllers;
 
 import lombok.AllArgsConstructor;
+import nl.bd.eindopdrachtjava.models.exceptions.ResourceNotFoundException;
 import nl.bd.eindopdrachtjava.models.requests.RecordRegistrationRequest;
 import nl.bd.eindopdrachtjava.services.RecordService;
 import nl.bd.eindopdrachtjava.models.entities.Record;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -38,7 +40,7 @@ public class RecordController {
      * Shows record with specific Id.
      */
     @GetMapping("/record/{recordId}")
-    public Record getRecordById(@PathVariable Long recordId){
+    public Record getRecordById(@PathVariable Long recordId) throws ResourceNotFoundException {
         return recordService.getRecordById(recordId);
     }
 
