@@ -29,7 +29,7 @@ public class RecordController {
     /**
      * Shows all records of a specific artist.
      * */
-    @GetMapping("/record/{artistId}")
+    @GetMapping("/records/artist/{artistId}")
     public List<Record> getRecordsByArtist(@PathVariable Long artistId){
         return recordService.getRecordsByArtist(artistId);
     }
@@ -45,7 +45,7 @@ public class RecordController {
     /**
      * Shows record with specific title.
      */
-    @GetMapping("/record/{title}")
+    @GetMapping("/record/title/{title}")
     public Record getRecordByTitle(@PathVariable String title){
         return recordService.getRecordByTitle(title);
     }
@@ -53,7 +53,7 @@ public class RecordController {
     /**
      * Shows all records with a specific genre.
      * */
-    @GetMapping("/record/{genre}")
+    @GetMapping("/record/genre/{genre}")
     public List<Record> getRecordsByGenre(@PathVariable String genre){
         return recordService.getRecordsByGenre(genre);
     }

@@ -63,7 +63,7 @@ public class RecordService {
      */
     public Record registerRecord(RecordRegistrationRequest recordRegistrationRequest){
         Record record = Record.builder()
-                .artist(artistRepository.findArtistByArtistName(recordRegistrationRequest.getArtistName()))
+                .artist(artistRepository.findByArtistName(recordRegistrationRequest.getArtistName()))
                 .title(recordRegistrationRequest.getTitle())
                 .genre(recordRegistrationRequest.getGenre())
                 .label(recordRegistrationRequest.getLabel())
@@ -80,8 +80,9 @@ public class RecordService {
      * Updates a Record with new data, creates new record if record id does not exist.
      */
     public Record updateRecord(Record newRecord, RecordRegistrationRequest recordRegistrationRequest, Long recordId){
+
         return recordRepository.findById(recordId).map(record -> {
-            record.setArtist(artistRepository.findArtistByArtistName(recordRegistrationRequest.getArtistName()));
+            record.setArtist(artistRepository.findByArtistName(recordRegistrationRequest.getArtistName()));
             record.setTitle(recordRegistrationRequest.getTitle());
             record.setGenre(recordRegistrationRequest.getGenre());
             record.setLabel(recordRegistrationRequest.getLabel());

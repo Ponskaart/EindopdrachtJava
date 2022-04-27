@@ -53,7 +53,7 @@ public class ArtistService {
      * Method searches repo for artist by name.
      */
     public Artist getArtistByArtistName(String artistName){
-        return artistRepository.findArtistByArtistName(artistName);
+        return artistRepository.findByArtistName(artistName);
     }
 
     /**
