@@ -66,11 +66,13 @@ public class RecordService {
      * the database does not get double entries.
      */
     public Record registerRecord(RecordRegistrationRequest recordRegistrationRequest) {
-        if (recordRepository.findRecordByTitle(recordRegistrationRequest.getTitle()).isPresent() &&
-                recordRepository.findRecordByTitle(recordRegistrationRequest.getTitle()).get()
-                        .getArtist().getArtistName().equals(recordRegistrationRequest.getArtistName())){
-            throw new ResourceAlreadyExistsException("Record with name: " + recordRegistrationRequest.getTitle()
-                    + ", and with artist: " + recordRegistrationRequest.getArtistName() + ", is already registered.");
+        String titleTemp = recordRegistrationRequest.getTitle();
+        String artistNameTemp = recordRegistrationRequest.getArtistName();
+
+        if (recordRepository.findRecordByTitle(titleTemp).isPresent() &&
+                recordRepository.findRecordByTitle(titleTemp).get().getArtist().getArtistName().equals(artistNameTemp)){
+            throw new ResourceAlreadyExistsException("Record with name: " + titleTemp + ", and with artist: "
+                    + artistNameTemp + ", is already registered.");
         } else {
             Record record = Record.builder()
                     .artist(artistRepository.findByArtistName(recordRegistrationRequest.getArtistName()))
