@@ -25,8 +25,11 @@ public class ArtistService {
     public Artist registerArtist(ArtistRegistrationRequest artistRegistrationRequest){
         if (doesArtistExist(artistRegistrationRequest)){
             throw new ResourceAlreadyExistsException(
-                    "Artist with name: " + artistRegistrationRequest.getArtistName() + ", and with year established: "
-                            + artistRegistrationRequest.getEstablished() + ", is already registered.");
+                    "Artist with name: " +
+                    artistRegistrationRequest.getArtistName() +
+                    ", and with year established: "
+                    + artistRegistrationRequest.getEstablished()
+                    + ", is already registered.");
         } else {
             Artist artist = createArtist(artistRegistrationRequest);
             return artistRepository.save(artist);
