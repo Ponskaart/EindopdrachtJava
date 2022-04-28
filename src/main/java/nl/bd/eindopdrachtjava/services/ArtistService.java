@@ -28,12 +28,20 @@ public class ArtistService {
                     "Artist with name: " + artistRegistrationRequest.getArtistName() + ", and with year established: "
                             + artistRegistrationRequest.getEstablished() + ", is already registered.");
         } else {
-            Artist artist = Artist.builder()
-                    .artistName(artistRegistrationRequest.getArtistName())
-                    .established(artistRegistrationRequest.getEstablished())
-                    .build();
+            Artist artist = createArtist(artistRegistrationRequest);
             return artistRepository.save(artist);
         }
+    }
+
+    /**
+     * Creates artist to use in registerArtist method.
+     */
+    private Artist createArtist(ArtistRegistrationRequest artistRegistrationRequest) {
+        Artist artist = Artist.builder()
+                .artistName(artistRegistrationRequest.getArtistName())
+                .established(artistRegistrationRequest.getEstablished())
+                .build();
+        return artist;
     }
 
     /**

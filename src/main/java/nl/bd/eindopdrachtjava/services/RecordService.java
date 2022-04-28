@@ -70,19 +70,27 @@ public class RecordService {
             throw new ResourceAlreadyExistsException("Record with name: " + recordRegistrationRequest.getTitle() +
                     ", and with artist: " + recordRegistrationRequest.getArtistName() + ", is already registered.");
         } else {
-            Record record = Record.builder()
-                    .artist(artistRepository.findByArtistName(recordRegistrationRequest.getArtistName()).get())
-                    .title(recordRegistrationRequest.getTitle())
-                    .genre(recordRegistrationRequest.getGenre())
-                    .label(recordRegistrationRequest.getLabel())
-                    .color(recordRegistrationRequest.getColor())
-                    .year(recordRegistrationRequest.getYear())
-                    .country(recordRegistrationRequest.getCountry())
-                    .isShaped(recordRegistrationRequest.isShaped())
-                    .isPicturedisk(recordRegistrationRequest.isPicturedisk())
-                    .build();
+            Record record = createRecord(recordRegistrationRequest);
             return recordRepository.save(record);
         }
+    }
+
+    /**
+     * Creates record to use in the registerRecord Method.
+     */
+    private Record createRecord(RecordRegistrationRequest recordRegistrationRequest) {
+        Record record = Record.builder()
+                .artist(artistRepository.findByArtistName(recordRegistrationRequest.getArtistName()).get())
+                .title(recordRegistrationRequest.getTitle())
+                .genre(recordRegistrationRequest.getGenre())
+                .label(recordRegistrationRequest.getLabel())
+                .color(recordRegistrationRequest.getColor())
+                .year(recordRegistrationRequest.getYear())
+                .country(recordRegistrationRequest.getCountry())
+                .isShaped(recordRegistrationRequest.isShaped())
+                .isPicturedisk(recordRegistrationRequest.isPicturedisk())
+                .build();
+        return record;
     }
 
     /**
