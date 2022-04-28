@@ -23,13 +23,10 @@ public class ArtistService {
      * happening.
      */
     public Artist registerArtist(ArtistRegistrationRequest artistRegistrationRequest){
-        String artistNameTemp = artistRegistrationRequest.getArtistName();
-        int establishedTemp = artistRegistrationRequest.getEstablished();
-
-        if (artistRepository.findByArtistName(artistNameTemp).isPresent() &&
-                artistRepository.findByArtistName(artistNameTemp).get().getEstablished() == establishedTemp){
-            throw new ResourceAlreadyExistsException("Artist with name: " + artistNameTemp
-                    + ", and with year established: " + establishedTemp + ", is already registered.");
+        if (doesArtistExist(artistRegistrationRequest)){
+            throw new ResourceAlreadyExistsException(
+                    "Artist with name: " + artistRegistrationRequest.getArtistName() + ", and with year established: "
+                            + artistRegistrationRequest.getEstablished() + ", is already registered.");
         } else {
             Artist artist = Artist.builder()
                     .artistName(artistRegistrationRequest.getArtistName())
@@ -37,6 +34,15 @@ public class ArtistService {
                     .build();
             return artistRepository.save(artist);
         }
+    }
+
+    /**
+     * Returns boolean true if artist already exists in database.
+     */
+    private boolean doesArtistExist(ArtistRegistrationRequest artistRegistrationRequest) {
+        return artistRepository.findByArtistName(artistRegistrationRequest.getArtistName()).isPresent() &&
+                artistRepository.findByArtistName(artistRegistrationRequest.getArtistName()).get().getEstablished()
+                        == artistRegistrationRequest.getEstablished();
     }
 
     /**
