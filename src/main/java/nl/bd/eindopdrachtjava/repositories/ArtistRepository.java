@@ -2,6 +2,8 @@ package nl.bd.eindopdrachtjava.repositories;
 
 import nl.bd.eindopdrachtjava.models.entities.Artist;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -9,11 +11,14 @@ import java.util.Optional;
 
 @Repository
 public interface ArtistRepository extends JpaRepository<Artist, Long> {
-
     /**
-     * This is a lazy way to create a custom query, but spring boot sorts out al the details from the method name.
-     * Should change it to a proper query to prevent things such as sql injection.
+     * Custom queries to retrieve specific data from the database.
      */
-    Optional<Artist> findByArtistName(String artistName);
-    Optional<List<Artist>> findArtistByEstablished(int established);
+    @Query("SELECT u FROM Artist u WHERE u.artistName = :artistName")
+    Optional<Artist> findByArtistName(
+            @Param("artistName") String artistName);
+
+    @Query("SELECT u FROM Artist u WHERE u.established = :established")
+    Optional<List<Artist>> findArtistByEstablished(
+            @Param("established") int established);
 }
