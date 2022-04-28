@@ -37,22 +37,25 @@ public class RecordService {
     /**
      * Returns all records of a specific artist
      */
-    public List<Record> getRecordsByArtist(Long artistId){
-        return recordRepository.findByArtistArtistId(artistId);
+    public List<Record> getRecordsByArtist(Long artistId)  throws ResourceNotFoundException {
+        return recordRepository.findByArtistArtistId(artistId).orElseThrow(() ->
+                new ResourceNotFoundException("Resources with artist " + artistId + " were not found" ));
     }
 
     /**
      * Returns a record with a specific title
      */
-    public Record getRecordByTitle(String title){
-        return recordRepository.findRecordByTitle(title);
+    public Record getRecordByTitle(String title)  throws ResourceNotFoundException {
+        return recordRepository.findRecordByTitle(title).orElseThrow(() ->
+                new ResourceNotFoundException("Resource with title " + title + " was not found" ));
     }
 
     /**
      * Returns a list of records with a specific genre
      */
-    public List<Record> getRecordsByGenre(String genre){
-        return recordRepository.findRecordByGenre(genre);
+    public List<Record> getRecordsByGenre(String genre)  throws ResourceNotFoundException {
+        return recordRepository.findRecordByGenre(genre).orElseThrow(() ->
+                new ResourceNotFoundException("Resource with genre " + genre + " was not found" )) ;
     }
 
     /**
@@ -79,7 +82,6 @@ public class RecordService {
      * Updates a Record with new data, creates new record if record id does not exist.
      */
     public Record updateRecord(Record newRecord, RecordRegistrationRequest recordRegistrationRequest, Long recordId){
-
         return recordRepository.findById(recordId).map(record -> {
             record.setArtist(artistRepository.findByArtistName(recordRegistrationRequest.getArtistName()));
             record.setTitle(recordRegistrationRequest.getTitle());
