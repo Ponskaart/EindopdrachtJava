@@ -1,6 +1,8 @@
 package nl.bd.eindopdrachtjava.services;
 
 import lombok.AllArgsConstructor;
+import nl.bd.eindopdrachtjava.exceptions.ResourceAlreadyExistsException;
+import nl.bd.eindopdrachtjava.exceptions.ResourceNotFoundException;
 import nl.bd.eindopdrachtjava.models.entities.Artist;
 import nl.bd.eindopdrachtjava.models.requests.ArtistRegistrationRequest;
 import nl.bd.eindopdrachtjava.repositories.ArtistRepository;
@@ -21,17 +23,26 @@ public class ArtistService {
      * happening.
      */
     public Artist registerArtist(ArtistRegistrationRequest artistRegistrationRequest){
-        Artist artist = Artist.builder()
-                .artistName(artistRegistrationRequest.getArtistName())
-                .established(artistRegistrationRequest.getEstablished())
-                .build();
-        return artistRepository.save(artist);
+        String artistNameTemp = artistRegistrationRequest.getArtistName();
+        int establishedTemp = artistRegistrationRequest.getEstablished();
+
+        if (artistRepository.findByArtistName(artistNameTemp).isPresent() &&
+                artistRepository.findByArtistName(artistNameTemp).get().getEstablished() == establishedTemp){
+            throw new ResourceAlreadyExistsException("Artist with name: " + artistNameTemp
+                    + ", and with year established: " + establishedTemp + ", is already registered.");
+        } else {
+            Artist artist = Artist.builder()
+                    .artistName(artistRegistrationRequest.getArtistName())
+                    .established(artistRegistrationRequest.getEstablished())
+                    .build();
+            return artistRepository.save(artist);
+        }
     }
 
     /**
      * Method retrieves all Artist entities from the database and returns them as a list.
      */
-    public List<Artist> getAllArtists() {
+    public List<Artist> getAllArtists() throws ResourceNotFoundException {
         return artistRepository.findAll();
     }
 
@@ -39,21 +50,25 @@ public class ArtistService {
      * Method that retrieves al artists in a specific year.
      */
     public List<Artist> getArtistsByYearEstablished(int established) {
-        return artistRepository.findArtistByEstablished(established);
+        return artistRepository.findArtistByEstablished(established).orElseThrow(() ->
+                new ResourceNotFoundException("Artists with year of establishment: "
+                        + established + ", were not found" ));
     }
 
     /**
      * Method searches repo for artist by Id.
      */
-    public Artist getArtistByArtistId(Long artistId){
-        return artistRepository.findById(artistId).get();
+    public Artist getArtistByArtistId(Long artistId) throws ResourceNotFoundException{
+        return artistRepository.findById(artistId).orElseThrow(() ->
+                new ResourceNotFoundException("Artist with id: " + artistId + ", was not found" ));
     }
 
     /**
      * Method searches repo for artist by name.
      */
     public Artist getArtistByArtistName(String artistName){
-        return artistRepository.findByArtistName(artistName);
+        return artistRepository.findByArtistName(artistName).orElseThrow(() ->
+                new ResourceNotFoundException("Artist with name: " + artistName + ", was not found" ));
     }
 
     /**

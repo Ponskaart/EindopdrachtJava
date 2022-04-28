@@ -75,7 +75,7 @@ public class RecordService {
                     + artistNameTemp + ", is already registered.");
         } else {
             Record record = Record.builder()
-                    .artist(artistRepository.findByArtistName(recordRegistrationRequest.getArtistName()))
+                    .artist(artistRepository.findByArtistName(recordRegistrationRequest.getArtistName()).get())
                     .title(recordRegistrationRequest.getTitle())
                     .genre(recordRegistrationRequest.getGenre())
                     .label(recordRegistrationRequest.getLabel())
