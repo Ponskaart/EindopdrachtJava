@@ -5,6 +5,7 @@ import nl.bd.eindopdrachtjava.models.entities.Record;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface RecordRepository extends JpaRepository<Record, Long> {
@@ -14,7 +15,7 @@ public interface RecordRepository extends JpaRepository<Record, Long> {
      */
 //    TODO change queries to proper queries.
 //    TODO fix finding artist by Id query.
-    List<Record> findByArtistArtistId(Long artistId);
-    List<Record> findRecordByGenre(String genre);
-    Record findRecordByTitle(String title);
+    Optional<List<Record>> findByArtistArtistId(Long artistId);
+    Optional<List<Record>> findRecordByGenre(String genre);
+    Optional<Record> findRecordByTitle(String title);
 }
