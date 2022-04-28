@@ -72,7 +72,7 @@ public class ArtistService {
     /**
      * Method searches repo for artist by Id.
      */
-    public Artist getArtistByArtistId(Long artistId) throws ResourceNotFoundException{
+    public Artist getArtistByArtistId(Long artistId) throws ResourceNotFoundException {
         return artistRepository.findById(artistId).orElseThrow(() ->
                 new ResourceNotFoundException("Artist with id: " + artistId + ", was not found" ));
     }
@@ -81,7 +81,9 @@ public class ArtistService {
      * Method searches repo for artist by name.
      */
     public Artist getArtistByArtistName(String artistName){
-        return artistRepository.findByArtistName(artistName).orElseThrow(() ->
+        return artistRepository
+                .findByArtistName(artistName)
+                .orElseThrow(() ->
                 new ResourceNotFoundException("Artist with name: " + artistName + ", was not found" ));
     }
 

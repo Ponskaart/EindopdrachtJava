@@ -14,11 +14,15 @@ public interface ArtistRepository extends JpaRepository<Artist, Long> {
     /**
      * Custom queries to retrieve specific data from the database.
      */
-    @Query("SELECT u FROM Artist u WHERE u.artistName = :artistName")
+    @Query( "SELECT a " +
+            "FROM Artist a " +
+            "WHERE a.artistName = :artistName")
     Optional<Artist> findByArtistName(
             @Param("artistName") String artistName);
 
-    @Query("SELECT u FROM Artist u WHERE u.established = :established")
+    @Query( "SELECT a " +
+            "FROM Artist a " +
+            "WHERE a.established = :established")
     Optional<List<Artist>> findArtistByEstablished(
             @Param("established") int established);
 }
