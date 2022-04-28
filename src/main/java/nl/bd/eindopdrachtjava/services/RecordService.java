@@ -25,7 +25,7 @@ public class RecordService {
      */
     public Record getRecordById(Long recordId) throws ResourceNotFoundException {
         return recordRepository.findById(recordId).orElseThrow(() ->
-                new ResourceNotFoundException("Resource with id " + recordId + " was not found" )) ;
+                new ResourceNotFoundException("Record with id " + recordId + " was not found" )) ;
     }
 
     /**
@@ -40,7 +40,7 @@ public class RecordService {
      */
     public List<Record> getRecordsByArtist(Long artistId)  throws ResourceNotFoundException {
         return recordRepository.findByArtistArtistId(artistId).orElseThrow(() ->
-                new ResourceNotFoundException("Resources with artist " + artistId + " were not found" ));
+                new ResourceNotFoundException("Record with artist " + artistId + " were not found" ));
     }
 
     /**
@@ -48,7 +48,7 @@ public class RecordService {
      */
     public Record getRecordByTitle(String title)  throws ResourceNotFoundException {
         return recordRepository.findRecordByTitle(title).orElseThrow(() ->
-                new ResourceNotFoundException("Resource with title " + title + " was not found" ));
+                new ResourceNotFoundException("Record with title " + title + " was not found" ));
     }
 
     /**
@@ -56,7 +56,7 @@ public class RecordService {
      */
     public List<Record> getRecordsByGenre(String genre)  throws ResourceNotFoundException {
         return recordRepository.findRecordByGenre(genre).orElseThrow(() ->
-                new ResourceNotFoundException("Resource with genre " + genre + " was not found" ));
+                new ResourceNotFoundException("Record with genre " + genre + " was not found" ));
     }
 
     /**
@@ -87,8 +87,6 @@ public class RecordService {
                     .build();
             return recordRepository.save(record);
         }
-
-
     }
 
     /**
@@ -108,7 +106,7 @@ public class RecordService {
             record.setPicturedisk(recordRegistrationRequest.isPicturedisk());
             return recordRepository.save(record);
         }).orElseThrow(() ->
-                new ResourceNotFoundException("Resource with id " + recordId + " was not found" ));
+                new ResourceNotFoundException("Record with id " + recordId + " was not found" ));
     }
 
     /**
