@@ -105,21 +105,26 @@ public class RecordService {
     /**
      * Updates a Record with new data, creates new record if record id does not exist.
      */
-    public Record updateRecord(Record newRecord, RecordRegistrationRequest recordRegistrationRequest,
+    public Record updateRecord(RecordRegistrationRequest recordRegistrationRequest,
                                Long recordId) throws ResourceNotFoundException{
-        return recordRepository.findById(recordId).map(record -> {
-            record.setArtist(artistRepository.findByArtistName(recordRegistrationRequest.getArtistName()).get());
-            record.setTitle(recordRegistrationRequest.getTitle());
-            record.setGenre(recordRegistrationRequest.getGenre());
-            record.setLabel(recordRegistrationRequest.getLabel());
-            record.setColor(recordRegistrationRequest.getColor());
-            record.setYear(recordRegistrationRequest.getYear());
-            record.setCountry(recordRegistrationRequest.getCountry());
-            record.setShaped(recordRegistrationRequest.isShaped());
-            record.setPicturedisk(recordRegistrationRequest.isPicturedisk());
-            return recordRepository.save(record);
-        }).orElseThrow(() ->
-                new ResourceNotFoundException("Record with id " + recordId + " was not found" ));
+        return recordRepository.findById(recordId).map(record -> updatedRecord(recordRegistrationRequest, record))
+                .orElseThrow(() -> new ResourceNotFoundException("Record with id " + recordId + " was not found" ));
+    }
+
+    /**
+     * Returns updated record
+     */
+    private Record updatedRecord(RecordRegistrationRequest recordRegistrationRequest, Record record) {
+        record.setArtist(artistRepository.findByArtistName(recordRegistrationRequest.getArtistName()).get());
+        record.setTitle(recordRegistrationRequest.getTitle());
+        record.setGenre(recordRegistrationRequest.getGenre());
+        record.setLabel(recordRegistrationRequest.getLabel());
+        record.setColor(recordRegistrationRequest.getColor());
+        record.setYear(recordRegistrationRequest.getYear());
+        record.setCountry(recordRegistrationRequest.getCountry());
+        record.setShaped(recordRegistrationRequest.isShaped());
+        record.setPicturedisk(recordRegistrationRequest.isPicturedisk());
+        return recordRepository.save(record);
     }
 
     /**

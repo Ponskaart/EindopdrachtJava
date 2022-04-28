@@ -73,7 +73,7 @@ public class RecordController {
     @PutMapping("/record/{recordId}")
     public Record updateRecord(@PathVariable Long recordId, Record newRecord,
                                @RequestBody RecordRegistrationRequest recordRegistrationRequest){
-        return recordService.updateRecord(newRecord, recordRegistrationRequest, recordId);
+        return recordService.updateRecord(recordRegistrationRequest, recordId);
     }
 
     /**
