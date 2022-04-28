@@ -95,7 +95,7 @@ public class RecordService {
     public Record updateRecord(Record newRecord, RecordRegistrationRequest recordRegistrationRequest,
                                Long recordId) throws ResourceNotFoundException{
         return recordRepository.findById(recordId).map(record -> {
-            record.setArtist(artistRepository.findByArtistName(recordRegistrationRequest.getArtistName()));
+            record.setArtist(artistRepository.findByArtistName(recordRegistrationRequest.getArtistName()).get());
             record.setTitle(recordRegistrationRequest.getTitle());
             record.setGenre(recordRegistrationRequest.getGenre());
             record.setLabel(recordRegistrationRequest.getLabel());
