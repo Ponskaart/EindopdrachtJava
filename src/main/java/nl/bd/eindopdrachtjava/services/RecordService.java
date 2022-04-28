@@ -1,6 +1,7 @@
 package nl.bd.eindopdrachtjava.services;
 
 import lombok.AllArgsConstructor;
+import nl.bd.eindopdrachtjava.exceptions.ResourceAlreadyExistsException;
 import nl.bd.eindopdrachtjava.models.entities.Record;
 import nl.bd.eindopdrachtjava.exceptions.ResourceNotFoundException;
 import nl.bd.eindopdrachtjava.models.requests.RecordRegistrationRequest;
@@ -55,33 +56,44 @@ public class RecordService {
      */
     public List<Record> getRecordsByGenre(String genre)  throws ResourceNotFoundException {
         return recordRepository.findRecordByGenre(genre).orElseThrow(() ->
-                new ResourceNotFoundException("Resource with genre " + genre + " was not found" )) ;
+                new ResourceNotFoundException("Resource with genre " + genre + " was not found" ));
     }
 
     /**
      * Method to register a new record using the builder design pattern to make it easier to see what is actually
      * happening. I'm also using a wrapper class when registering the record so that I don't have to pass this method 9
-     * different variables.
+     * different variables. Method also checks if record is already registered, if so, it throws an exception so that
+     * the database does not get double entries.
      */
-    public Record registerRecord(RecordRegistrationRequest recordRegistrationRequest){
-        Record record = Record.builder()
-                .artist(artistRepository.findByArtistName(recordRegistrationRequest.getArtistName()))
-                .title(recordRegistrationRequest.getTitle())
-                .genre(recordRegistrationRequest.getGenre())
-                .label(recordRegistrationRequest.getLabel())
-                .color(recordRegistrationRequest.getColor())
-                .year(recordRegistrationRequest.getYear())
-                .country(recordRegistrationRequest.getCountry())
-                .isShaped(recordRegistrationRequest.isShaped())
-                .isPicturedisk(recordRegistrationRequest.isPicturedisk())
-                .build();
-        return recordRepository.save(record);
+    public Record registerRecord(RecordRegistrationRequest recordRegistrationRequest) {
+        if (recordRepository.findRecordByTitle(recordRegistrationRequest.getTitle()).isPresent() &&
+                recordRepository.findRecordByTitle(recordRegistrationRequest.getTitle()).get()
+                        .getArtist().getArtistName().equals(recordRegistrationRequest.getArtistName())){
+            throw new ResourceAlreadyExistsException("Record with name: " + recordRegistrationRequest.getTitle()
+                    + ", and with artist: " + recordRegistrationRequest.getArtistName() + ", is already registered.");
+        } else {
+            Record record = Record.builder()
+                    .artist(artistRepository.findByArtistName(recordRegistrationRequest.getArtistName()))
+                    .title(recordRegistrationRequest.getTitle())
+                    .genre(recordRegistrationRequest.getGenre())
+                    .label(recordRegistrationRequest.getLabel())
+                    .color(recordRegistrationRequest.getColor())
+                    .year(recordRegistrationRequest.getYear())
+                    .country(recordRegistrationRequest.getCountry())
+                    .isShaped(recordRegistrationRequest.isShaped())
+                    .isPicturedisk(recordRegistrationRequest.isPicturedisk())
+                    .build();
+            return recordRepository.save(record);
+        }
+
+
     }
 
     /**
      * Updates a Record with new data, creates new record if record id does not exist.
      */
-    public Record updateRecord(Record newRecord, RecordRegistrationRequest recordRegistrationRequest, Long recordId){
+    public Record updateRecord(Record newRecord, RecordRegistrationRequest recordRegistrationRequest,
+                               Long recordId) throws ResourceNotFoundException{
         return recordRepository.findById(recordId).map(record -> {
             record.setArtist(artistRepository.findByArtistName(recordRegistrationRequest.getArtistName()));
             record.setTitle(recordRegistrationRequest.getTitle());
@@ -93,10 +105,8 @@ public class RecordService {
             record.setShaped(recordRegistrationRequest.isShaped());
             record.setPicturedisk(recordRegistrationRequest.isPicturedisk());
             return recordRepository.save(record);
-        }).orElseGet(() -> {
-            newRecord.setRecordId(recordId);
-            return recordRepository.save(newRecord);
-        });
+        }).orElseThrow(() ->
+                new ResourceNotFoundException("Resource with id " + recordId + " was not found" ));
     }
 
     /**

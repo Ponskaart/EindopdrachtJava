@@ -13,8 +13,14 @@ public class GlobalExceptionHandler
         extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(value = {ResourceNotFoundException.class})
-    protected ResponseEntity<Object> handleConflict(ResourceNotFoundException ex, WebRequest request) {
+    protected ResponseEntity<Object> handleResourceNotFoundConflict(ResourceNotFoundException ex, WebRequest request) {
         String bodyOfResponse = ex.getMessage();
         return handleExceptionInternal(ex, bodyOfResponse, new HttpHeaders(), HttpStatus.NOT_FOUND, request);
+    }
+
+    @ExceptionHandler(value = {ResourceAlreadyExistsException.class})
+    protected ResponseEntity<Object> handleResourceAlreadyExistsConflict(ResourceAlreadyExistsException ex, WebRequest request) {
+        String bodyOfResponse = ex.getMessage();
+        return handleExceptionInternal(ex, bodyOfResponse, new HttpHeaders(), HttpStatus.CONFLICT, request);
     }
 }
