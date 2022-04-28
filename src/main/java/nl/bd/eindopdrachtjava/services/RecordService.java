@@ -2,11 +2,10 @@ package nl.bd.eindopdrachtjava.services;
 
 import lombok.AllArgsConstructor;
 import nl.bd.eindopdrachtjava.models.entities.Record;
-import nl.bd.eindopdrachtjava.models.exceptions.ResourceNotFoundException;
+import nl.bd.eindopdrachtjava.exceptions.ResourceNotFoundException;
 import nl.bd.eindopdrachtjava.models.requests.RecordRegistrationRequest;
 import nl.bd.eindopdrachtjava.repositories.ArtistRepository;
 import nl.bd.eindopdrachtjava.repositories.RecordRepository;
-import org.springframework.boot.context.config.ConfigDataResourceNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -25,7 +24,7 @@ public class RecordService {
      */
     public Record getRecordById(Long recordId) throws ResourceNotFoundException {
         return recordRepository.findById(recordId).orElseThrow(() ->
-                new ResourceNotFoundException("Resource with id :: was not found" + recordId)) ;
+                new ResourceNotFoundException("Resource with id " + recordId + " was not found" )) ;
     }
 
     /**
