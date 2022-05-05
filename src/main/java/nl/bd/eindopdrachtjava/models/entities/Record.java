@@ -41,6 +41,9 @@ public class Record {
                     referencedColumnName = "artist_Id")
     private Artist artist;
 
+    @OneToOne(mappedBy = "record")
+    private CoverArt coverArt;
+
     @Column
     private String title;
 
