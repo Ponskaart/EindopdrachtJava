@@ -26,34 +26,14 @@ public class ArtistService {
         if (doesArtistExist(artistRegistrationRequest)){
             throw new ResourceAlreadyExistsException(
                     "Artist with name: " +
-                    artistRegistrationRequest.getArtistName() +
-                    ", and with year established: "
-                    + artistRegistrationRequest.getEstablished()
-                    + ", is already registered.");
+                            artistRegistrationRequest.getArtistName() +
+                            ", and with year established: " +
+                            artistRegistrationRequest.getEstablished() +
+                            ", is already registered.");
         } else {
             Artist artist = createArtist(artistRegistrationRequest);
             return artistRepository.save(artist);
         }
-    }
-
-    /**
-     * Creates artist to use in registerArtist method.
-     */
-    private Artist createArtist(ArtistRegistrationRequest artistRegistrationRequest) {
-        Artist artist = Artist.builder()
-                .artistName(artistRegistrationRequest.getArtistName())
-                .established(artistRegistrationRequest.getEstablished())
-                .build();
-        return artist;
-    }
-
-    /**
-     * Returns boolean true if artist already exists in database.
-     */
-    private boolean doesArtistExist(ArtistRegistrationRequest artistRegistrationRequest) {
-        return artistRepository.findByArtistName(artistRegistrationRequest.getArtistName()).isPresent() &&
-                artistRepository.findByArtistName(artistRegistrationRequest.getArtistName()).get().getEstablished()
-                        == artistRegistrationRequest.getEstablished();
     }
 
     /**
@@ -95,5 +75,25 @@ public class ArtistService {
      */
     public void deleteArtist(Long artistId){
         artistRepository.deleteById(artistId);
+    }
+
+    /**
+     * Returns boolean true if artist already exists in database.
+     */
+    private boolean doesArtistExist(ArtistRegistrationRequest artistRegistrationRequest) {
+        return artistRepository.findByArtistName(artistRegistrationRequest.getArtistName()).isPresent() &&
+                artistRepository.findByArtistName(artistRegistrationRequest.getArtistName()).get().getEstablished()
+                        == artistRegistrationRequest.getEstablished();
+    }
+
+    /**
+     * Creates artist to use in registerArtist method.
+     */
+    private Artist createArtist(ArtistRegistrationRequest artistRegistrationRequest) {
+        Artist artist = Artist.builder()
+                .artistName(artistRegistrationRequest.getArtistName())
+                .established(artistRegistrationRequest.getEstablished())
+                .build();
+        return artist;
     }
 }

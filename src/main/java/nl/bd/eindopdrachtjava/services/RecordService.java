@@ -76,6 +76,22 @@ public class RecordService {
     }
 
     /**
+     * Updates a Record with new data, creates new record if record id does not exist.
+     */
+    public Record updateRecord(RecordRegistrationRequest recordRegistrationRequest,
+                               Long recordId) throws ResourceNotFoundException{
+        return recordRepository.findById(recordId).map(record -> updatedRecord(recordRegistrationRequest, record))
+                .orElseThrow(() -> new ResourceNotFoundException("Record with id " + recordId + " was not found" ));
+    }
+
+    /**
+     * Deletes a record with a specific id
+     */
+    public void deleteRecord(Long recordId){
+        recordRepository.deleteById(recordId);
+    }
+
+    /**
      * Creates record to use in the registerRecord Method.
      */
     private Record createRecord(RecordRegistrationRequest recordRegistrationRequest) {
@@ -103,15 +119,6 @@ public class RecordService {
     }
 
     /**
-     * Updates a Record with new data, creates new record if record id does not exist.
-     */
-    public Record updateRecord(RecordRegistrationRequest recordRegistrationRequest,
-                               Long recordId) throws ResourceNotFoundException{
-        return recordRepository.findById(recordId).map(record -> updatedRecord(recordRegistrationRequest, record))
-                .orElseThrow(() -> new ResourceNotFoundException("Record with id " + recordId + " was not found" ));
-    }
-
-    /**
      * Returns updated record
      */
     private Record updatedRecord(RecordRegistrationRequest recordRegistrationRequest, Record record) {
@@ -127,10 +134,4 @@ public class RecordService {
         return recordRepository.save(record);
     }
 
-    /**
-     * Deletes a record with a specific id
-     */
-    public void deleteRecord(Long recordId){
-        recordRepository.deleteById(recordId);
-    }
 }
