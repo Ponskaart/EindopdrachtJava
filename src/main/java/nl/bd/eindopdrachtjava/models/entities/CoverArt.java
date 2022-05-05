@@ -21,6 +21,9 @@ public class CoverArt {
     @GeneratedValue(strategy = IDENTITY)
     private Long coverArtId;
 
+    /**
+     * The @Lob annotation signifies to the databse that it might receive a large object of bytes.
+     */
     @Lob
     @Column
     private byte[] content;
@@ -28,6 +31,9 @@ public class CoverArt {
     @Column
     private String title;
 
+    /**
+     * One to one relationship with a record entity, one record has one cover art.
+     */
     @OneToOne
     @JoinColumn
             (name = "record_Id",
