@@ -14,15 +14,21 @@ public interface RecordRepository extends JpaRepository<Record, Long> {
     /**
      * Custom queries to retrieve specific data from the database.
      */
-    @Query("SELECT u FROM Artist u WHERE u.artistId = :artistid")
+    @Query( "SELECT a " +
+            "FROM Artist a " +
+            "WHERE a.artistId = :artistId")
     Optional<List<Record>> findByArtistArtistId(
-            @Param("artistid") Long artistId);
+            @Param("artistId") Long artistId);
 
-    @Query("SELECT u FROM Record u WHERE u.genre = :genre")
+    @Query( "SELECT r" +
+            " FROM Record r " +
+            "WHERE r.genre = :genre")
     Optional<List<Record>> findRecordByGenre(
             @Param("genre") String genre);
 
-    @Query("SELECT u FROM Record u WHERE u.title = :title")
+    @Query("SELECT r " +
+            "FROM Record r " +
+            "WHERE r.title = :title")
     Optional<Record> findRecordByTitle(
             @Param("title") String title);
 }

@@ -23,18 +23,15 @@ public class ArtistService {
      * happening.
      */
     public Artist registerArtist(ArtistRegistrationRequest artistRegistrationRequest){
-        String artistNameTemp = artistRegistrationRequest.getArtistName();
-        int establishedTemp = artistRegistrationRequest.getEstablished();
-
-        if (artistRepository.findByArtistName(artistNameTemp).isPresent() &&
-                artistRepository.findByArtistName(artistNameTemp).get().getEstablished() == establishedTemp){
-            throw new ResourceAlreadyExistsException("Artist with name: " + artistNameTemp
-                    + ", and with year established: " + establishedTemp + ", is already registered.");
+        if (doesArtistExist(artistRegistrationRequest)){
+            throw new ResourceAlreadyExistsException(
+                    "Artist with name: " +
+                            artistRegistrationRequest.getArtistName() +
+                            ", and with year established: " +
+                            artistRegistrationRequest.getEstablished() +
+                            ", is already registered.");
         } else {
-            Artist artist = Artist.builder()
-                    .artistName(artistRegistrationRequest.getArtistName())
-                    .established(artistRegistrationRequest.getEstablished())
-                    .build();
+            Artist artist = createArtist(artistRegistrationRequest);
             return artistRepository.save(artist);
         }
     }
@@ -58,7 +55,7 @@ public class ArtistService {
     /**
      * Method searches repo for artist by Id.
      */
-    public Artist getArtistByArtistId(Long artistId) throws ResourceNotFoundException{
+    public Artist getArtistByArtistId(Long artistId) throws ResourceNotFoundException {
         return artistRepository.findById(artistId).orElseThrow(() ->
                 new ResourceNotFoundException("Artist with id: " + artistId + ", was not found" ));
     }
@@ -67,7 +64,9 @@ public class ArtistService {
      * Method searches repo for artist by name.
      */
     public Artist getArtistByArtistName(String artistName){
-        return artistRepository.findByArtistName(artistName).orElseThrow(() ->
+        return artistRepository
+                .findByArtistName(artistName)
+                .orElseThrow(() ->
                 new ResourceNotFoundException("Artist with name: " + artistName + ", was not found" ));
     }
 
@@ -76,5 +75,25 @@ public class ArtistService {
      */
     public void deleteArtist(Long artistId){
         artistRepository.deleteById(artistId);
+    }
+
+    /**
+     * Returns boolean true if artist already exists in database.
+     */
+    private boolean doesArtistExist(ArtistRegistrationRequest artistRegistrationRequest) {
+        return artistRepository.findByArtistName(artistRegistrationRequest.getArtistName()).isPresent() &&
+                artistRepository.findByArtistName(artistRegistrationRequest.getArtistName()).get().getEstablished()
+                        == artistRegistrationRequest.getEstablished();
+    }
+
+    /**
+     * Creates artist to use in registerArtist method.
+     */
+    private Artist createArtist(ArtistRegistrationRequest artistRegistrationRequest) {
+        Artist artist = Artist.builder()
+                .artistName(artistRegistrationRequest.getArtistName())
+                .established(artistRegistrationRequest.getEstablished())
+                .build();
+        return artist;
     }
 }
