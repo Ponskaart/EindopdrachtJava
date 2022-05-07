@@ -6,6 +6,7 @@ import nl.bd.eindopdrachtjava.models.entities.Record;
 import nl.bd.eindopdrachtjava.exceptions.ResourceNotFoundException;
 import nl.bd.eindopdrachtjava.models.requests.RecordRegistrationRequest;
 import nl.bd.eindopdrachtjava.repositories.ArtistRepository;
+import nl.bd.eindopdrachtjava.repositories.CoverArtRepository;
 import nl.bd.eindopdrachtjava.repositories.RecordRepository;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +20,7 @@ import java.util.List;
 public class RecordService {
     private final RecordRepository recordRepository;
     private final ArtistRepository artistRepository;
+    private final CoverArtRepository coverArtRepository;
 
     /**
      * Searches for record with specific Id.
@@ -84,6 +86,12 @@ public class RecordService {
                 .orElseThrow(() -> new ResourceNotFoundException("Record with id " + recordId + " was not found" ));
     }
 
+    public Record updateCoverArt(Long recordId, Long coverArtId) {
+        return recordRepository.findById(recordId).map(record -> updatedCoverArt(coverArtId, record))
+                .orElseThrow(() -> new ResourceNotFoundException("Record with id " + recordId + " was not found" ));
+
+    }
+
     /**
      * Deletes a record with a specific id
      */
@@ -131,6 +139,11 @@ public class RecordService {
         record.setCountry(recordRegistrationRequest.getCountry());
         record.setShaped(recordRegistrationRequest.isShaped());
         record.setPicturedisk(recordRegistrationRequest.isPicturedisk());
+        return recordRepository.save(record);
+    }
+
+    private Record updatedCoverArt(Long coverArtId, Record record) {
+        record.setCoverArt(coverArtRepository.getById(coverArtId));
         return recordRepository.save(record);
     }
 
