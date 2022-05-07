@@ -1,13 +1,16 @@
 package nl.bd.eindopdrachtjava.services;
 
 import lombok.AllArgsConstructor;
+import nl.bd.eindopdrachtjava.exceptions.ResourceNotFoundException;
 import nl.bd.eindopdrachtjava.models.entities.CoverArt;
 import nl.bd.eindopdrachtjava.models.entities.Record;
 import nl.bd.eindopdrachtjava.repositories.CoverArtRepository;
 import nl.bd.eindopdrachtjava.repositories.RecordRepository;
+import org.springframework.core.io.ByteArrayResource;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.annotation.Resource;
 import java.io.IOException;
 
 /**
@@ -28,7 +31,20 @@ public class CoverArtService {
         coverArt.setContent(multipartImage.getBytes());
         coverArt.setRecord(recordRepository.findById(recordId).get());
         coverArtRepository.save(coverArt);
-
+//TODO add exception handling if file is not a PNG or file already exists
         return recordService.updateCoverArt(recordId, coverArt.getCoverArtId());
+    }
+
+    /**
+     * Method retrieves cover art from database and returns it as a byte array.
+     */
+    public ByteArrayResource downloadCoverArt(Long recordId) throws ResourceNotFoundException {
+        Long tempCoverArtId = recordRepository.findById(recordId).get().getCoverArt().getCoverArtId();
+        CoverArt tempCoverArt = coverArtRepository.findById(tempCoverArtId).orElseThrow(() ->
+                new ResourceNotFoundException("Record with id " + recordId + " was not found" ));
+
+        byte[] coverArt = tempCoverArt.getContent();
+
+        return new ByteArrayResource(coverArt);
     }
 }
