@@ -1,5 +1,6 @@
 package nl.bd.eindopdrachtjava.models.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
@@ -27,6 +28,8 @@ public class Record {
      */
     @Id
     @GeneratedValue(strategy = IDENTITY)
+    @Column
+            (name = "record_Id")
     private Long recordId;
 
     /**

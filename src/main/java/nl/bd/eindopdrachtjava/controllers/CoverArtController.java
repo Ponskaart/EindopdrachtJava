@@ -1,7 +1,6 @@
 package nl.bd.eindopdrachtjava.controllers;
 
 import lombok.AllArgsConstructor;
-import nl.bd.eindopdrachtjava.repositories.CoverArtRepository;
 import nl.bd.eindopdrachtjava.services.CoverArtService;
 import nl.bd.eindopdrachtjava.models.entities.Record;
 import org.springframework.web.bind.annotation.*;
@@ -13,7 +12,6 @@ import java.io.IOException;
 @RequestMapping(path = "recordstore")
 @RestController
 public class CoverArtController {
-    private CoverArtRepository coverArtRepository;
     private CoverArtService coverArtService;
 
     @PostMapping("/uploadcoverart/{recordId}")
