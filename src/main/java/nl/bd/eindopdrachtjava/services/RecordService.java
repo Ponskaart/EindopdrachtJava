@@ -86,6 +86,9 @@ public class RecordService {
                 .orElseThrow(() -> new ResourceNotFoundException("Record with id " + recordId + " was not found" ));
     }
 
+    /**
+     * Method adds cover art to the record object.
+     */
     public Record updateCoverArt(Long recordId, Long coverArtId) {
         return recordRepository.findById(recordId).map(record -> updatedCoverArt(coverArtId, record))
                 .orElseThrow(() -> new ResourceNotFoundException("Record with id " + recordId + " was not found" ));
