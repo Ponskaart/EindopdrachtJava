@@ -36,7 +36,7 @@ public class CoverArt {
      */
     @OneToOne
     @JoinColumn
-            (name = "record_Id",
-                    referencedColumnName = "record_Id")
+            (name = "recordId",
+                    referencedColumnName = "recordId")
     private Record record;
 }
