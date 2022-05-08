@@ -44,7 +44,7 @@ public class Record {
                     referencedColumnName = "artist_Id")
     private Artist artist;
 
-    @OneToOne(mappedBy = "record")
+    @OneToOne(orphanRemoval = true, cascade = CascadeType.PERSIST, mappedBy = "record")
     private CoverArt coverArt;
 
     @Column

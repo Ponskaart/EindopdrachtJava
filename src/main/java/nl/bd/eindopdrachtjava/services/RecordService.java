@@ -150,5 +150,4 @@ public class RecordService {
         record.setCoverArt(coverArtRepository.getById(coverArtId));
         return recordRepository.save(record);
     }
-
 }

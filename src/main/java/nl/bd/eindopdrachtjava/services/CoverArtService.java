@@ -37,7 +37,7 @@ public class CoverArtService {
             coverArtRepository.save(coverArt);
             return recordService.updateCoverArt(recordId, coverArt.getCoverArtId());
         } else {
-            throw new InvalidFileException("Only PNG, JPEG and GIFF files are accepted");
+            throw new InvalidFileException("Only PNG files are accepted");
         }
     }
 
@@ -53,9 +53,9 @@ public class CoverArtService {
     }
 
     /**
-     * List of accepted content types.
+     * List of accepted content types. Currently only one file type is accepted
      */
-    private static final List<String> contentTypes = Arrays.asList("image/png", "image/jpeg", "image/gif");
+    private static final List<String> contentTypes = List.of("image/png");
 
     /**
      * Method to save validated image to the database, returns the newly created cover art object to assign the
@@ -67,5 +67,4 @@ public class CoverArtService {
         coverArt.setRecord(recordRepository.findById(recordId).get());
         return coverArt;
     }
-
 }
