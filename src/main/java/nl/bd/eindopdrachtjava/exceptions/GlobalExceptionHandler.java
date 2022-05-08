@@ -31,8 +31,8 @@ public class GlobalExceptionHandler
     }
 
     /**
-     * Handles ResourceAlreadyExistsException, returns the exception, http status and a message to ensure the origins of the
-     * exception are properly communicated to the user.
+     * Handles ResourceAlreadyExistsException, returns the exception, http status and a message to ensure the origins
+     * of the exception are properly communicated to the user.
      */
     @ExceptionHandler(value = {ResourceAlreadyExistsException.class})
     protected ResponseEntity<Object> handleResourceAlreadyExistsConflict(ResourceAlreadyExistsException ex, WebRequest request) {
@@ -41,21 +41,31 @@ public class GlobalExceptionHandler
     }
 
     /**
-     * Handles exceptions thrown when file is incorrect, or not present.
+     * Exception thrown when an invalid file is uploaded.
      */
-    @ExceptionHandler(MultipartException.class)
-    protected ResponseEntity<Object> handleMultipartConflict(MultipartException ex, WebRequest request){
-        String bodyOfResponse = "Something went wrong, please select a file";
-        return handleExceptionInternal(ex, bodyOfResponse, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
+    @ExceptionHandler(value = {InvalidFileException.class})
+    protected ResponseEntity<Object> handleInvalidFileConflict(InvalidFileException ex, WebRequest request) {
+        String bodyOfResponse = ex.getMessage();
+        return handleExceptionInternal(ex, bodyOfResponse, new HttpHeaders(), HttpStatus.FORBIDDEN, request);
     }
 
-    /**
-     * Handles exceptions thrown when database integrity is constrained.
-     */
-    @ExceptionHandler(ConstraintViolationException.class)
-    protected ResponseEntity<Object>
-    handleConstraintViolationConflict(ConstraintViolationException ex, WebRequest request){
-        String bodyOfResponse = "Database error, please contact the system administrator";
-        return handleExceptionInternal(ex, bodyOfResponse, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
-    }
+//
+//    /**
+//     * Handles exceptions thrown when file is incorrect, or not present.
+//     */
+//    @ExceptionHandler(MultipartException.class)
+//    protected ResponseEntity<Object> handleMultipartConflict(MultipartException ex, WebRequest request) {
+//        String bodyOfResponse = "Something went wrong, please select a file";
+//        return handleExceptionInternal(ex, bodyOfResponse, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
+//    }
+//
+//    /**
+//     * Handles exceptions thrown when database integrity is constrained.
+//     */
+//    @ExceptionHandler(ConstraintViolationException.class)
+//    protected ResponseEntity<Object>
+//    handleConstraintViolationConflict(ConstraintViolationException ex, WebRequest request) {
+//        String bodyOfResponse = "Database error, please contact the system administrator";
+//        return handleExceptionInternal(ex, bodyOfResponse, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
+//    }
 }

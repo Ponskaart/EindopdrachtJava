@@ -17,8 +17,9 @@ public class CoverArtController {
     private CoverArtService coverArtService;
 
     @PostMapping("/uploadcoverart/{recordId}")
-    public Record uploadCoverArt(@RequestParam MultipartFile multipartImage, @PathVariable Long recordId) throws IOException {
-        return coverArtService.uploadCoverArt(multipartImage, recordId);
+    public Record uploadCoverArt(@RequestBody MultipartFile multipartImage,
+                                 @PathVariable Long recordId) throws IOException {
+            return coverArtService.uploadCoverArt(multipartImage, recordId);
     }
 
     @GetMapping(value = "/viewcoverart/{recordId}", produces = MediaType.IMAGE_PNG_VALUE)

@@ -1,6 +1,7 @@
 package nl.bd.eindopdrachtjava.services;
 
 import lombok.AllArgsConstructor;
+import nl.bd.eindopdrachtjava.exceptions.InvalidFileException;
 import nl.bd.eindopdrachtjava.exceptions.ResourceNotFoundException;
 import nl.bd.eindopdrachtjava.models.entities.CoverArt;
 import nl.bd.eindopdrachtjava.models.entities.Record;
@@ -8,10 +9,12 @@ import nl.bd.eindopdrachtjava.repositories.CoverArtRepository;
 import nl.bd.eindopdrachtjava.repositories.RecordRepository;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartException;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.annotation.Resource;
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * Service layer which handles all image up/downloading related logic.
@@ -24,15 +27,21 @@ public class CoverArtService {
     private final RecordService recordService;
 
     /**
-     * Method saves an image to the database and returns the record object it belongs to.
+     * Method saves an image to the database and returns the record object it belongs to if the file is a PNG, JPEG or
+     * GIFF. Otherwise, the system throws an exception.
      */
-    public Record uploadCoverArt(MultipartFile multipartImage, Long recordId) throws IOException {
-        CoverArt coverArt = new CoverArt();
-        coverArt.setContent(multipartImage.getBytes());
-        coverArt.setRecord(recordRepository.findById(recordId).get());
-        coverArtRepository.save(coverArt);
+    public Record uploadCoverArt(MultipartFile multipartImage, Long recordId) throws MultipartException, IOException {
+        String fileContentType = multipartImage.getContentType();
+        if (contentTypes.contains(fileContentType)) {
+            CoverArt coverArt = new CoverArt();
+            coverArt.setContent(multipartImage.getBytes());
+            coverArt.setRecord(recordRepository.findById(recordId).get());
+            coverArtRepository.save(coverArt);
 //TODO add exception handling if file is not a PNG or file already exists
-        return recordService.updateCoverArt(recordId, coverArt.getCoverArtId());
+            return recordService.updateCoverArt(recordId, coverArt.getCoverArtId());
+        } else {
+            throw new InvalidFileException("Only PNG, JPEG and GIFF files are accepted");
+        }
     }
 
     /**
@@ -46,4 +55,6 @@ public class CoverArtService {
         byte[] coverArt = tempCoverArt.getContent();
         return new ByteArrayResource(coverArt);
     }
+
+    private static final List<String> contentTypes = Arrays.asList("image/png", "image/jpeg", "image/gif");
 }
