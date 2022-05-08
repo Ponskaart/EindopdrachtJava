@@ -34,7 +34,7 @@ public class CoverArtService {
         String fileContentType = multipartImage.getContentType();
         if (contentTypes.contains(fileContentType)) {
             CoverArt coverArt = ValidatedImage(multipartImage, recordId);
-
+            coverArtRepository.save(coverArt);
             return recordService.updateCoverArt(recordId, coverArt.getCoverArtId());
         } else {
             throw new InvalidFileException("Only PNG, JPEG and GIFF files are accepted");
@@ -46,11 +46,10 @@ public class CoverArtService {
      */
     public ByteArrayResource downloadCoverArt(Long recordId) throws ResourceNotFoundException {
         Long tempCoverArtId = recordRepository.findById(recordId).get().getCoverArt().getCoverArtId();
-        CoverArt tempCoverArt = coverArtRepository.findById(tempCoverArtId).orElseThrow(() ->
+        CoverArt coverArt = coverArtRepository.findById(tempCoverArtId).orElseThrow(() ->
                 new ResourceNotFoundException("Record with id " + recordId + " was not found" ));
 
-        byte[] coverArt = tempCoverArt.getContent();
-        return new ByteArrayResource(coverArt);
+        return new ByteArrayResource(coverArt.getContent());
     }
 
     /**
@@ -66,7 +65,6 @@ public class CoverArtService {
         CoverArt coverArt = new CoverArt();
         coverArt.setContent(multipartImage.getBytes());
         coverArt.setRecord(recordRepository.findById(recordId).get());
-        coverArtRepository.save(coverArt);
         return coverArt;
     }
 
