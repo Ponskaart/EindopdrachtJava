@@ -44,8 +44,7 @@ public class CoverArtService {
      * Method retrieves cover art from database and returns it as a byte array.
      */
     public ByteArrayResource downloadCoverArt(Long recordId) throws ResourceNotFoundException {
-        Long tempCoverArtId = recordRepository.findById(recordId).get().getCoverArt().getCoverArtId();
-        CoverArt coverArt = coverArtRepository.findById(tempCoverArtId).orElseThrow(() ->
+        CoverArt coverArt = coverArtRepository.findCoverArtByRecordRecordId(recordId).orElseThrow(() ->
                 new ResourceNotFoundException("Record with id " + recordId + " was not found" ));
 
         return new ByteArrayResource(coverArt.getContent());
