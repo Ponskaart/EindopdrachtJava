@@ -44,8 +44,7 @@ public class GlobalExceptionHandler
      * Handles exceptions thrown when file is incorrect, or not present.
      */
     @ExceptionHandler(MultipartException.class)
-    protected ResponseEntity<Object> handleMultipartConflict(MultipartException ex, WebRequest request)
-            throws IOException {
+    protected ResponseEntity<Object> handleMultipartConflict(MultipartException ex, WebRequest request){
         String bodyOfResponse = "Something went wrong, please select a file";
         return handleExceptionInternal(ex, bodyOfResponse, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
     }
@@ -54,8 +53,8 @@ public class GlobalExceptionHandler
      * Handles exceptions thrown when database integrity is constrained.
      */
     @ExceptionHandler(ConstraintViolationException.class)
-    protected ResponseEntity<Object> handleConstraintViolationConflict(ConstraintViolationException ex, WebRequest request)
-            throws IOException {
+    protected ResponseEntity<Object>
+    handleConstraintViolationConflict(ConstraintViolationException ex, WebRequest request){
         String bodyOfResponse = "Database error, please contact the system administrator";
         return handleExceptionInternal(ex, bodyOfResponse, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
     }
