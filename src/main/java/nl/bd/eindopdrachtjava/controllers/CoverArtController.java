@@ -24,12 +24,13 @@ public class CoverArtController {
      * Uploads an image to the database and assigns it to a record.
      */
     @PostMapping("/uploadcoverart/{recordId}")
-    public Record uploadCoverArt(@RequestBody MultipartFile multipartImage, @PathVariable Long recordId) throws IOException {
+    public Record uploadCoverArt
+    (@RequestBody MultipartFile multipartImage, @PathVariable Long recordId) throws IOException {
             return coverArtService.uploadCoverArt(multipartImage, recordId);
     }
 
     /**
-     * Shows an image from the database. Had to use response entity, could not get it to work otherwise.
+     * Downloads an image from the database. Had to use response entity, could not get it to work otherwise.
      */
     @GetMapping(value = "/downloadcoverart/{recordId}")
     public ResponseEntity<Resource> download(@PathVariable Long recordId) {
@@ -44,6 +45,9 @@ public class CoverArtController {
                 .body(resource);
     }
 
+    /**
+     * Shows an image from the database in the browser.
+     */
     @GetMapping(value = "/viewcoverart/{recordId}", produces = MediaType.IMAGE_PNG_VALUE)
     public ByteArrayResource downloadCoverArt(@PathVariable Long recordId) {
         return coverArtService.downloadCoverArt(recordId);

@@ -90,10 +90,9 @@ public class ArtistService {
      * Creates artist to use in registerArtist method.
      */
     private Artist createArtist(ArtistRegistrationRequest artistRegistrationRequest) {
-        Artist artist = Artist.builder()
+        return Artist.builder()
                 .artistName(artistRegistrationRequest.getArtistName())
                 .established(artistRegistrationRequest.getEstablished())
                 .build();
-        return artist;
     }
 }
