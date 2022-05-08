@@ -13,7 +13,6 @@ import org.springframework.web.multipart.MultipartException;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -30,14 +29,14 @@ public class CoverArtService {
      * Method saves an image to the database and returns the record object it belongs to if the file is a PNG, JPEG or
      * GIFF. Otherwise, the system throws an exception.
      */
-    public Record uploadCoverArt(MultipartFile multipartImage, Long recordId) throws MultipartException, IOException {
+    public Record uploadCoverArt(MultipartFile multipartImage, Long recordId)
+            throws MultipartException, IOException, ResourceNotFoundException {
         String fileContentType = multipartImage.getContentType();
-        if (contentTypes.contains(fileContentType)) {
-            CoverArt coverArt = ValidatedImage(multipartImage, recordId);
-            coverArtRepository.save(coverArt);
-            return recordService.updateCoverArt(recordId, coverArt.getCoverArtId());
+
+        if (recordRepository.findById(recordId).isPresent()) {
+            return validateAndUpload(multipartImage, recordId, fileContentType);
         } else {
-            throw new InvalidFileException("Only PNG files are accepted");
+            throw new ResourceNotFoundException("Record with id " + recordId + ", does not exist");
         }
     }
 
@@ -66,5 +65,18 @@ public class CoverArtService {
         coverArt.setContent(multipartImage.getBytes());
         coverArt.setRecord(recordRepository.findById(recordId).get());
         return coverArt;
+    }
+
+    /**
+     * Validates and uploads an image to the database.
+     */
+    private Record validateAndUpload(MultipartFile multipartImage, Long recordId, String fileContentType) throws IOException {
+        if (contentTypes.contains(fileContentType)) {
+            CoverArt coverArt = ValidatedImage(multipartImage, recordId);
+            coverArtRepository.save(coverArt);
+            return recordService.updateCoverArt(recordId, coverArt.getCoverArtId());
+        } else {
+            throw new InvalidFileException("Only PNG files are accepted");
+        }
     }
 }
