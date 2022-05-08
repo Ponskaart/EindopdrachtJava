@@ -33,11 +33,8 @@ public class CoverArtService {
     public Record uploadCoverArt(MultipartFile multipartImage, Long recordId) throws MultipartException, IOException {
         String fileContentType = multipartImage.getContentType();
         if (contentTypes.contains(fileContentType)) {
-            CoverArt coverArt = new CoverArt();
-            coverArt.setContent(multipartImage.getBytes());
-            coverArt.setRecord(recordRepository.findById(recordId).get());
-            coverArtRepository.save(coverArt);
-//TODO add exception handling if file is not a PNG or file already exists
+            CoverArt coverArt = ValidatedImage(multipartImage, recordId);
+
             return recordService.updateCoverArt(recordId, coverArt.getCoverArtId());
         } else {
             throw new InvalidFileException("Only PNG, JPEG and GIFF files are accepted");
@@ -56,5 +53,21 @@ public class CoverArtService {
         return new ByteArrayResource(coverArt);
     }
 
+    /**
+     * List of accepted content types.
+     */
     private static final List<String> contentTypes = Arrays.asList("image/png", "image/jpeg", "image/gif");
+
+    /**
+     * Method to save validated image to the database, returns the newly created cover art object to assign the
+     * database reference.
+     */
+    private CoverArt ValidatedImage(MultipartFile multipartImage, Long recordId) throws IOException {
+        CoverArt coverArt = new CoverArt();
+        coverArt.setContent(multipartImage.getBytes());
+        coverArt.setRecord(recordRepository.findById(recordId).get());
+        coverArtRepository.save(coverArt);
+        return coverArt;
+    }
+
 }

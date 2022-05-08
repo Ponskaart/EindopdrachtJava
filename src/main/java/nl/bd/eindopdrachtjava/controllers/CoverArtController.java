@@ -16,12 +16,19 @@ import java.io.IOException;
 public class CoverArtController {
     private CoverArtService coverArtService;
 
+    /**
+     * Uploads an image to the database and assigns it to a record.
+     */
     @PostMapping("/uploadcoverart/{recordId}")
     public Record uploadCoverArt(@RequestBody MultipartFile multipartImage,
                                  @PathVariable Long recordId) throws IOException {
             return coverArtService.uploadCoverArt(multipartImage, recordId);
     }
 
+    /**
+     * Downloads an image from the database.
+     */
+    //TODO Does this download an image? Or does it only show an image? Maybe add proper download method.
     @GetMapping(value = "/viewcoverart/{recordId}", produces = MediaType.IMAGE_PNG_VALUE)
     public ByteArrayResource downloadCoverArt(@PathVariable Long recordId) {
         return coverArtService.downloadCoverArt(recordId);
