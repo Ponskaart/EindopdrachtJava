@@ -44,7 +44,6 @@ public class CoverArtService {
                 new ResourceNotFoundException("Record with id " + recordId + " was not found" ));
 
         byte[] coverArt = tempCoverArt.getContent();
-
         return new ByteArrayResource(coverArt);
     }
 }
