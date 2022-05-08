@@ -5,6 +5,9 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
+/**
+ * Validator class that checks if file is a PNG or not.
+ */
 public class FileValidator implements ConstraintValidator<ValidFile, MultipartFile> {
 
     @Override
@@ -12,6 +15,9 @@ public class FileValidator implements ConstraintValidator<ValidFile, MultipartFi
 
     }
 
+    /**
+     * Checks if file is of a valid type.
+     */
     @Override
     public boolean isValid(MultipartFile multipartFile, ConstraintValidatorContext context) {
 
@@ -26,10 +32,6 @@ public class FileValidator implements ConstraintValidator<ValidFile, MultipartFi
     }
 
     private boolean isSupportedContentType(String contentType) {
-        return contentType.equals("text/xml")
-                || contentType.equals("application/pdf")
-                || contentType.equals("image/png")
-                || contentType.equals("image/jpg")
-                || contentType.equals("image/jpeg");
+        return contentType.equals("image/png");
     }
 }
