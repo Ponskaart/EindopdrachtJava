@@ -16,6 +16,6 @@ public interface CoverArtRepository extends JpaRepository<CoverArt, Long> {
     @Query( "SELECT r " +
             "FROM Record r" +
             " WHERE r.recordId = :recordId")
-    Optional<CoverArt> findCoverArtByRecordRecordId(
+    Optional<CoverArt> findCoverArtByRecordId(
             @Param("recordId") Long recordId);
 }

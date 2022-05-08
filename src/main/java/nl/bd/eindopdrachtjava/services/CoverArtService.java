@@ -41,13 +41,18 @@ public class CoverArtService {
     }
 
     /**
-     * Method retrieves cover art from database and returns it as a byte array.
+     * Method retrieves cover art from database and returns it as a byte array. Tried to use custom query to find
+     * cover art by record id, but method would return a record and not a cover art object.
      */
     public ByteArrayResource downloadCoverArt(Long recordId) throws ResourceNotFoundException {
-        CoverArt coverArt = coverArtRepository.findCoverArtByRecordRecordId(recordId).orElseThrow(() ->
-                new ResourceNotFoundException("Record with id " + recordId + " was not found" ));
-
-        return new ByteArrayResource(coverArt.getContent());
+        if (recordRepository.findById(recordId).isPresent()){
+            Long coverArtId = recordRepository.findById(recordId).get().getCoverArt().getCoverArtId();
+            CoverArt coverArt = coverArtRepository.findById(coverArtId).orElseThrow(() ->
+                    new ResourceNotFoundException("No cover art was found."));
+            return new ByteArrayResource(coverArt.getContent());
+        } else {
+            throw new ResourceNotFoundException("Record with id " + recordId + ", was not found");
+        }
     }
 
     /**
