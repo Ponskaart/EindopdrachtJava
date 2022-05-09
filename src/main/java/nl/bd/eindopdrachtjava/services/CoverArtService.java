@@ -46,8 +46,7 @@ public class CoverArtService {
      */
     public ByteArrayResource downloadCoverArt(Long recordId) throws ResourceNotFoundException {
         if (recordRepository.findById(recordId).isPresent()){
-            Long coverArtId = recordRepository.findById(recordId).get().getCoverArt().getCoverArtId();
-            CoverArt coverArt = coverArtRepository.findById(coverArtId).orElseThrow(() ->
+            CoverArt coverArt = coverArtRepository.findCoverArtByRecordId(recordId).orElseThrow(() ->
                     new ResourceNotFoundException("No cover art was found."));
             return new ByteArrayResource(coverArt.getContent());
         } else {
