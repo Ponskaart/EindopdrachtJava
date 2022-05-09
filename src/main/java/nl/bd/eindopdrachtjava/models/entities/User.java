@@ -21,6 +21,7 @@ public class User {
     private Long userId;
 
     @Column
+    @Enumerated
     private UserRole role;
 
     @Column
@@ -28,4 +29,10 @@ public class User {
 
     @Column
     private String password;
+
+    public User(String username, String password,  UserRole role) {
+        this.username = username;
+        this.password = password;
+        this.role = role;
+    }
 }
