@@ -1,9 +1,6 @@
 package nl.bd.eindopdrachtjava.models.entities;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import nl.bd.eindopdrachtjava.models.enums.UserRole;
 
 import javax.persistence.*;
@@ -16,6 +13,7 @@ import static javax.persistence.GenerationType.IDENTITY;
 @NoArgsConstructor
 @Getter
 @Setter
+@Builder
 public class User {
     @Id
     @GeneratedValue(strategy = IDENTITY)
