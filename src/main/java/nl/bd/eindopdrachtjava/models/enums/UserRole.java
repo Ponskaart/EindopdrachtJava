@@ -3,9 +3,9 @@ package nl.bd.eindopdrachtjava.models.enums;
 import org.springframework.security.core.GrantedAuthority;
 
 public enum UserRole implements GrantedAuthority {
-    EMPLOYEE(Code.EMPLOYEE),
-    ADMIN(Code.ADMIN),
-    CUSTOMER(Code.CUSTOMER);
+    EMPLOYEE(UserRoleString.EMPLOYEE),
+    ADMIN(UserRoleString.ADMIN),
+    CUSTOMER(UserRoleString.CUSTOMER);
 
     private final String authority;
 
@@ -18,7 +18,7 @@ public enum UserRole implements GrantedAuthority {
         return null;
     }
 
-    public class Code {
+    public static class UserRoleString {
         public static final String EMPLOYEE = "ROLE_EMPLOYEE";
         public static final String ADMIN = "ROLE_ADMIN";
         public static final String CUSTOMER = "ROLE_CUSTOMER";
