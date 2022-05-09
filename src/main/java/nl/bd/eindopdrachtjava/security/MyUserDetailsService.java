@@ -4,7 +4,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
-public class MyDatabaseUserDetailsService implements UserDetailsService {
+public class MyUserDetailsService implements UserDetailsService {
 
     UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         //TODO  Load the user from the users table by username. If not found, throw UsernameNotFoundException.
