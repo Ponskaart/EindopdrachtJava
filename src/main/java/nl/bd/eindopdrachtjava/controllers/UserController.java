@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import nl.bd.eindopdrachtjava.models.annotations.AdminAuthorization;
 import nl.bd.eindopdrachtjava.models.entities.User;
 import nl.bd.eindopdrachtjava.models.requests.UserRegistrationRequest;
-import nl.bd.eindopdrachtjava.repositories.UserDetailsRepository;
 import nl.bd.eindopdrachtjava.services.UserService;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,7 +11,6 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("recordstore")
 @AllArgsConstructor
 public class UserController {
-    private final UserDetailsRepository userDetailsRepository;
     private final UserService userService;
 
     @AdminAuthorization

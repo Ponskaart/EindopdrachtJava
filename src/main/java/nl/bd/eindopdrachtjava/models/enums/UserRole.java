@@ -28,7 +28,9 @@ public enum UserRole {
     }
 
     /**
-     * Fills set with permissions, although IDE does not seem to use method, I am reluctant to remove it.
+     * Fills set with permissions, although IDE does not seem to directly use this method, it seems necessary for the
+     * rest of the class to function properly. For without it, the permissions Sets would never be filled and the enums
+     * then cannot function.
      */
     public Set<SimpleGrantedAuthority> getGrantedAuthorities() {
         Set<SimpleGrantedAuthority> permissions = getPermissions().stream()

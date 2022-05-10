@@ -37,6 +37,15 @@ public class CommandLineAppStartupRunner {
                         .build();
                 userDetailsRepository.save(customer);
             }
+
+            if(userDetailsRepository.findByUserRole(UserRole.EMPLOYEE).isEmpty()){
+                User employee = User.builder()
+                        .username("Employee")
+                        .password(bCryptPasswordEncoder.encode("TheBestPassword"))
+                        .role(UserRole.EMPLOYEE)
+                        .build();
+                userDetailsRepository.save(employee);
+            }
         };
     }
 }
