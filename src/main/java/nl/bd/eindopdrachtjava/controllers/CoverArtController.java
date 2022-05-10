@@ -15,6 +15,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 
+/**
+ * Contains endpoints for all CoverArt related functions.
+ */
 @AllArgsConstructor
 @RequestMapping(path = "recordstore")
 @RestController
