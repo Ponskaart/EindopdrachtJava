@@ -58,4 +58,5 @@ public class CoverArtController {
     }
 
     //TODO Where is the delete method!?
+    //TODO Update method!
 }

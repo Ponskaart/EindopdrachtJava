@@ -70,4 +70,6 @@ public class Record {
 
     @Column
     private boolean isPicturedisk;
+
+    //TODO Since this is an api for a record store, we should keep track of the price and qtyInStock. Completely forgot those
 }

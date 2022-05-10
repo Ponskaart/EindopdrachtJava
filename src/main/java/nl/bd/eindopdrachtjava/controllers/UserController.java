@@ -18,4 +18,8 @@ public class UserController {
     public User registerUser(@RequestBody UserRegistrationRequest userRegistrationRequest){
         return userService.registerUser(userRegistrationRequest);
     }
+
+    //TODO Add update user
+    //TODO Add delete user
+    //TODO add get user(?)
 }
