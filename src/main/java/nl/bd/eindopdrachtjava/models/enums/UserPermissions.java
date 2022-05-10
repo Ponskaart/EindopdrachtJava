@@ -1,4 +1,4 @@
-package nl.bd.eindopdrachtjava.security;
+package nl.bd.eindopdrachtjava.models.enums;
 
 import lombok.Getter;
 

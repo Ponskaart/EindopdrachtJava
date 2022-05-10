@@ -1,6 +1,8 @@
 package nl.bd.eindopdrachtjava.controllers;
 
 import lombok.AllArgsConstructor;
+import nl.bd.eindopdrachtjava.models.annotations.AdminAuthorization;
+import nl.bd.eindopdrachtjava.models.annotations.CustomerAuthorization;
 import nl.bd.eindopdrachtjava.models.entities.Artist;
 import nl.bd.eindopdrachtjava.models.enums.UserRole;
 import nl.bd.eindopdrachtjava.models.requests.ArtistRegistrationRequest;
@@ -23,8 +25,8 @@ public class ArtistController {
     /**
      * Endpoint creates a new artist object and saves it to te database.
      */
+    @AdminAuthorization
     @PostMapping("/artist")
-//    @PreAuthorize("hasAuthority('ADMIN')")
     public Artist registerArtist(@RequestBody ArtistRegistrationRequest artistRegistrationRequest){
         return artistService.registerArtist(artistRegistrationRequest);
     }
@@ -32,6 +34,7 @@ public class ArtistController {
     /**
      * Endpoint shows all registered artists.
      */
+    @CustomerAuthorization
     @GetMapping("/artists")
     public List<Artist> getAllArtists(){
         return artistService.getAllArtists();

@@ -4,12 +4,10 @@ import lombok.AllArgsConstructor;
 import nl.bd.eindopdrachtjava.models.entities.User;
 import nl.bd.eindopdrachtjava.models.enums.UserRole;
 import nl.bd.eindopdrachtjava.repositories.UserDetailsRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.stereotype.Component;
 
 /**
  * Class runs before actual program starts and loads database with an admin user.
@@ -20,9 +18,7 @@ public class CommandLineAppStartupRunner {
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Bean
-    CommandLineRunner commandLineRunner(
-            UserDetailsRepository userDetailsRepository
-    ){
+    CommandLineRunner commandLineRunner(UserDetailsRepository userDetailsRepository){
         return args -> {
             if(userDetailsRepository.findByUserRole(UserRole.ADMIN).isEmpty()){
                 User admin = User.builder()
@@ -32,14 +28,15 @@ public class CommandLineAppStartupRunner {
                         .build();
                 userDetailsRepository.save(admin);
             }
+
+            if(userDetailsRepository.findByUserRole(UserRole.CUSTOMER).isEmpty()){
+                User customer = User.builder()
+                        .username("Customer")
+                        .password(bCryptPasswordEncoder.encode("EvenBetterPassword"))
+                        .role(UserRole.CUSTOMER)
+                        .build();
+                userDetailsRepository.save(customer);
+            }
         };
     }
-
-
-
-//    @Override
-//    public void run(String...args) throws Exception {
-//        User admin = new User("Admin", "VeryGoodPassword", UserRole.ADMIN);
-//        userDetailsRepository.save(admin);
-//    }
 }
