@@ -121,6 +121,8 @@ public class RecordService {
                 .country(recordRegistrationRequest.getCountry())
                 .isShaped(recordRegistrationRequest.isShaped())
                 .isPicturedisk(recordRegistrationRequest.isPicturedisk())
+                .price(recordRegistrationRequest.getPrice())
+                .qtyInStock(recordRegistrationRequest.getQtyInStock())
                 .build();
         return record;
     }
@@ -154,6 +156,8 @@ public class RecordService {
         record.setCountry(recordRegistrationRequest.getCountry());
         record.setShaped(recordRegistrationRequest.isShaped());
         record.setPicturedisk(recordRegistrationRequest.isPicturedisk());
+        record.setPrice(recordRegistrationRequest.getPrice());
+        record.setQtyInStock(recordRegistrationRequest.getQtyInStock());
         return recordRepository.save(record);
     }
 

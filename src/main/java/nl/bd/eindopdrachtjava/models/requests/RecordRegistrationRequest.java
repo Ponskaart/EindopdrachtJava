@@ -19,4 +19,6 @@ public class RecordRegistrationRequest {
     private final String country;
     private final boolean isShaped;
     private final boolean isPicturedisk;
+    private final double price;
+    private final int qtyInStock;
 }
