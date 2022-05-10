@@ -12,8 +12,7 @@ import java.util.Optional;
 @Repository
 public interface RecordRepository extends JpaRepository<Record, Long> {
     /**
-     * Custom queries to retrieve specific data from the database. findRecordByGenre does not work without whitespace
-     * in front of "FROM", don't know why.
+     * Custom queries to retrieve specific data from the database.
      */
     @Query( "SELECT a " +
             "FROM Artist a " +

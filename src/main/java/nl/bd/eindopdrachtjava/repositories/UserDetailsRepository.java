@@ -11,6 +11,9 @@ import java.util.Optional;
 
 @Repository
 public interface UserDetailsRepository extends JpaRepository<User, Long> {
+    /**
+     * Custom queries to retrieve specific data from the database.
+     */
     @Query( "SELECT u " +
             "FROM User u" +
             " WHERE u.username = :username")

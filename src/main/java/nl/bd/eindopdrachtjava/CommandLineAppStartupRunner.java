@@ -10,7 +10,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 /**
- * Class runs before actual program starts and loads database with an admin user.
+ * Class runs before actual program starts and loads database with an admin user and a customer user.
  */
 @Configuration
 @AllArgsConstructor

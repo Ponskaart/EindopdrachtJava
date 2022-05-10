@@ -4,6 +4,9 @@ import org.springframework.security.access.prepost.PreAuthorize;
 
 import java.lang.annotation.*;
 
+/**
+ * Custom annotation to enable easy authorization for users
+ */
 @Target({ ElementType.METHOD, ElementType.TYPE })
 @Retention(RetentionPolicy.RUNTIME)
 @Inherited

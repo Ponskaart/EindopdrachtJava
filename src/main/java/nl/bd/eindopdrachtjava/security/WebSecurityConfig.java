@@ -12,25 +12,27 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
-
-
-
 @Configuration
 @AllArgsConstructor
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
+/**
+ * Config class to configure spring security.
+ */
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final UserDetailsService userDetailsService;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
+    /**
+     * Disables csrf, otherwise authentication does not work, also disables login page since this application is pure
+     * backend.
+     */
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
             .csrf().disable()
             .authorizeRequests()
-//            .antMatchers("/**").hasAuthority("ADMIN")
-//            .antMatchers("/artist").hasAuthority("ADMIN")
             .anyRequest()
             .authenticated()
             .and()
@@ -39,11 +41,17 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             .httpBasic();
 }
 
+    /**
+     * Initiates DaoAuthenticationProvider Bean.
+     */
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.authenticationProvider(daoAuthenticationProvider());
     }
 
+    /**
+     * Bean initiates password encoding.
+     */
     @Bean
     public DaoAuthenticationProvider daoAuthenticationProvider() {
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider();

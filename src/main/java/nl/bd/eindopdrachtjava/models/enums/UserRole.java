@@ -6,11 +6,17 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import com.google.common.collect.Sets;
 
+/**
+ * Enums to differentiate the different roles in the system.
+ */
 public enum UserRole {
     EMPLOYEE(Sets.newHashSet()),
     ADMIN(Sets.newHashSet()),
     CUSTOMER(Sets.newHashSet());
 
+    /**
+     * Set of granted permission for the user
+     */
     private final Set<UserPermissions> permissions;
 
     UserRole(Set<UserPermissions> permissions) {
@@ -21,6 +27,9 @@ public enum UserRole {
         return this.permissions;
     }
 
+    /**
+     * Fills set with permissions, although IDE does not seem to use method, I am reluctant to remove it.
+     */
     public Set<SimpleGrantedAuthority> getGrantedAuthorities() {
         Set<SimpleGrantedAuthority> permissions = getPermissions().stream()
                 .map(permission -> new SimpleGrantedAuthority(permission.getPermission()))
@@ -29,11 +38,4 @@ public enum UserRole {
 
         return permissions;
     }
-
-//
-//    public static class UserRoleString {
-//        public static final String EMPLOYEE = "ROLE_EMPLOYEE";
-//        public static final String ADMIN = "ROLE_ADMIN";
-//        public static final String CUSTOMER = "ROLE_CUSTOMER";
-//    }
 }
