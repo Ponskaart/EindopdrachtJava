@@ -6,6 +6,7 @@ import nl.bd.eindopdrachtjava.models.enums.UserRole;
 import nl.bd.eindopdrachtjava.models.requests.ArtistRegistrationRequest;
 import nl.bd.eindopdrachtjava.services.ArtistService;
 import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -22,7 +23,8 @@ public class ArtistController {
     /**
      * Endpoint creates a new artist object and saves it to te database.
      */
-    @PostMapping("/artist") @Secured(UserRole.UserRoleString.ADMIN)
+    @PostMapping("/artist")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public Artist registerArtist(@RequestBody ArtistRegistrationRequest artistRegistrationRequest){
         return artistService.registerArtist(artistRegistrationRequest);
     }

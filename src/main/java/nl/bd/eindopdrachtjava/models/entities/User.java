@@ -21,7 +21,7 @@ public class User {
     private Long userId;
 
     @Column
-    @Enumerated
+    @Enumerated(EnumType.STRING)
     private UserRole role;
 
     @Column
