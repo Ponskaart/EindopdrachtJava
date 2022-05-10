@@ -26,8 +26,8 @@ public class CoverArtService {
     private final RecordService recordService;
 
     /**
-     * Method saves an image to the database and returns the record object it belongs to if the file is a PNG, JPEG or
-     * GIFF. Otherwise, the system throws an exception.
+     * Method saves an image to the database and returns the record object it belongs to if the file is a PNG.
+     * Otherwise, the system throws an exception.
      */
     public Record uploadCoverArt(MultipartFile multipartImage, Long recordId)
             throws MultipartException, IOException, ResourceNotFoundException {

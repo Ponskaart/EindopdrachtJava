@@ -72,12 +72,12 @@ public class RecordService {
             throw new ResourceAlreadyExistsException("Record with name: " + recordRegistrationRequest.getTitle() +
                     ", and with artist: " + recordRegistrationRequest.getArtistName() + ", is already registered.");
         } else {
-            if(!doesArtistExist(recordRegistrationRequest)){
-                throw new ResourceNotFoundException("Artist with name: " + recordRegistrationRequest.getArtistName() +
-                        ", does not exist");
-            } else {
+            if(doesArtistExist(recordRegistrationRequest)){
                 Record record = createRecord(recordRegistrationRequest);
                 return recordRepository.save(record);
+            } else {
+                throw new ResourceNotFoundException("Artist with name: " + recordRegistrationRequest.getArtistName() +
+                        ", does not exist");
             }
         }
     }
@@ -136,7 +136,7 @@ public class RecordService {
     }
 
     /**
-     * Returns boolean false if Artist doesn't exist in database.
+     * Returns boolean true if artist exists in database.
      */
     private boolean doesArtistExist(RecordRegistrationRequest recordRegistrationRequest) {
         return artistRepository.findByArtistName(recordRegistrationRequest.getArtistName()).isPresent();
