@@ -13,7 +13,7 @@ import java.util.Optional;
 @Repository
 public interface CoverArtRepository extends JpaRepository<CoverArt, Long> {
     /**
-     * custom query does not work without the whitespace in from of "WHERE", don't know why.
+     * Custom queries to retrieve specific data from the database.
      */
     @Query( "SELECT c " +
             "FROM CoverArt c" +
