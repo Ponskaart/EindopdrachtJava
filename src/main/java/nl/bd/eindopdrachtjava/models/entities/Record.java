@@ -66,12 +66,6 @@ public class Record {
     private String country;
 
     @Column
-    private boolean isShaped;
-
-    @Column
-    private boolean isPicturedisk;
-
-    @Column
     private double price;
 
     @Column

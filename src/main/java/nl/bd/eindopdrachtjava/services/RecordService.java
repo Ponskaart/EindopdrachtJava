@@ -119,8 +119,6 @@ public class RecordService {
                 .color(recordRegistrationRequest.getColor())
                 .year(recordRegistrationRequest.getYear())
                 .country(recordRegistrationRequest.getCountry())
-                .isShaped(recordRegistrationRequest.isShaped())
-                .isPicturedisk(recordRegistrationRequest.isPicturedisk())
                 .price(recordRegistrationRequest.getPrice())
                 .qtyInStock(recordRegistrationRequest.getQtyInStock())
                 .build();
@@ -145,7 +143,7 @@ public class RecordService {
 
     /**
      * Returns updated record. Very large method, but it should make sure that if the user does not specify a value
-     * the old value does not get overridden.
+     * the old value does not get overridden with null or 0.
      */
     private Record updatedRecord(RecordRegistrationRequest recordRegistrationRequest, Record record) {
         Long tempRecordId = record.getRecordId();
@@ -188,14 +186,6 @@ public class RecordService {
             record.setCountry(recordRegistrationRequest.getCountry());
         }
 
-        if (record.isShaped() != recordRegistrationRequest.isShaped()){
-            record.setShaped(true);
-        }
-
-        if (record.isPicturedisk() != recordRegistrationRequest.isPicturedisk()){
-            record.setPicturedisk(true);
-        }
-
         if (recordRegistrationRequest.getPrice() == 0.0) {
             record.setPrice(recordRepository.findById(tempRecordId).get().getPrice());
         } else {
@@ -209,17 +199,6 @@ public class RecordService {
         }
 
         return recordRepository.save(record);
-
-//            record.setTitle(recordRegistrationRequest.getTitle());
-//            record.setGenre(recordRegistrationRequest.getGenre());
-//            record.setLabel(recordRegistrationRequest.getLabel());
-//            record.setColor(recordRegistrationRequest.getColor());
-//            record.setYear(recordRegistrationRequest.getYear());
-//            record.setCountry(recordRegistrationRequest.getCountry());
-//            record.setShaped(recordRegistrationRequest.isShaped());
-//            record.setPicturedisk(recordRegistrationRequest.isPicturedisk());
-//            record.setPrice(recordRegistrationRequest.getPrice());
-//            record.setQtyInStock(recordRegistrationRequest.getQtyInStock());
     }
 
     private Record updatedCoverArt(Long coverArtId, Record record) {
