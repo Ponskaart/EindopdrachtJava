@@ -1,4 +1,4 @@
-package nl.bd.eindopdrachtjava.security;
+package nl.bd.eindopdrachtjava.services;
 
 import nl.bd.eindopdrachtjava.models.entities.User;
 import nl.bd.eindopdrachtjava.models.requests.UserRegistrationRequest;
@@ -10,7 +10,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 @Service
-public class MyUserDetailsService implements UserDetailsService {
+public class UserService implements UserDetailsService {
 
     @Autowired
     private UserDetailsRepository userDetailsRepository;

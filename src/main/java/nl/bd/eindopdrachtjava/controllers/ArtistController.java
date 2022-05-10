@@ -24,7 +24,7 @@ public class ArtistController {
      * Endpoint creates a new artist object and saves it to te database.
      */
     @PostMapping("/artist")
-    @PreAuthorize("hasAuthority('ADMIN')")
+//    @PreAuthorize("hasAuthority('ADMIN')")
     public Artist registerArtist(@RequestBody ArtistRegistrationRequest artistRegistrationRequest){
         return artistService.registerArtist(artistRegistrationRequest);
     }
