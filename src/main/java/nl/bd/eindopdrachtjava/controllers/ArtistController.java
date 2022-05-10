@@ -42,7 +42,7 @@ public class ArtistController {
     /**
      * Endpoint shows all artists established in a specific year.
      */
- @AllUserAuthorization
+    @AllUserAuthorization
     @GetMapping("/artists/{established}")
     public List<Artist> getArtistsByYearEstablished(@PathVariable int established){
         return artistService.getArtistsByYearEstablished(established);
