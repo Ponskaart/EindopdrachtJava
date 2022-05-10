@@ -83,7 +83,7 @@ public class RecordService {
     }
 
     /**
-     * Updates a Record with new data, creates new record if record id does not exist.
+     * Updates a Record with new data.
      */
     public Record updateRecord(RecordRegistrationRequest recordRegistrationRequest,
                                Long recordId) throws ResourceNotFoundException{
@@ -144,21 +144,82 @@ public class RecordService {
     }
 
     /**
-     * Returns updated record
+     * Returns updated record. Very large method, but it should make sure that if the user does not specify a value
+     * the old value does not get overridden.
      */
     private Record updatedRecord(RecordRegistrationRequest recordRegistrationRequest, Record record) {
+        Long tempRecordId = record.getRecordId();
+
         record.setArtist(artistRepository.findByArtistName(recordRegistrationRequest.getArtistName()).get());
-        record.setTitle(recordRegistrationRequest.getTitle());
-        record.setGenre(recordRegistrationRequest.getGenre());
-        record.setLabel(recordRegistrationRequest.getLabel());
-        record.setColor(recordRegistrationRequest.getColor());
-        record.setYear(recordRegistrationRequest.getYear());
-        record.setCountry(recordRegistrationRequest.getCountry());
-        record.setShaped(recordRegistrationRequest.isShaped());
-        record.setPicturedisk(recordRegistrationRequest.isPicturedisk());
-        record.setPrice(recordRegistrationRequest.getPrice());
-        record.setQtyInStock(recordRegistrationRequest.getQtyInStock());
+
+        if (recordRegistrationRequest.getTitle() == null) {
+            record.setTitle(recordRepository.findById(tempRecordId).get().getTitle());
+        } else {
+            record.setTitle(recordRegistrationRequest.getTitle());
+        }
+
+        if (recordRegistrationRequest.getGenre() == null) {
+            record.setGenre(recordRepository.findById(tempRecordId).get().getGenre());
+        } else {
+            record.setGenre(recordRegistrationRequest.getGenre());
+        }
+
+        if (recordRegistrationRequest.getLabel() == null) {
+            record.setLabel(recordRepository.findById(tempRecordId).get().getLabel());
+        } else {
+            record.setLabel(recordRegistrationRequest.getLabel());
+        }
+
+        if (recordRegistrationRequest.getColor() == null){
+            record.setColor(recordRepository.findById(tempRecordId).get().getColor());
+        } else {
+            record.setColor(recordRegistrationRequest.getColor());
+        }
+
+        if (recordRegistrationRequest.getYear() == 0){
+            record.setYear(recordRepository.findById(tempRecordId).get().getYear());
+        } else {
+            record.setYear(recordRegistrationRequest.getYear());
+        }
+
+        if (recordRegistrationRequest.getCountry() == null){
+            record.setCountry(recordRepository.findById(tempRecordId).get().getCountry());
+        } else {
+            record.setCountry(recordRegistrationRequest.getCountry());
+        }
+
+        if (record.isShaped() != recordRegistrationRequest.isShaped()){
+            record.setShaped(true);
+        }
+
+        if (record.isPicturedisk() != recordRegistrationRequest.isPicturedisk()){
+            record.setPicturedisk(true);
+        }
+
+        if (recordRegistrationRequest.getPrice() == 0.0) {
+            record.setPrice(recordRepository.findById(tempRecordId).get().getPrice());
+        } else {
+            record.setPrice(recordRegistrationRequest.getPrice());
+        }
+
+        if (recordRegistrationRequest.getQtyInStock() == 0) {
+            record.setQtyInStock(recordRepository.findById(tempRecordId).get().getQtyInStock());
+        } else {
+            record.setQtyInStock(recordRegistrationRequest.getQtyInStock());
+        }
+
         return recordRepository.save(record);
+
+//            record.setTitle(recordRegistrationRequest.getTitle());
+//            record.setGenre(recordRegistrationRequest.getGenre());
+//            record.setLabel(recordRegistrationRequest.getLabel());
+//            record.setColor(recordRegistrationRequest.getColor());
+//            record.setYear(recordRegistrationRequest.getYear());
+//            record.setCountry(recordRegistrationRequest.getCountry());
+//            record.setShaped(recordRegistrationRequest.isShaped());
+//            record.setPicturedisk(recordRegistrationRequest.isPicturedisk());
+//            record.setPrice(recordRegistrationRequest.getPrice());
+//            record.setQtyInStock(recordRegistrationRequest.getQtyInStock());
     }
 
     private Record updatedCoverArt(Long coverArtId, Record record) {
