@@ -2,6 +2,7 @@ package nl.bd.eindopdrachtjava.controllers;
 
 import lombok.AllArgsConstructor;
 import nl.bd.eindopdrachtjava.models.annotations.*;
+import nl.bd.eindopdrachtjava.models.entities.CoverArt;
 import nl.bd.eindopdrachtjava.services.CoverArtService;
 import nl.bd.eindopdrachtjava.models.entities.Record;
 import org.springframework.core.io.ByteArrayResource;
@@ -58,8 +59,20 @@ public class CoverArtController {
     }
 
     /**
+     * Method is the same as the uploadCoverArt PostMapping, however this is a PutMapping. Purely a formality.
+     */
+    @AdminAndEmployeeAuthorization
+    @PutMapping("/coverArt/{recordId}")
+    public Record updateCoverArt
+            (@RequestBody MultipartFile multipartImage, @PathVariable Long recordId) throws IOException {
+        return coverArtService.uploadCoverArt(multipartImage, recordId);
+    }
+
+
+    /**
      * Deletes CoverArt entity from database with given Id.
      */
+    @AdminAuthorization
     @DeleteMapping("/coverart/{coverArtId}")
     public void deleteCoverArt(@PathVariable Long coverArtId){
         coverArtService.deleteCoverArt(coverArtId);
