@@ -68,7 +68,6 @@ public class CoverArtController {
         return coverArtService.uploadCoverArt(multipartImage, recordId);
     }
 
-
     /**
      * Deletes CoverArt entity from database with given Id.
      */
@@ -77,7 +76,4 @@ public class CoverArtController {
     public void deleteCoverArt(@PathVariable Long coverArtId){
         coverArtService.deleteCoverArt(coverArtId);
     }
-
-
-    //TODO Update method!
 }

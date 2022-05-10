@@ -15,10 +15,15 @@ public class UserController {
 
     @AdminAuthorization
     @PostMapping("/add/user")
-    public User registerUser(@RequestBody UserRegistrationRequest userRegistrationRequest){
+    public User registerUser(@RequestBody UserRegistrationRequest userRegistrationRequest) {
         return userService.registerUser(userRegistrationRequest);
     }
 
+    @AdminAuthorization
+    @PutMapping("/update/user/{userId}")
+    public User updateUser(@RequestBody UserRegistrationRequest userRegistrationRequest, @PathVariable Long userId) {
+        return userService.updateUser(userRegistrationRequest,userId);
+    }
     //TODO Add update user
     //TODO Add delete user
     //TODO add get user(?)
