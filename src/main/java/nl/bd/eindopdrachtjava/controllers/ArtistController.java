@@ -1,9 +1,7 @@
 package nl.bd.eindopdrachtjava.controllers;
 
 import lombok.AllArgsConstructor;
-import nl.bd.eindopdrachtjava.models.annotations.AdminAuthorization;
-import nl.bd.eindopdrachtjava.models.annotations.CustomerAuthorization;
-import nl.bd.eindopdrachtjava.models.annotations.EmployeeAuthorization;
+import nl.bd.eindopdrachtjava.models.annotations.*;
 import nl.bd.eindopdrachtjava.models.entities.Artist;
 import nl.bd.eindopdrachtjava.models.enums.UserRole;
 import nl.bd.eindopdrachtjava.models.requests.ArtistRegistrationRequest;
@@ -26,8 +24,7 @@ public class ArtistController {
     /**
      * Endpoint creates a new artist object and saves it to te database.
      */
-    @AdminAuthorization
-    @EmployeeAuthorization
+    @AdminAndEmployeeAuthorization
     @PostMapping("/artist")
     public Artist registerArtist(@RequestBody ArtistRegistrationRequest artistRegistrationRequest){
         return artistService.registerArtist(artistRegistrationRequest);
@@ -36,9 +33,7 @@ public class ArtistController {
     /**
      * Endpoint shows all registered artists.
      */
-    @AdminAuthorization
-    @EmployeeAuthorization
-    @CustomerAuthorization
+    @AllUserAuthorization
     @GetMapping("/artists")
     public List<Artist> getAllArtists(){
         return artistService.getAllArtists();
@@ -47,9 +42,7 @@ public class ArtistController {
     /**
      * Endpoint shows all artists established in a specific year.
      */
-    @AdminAuthorization
-    @EmployeeAuthorization
-    @CustomerAuthorization
+ @AllUserAuthorization
     @GetMapping("/artists/{established}")
     public List<Artist> getArtistsByYearEstablished(@PathVariable int established){
         return artistService.getArtistsByYearEstablished(established);
@@ -58,9 +51,7 @@ public class ArtistController {
     /**
      * Endpoint shows an artist with a specific Id.
      */
-    @AdminAuthorization
-    @EmployeeAuthorization
-    @CustomerAuthorization
+    @AllUserAuthorization
     @GetMapping("/artist/{artistId}")
     public Artist getArtistByArtistId(@PathVariable Long artistId){
         return artistService.getArtistByArtistId(artistId);
@@ -69,9 +60,7 @@ public class ArtistController {
     /**
      * Endpoint to show an artist with a specific name.
      */
-    @AdminAuthorization
-    @EmployeeAuthorization
-    @CustomerAuthorization
+    @AllUserAuthorization
     @GetMapping("/artist/{artistName}")
     public Artist getArtistByArtistName(@PathVariable String artistName){
         return artistService.getArtistByArtistName(artistName);
