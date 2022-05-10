@@ -44,6 +44,13 @@ public class UserService implements UserDetailsService {
     }
 
     /**
+     * Deletes user with given Id from database.
+     */
+    public void deleteUser(Long userId) {
+        userDetailsRepository.deleteById(userId);
+    }
+
+    /**
      * Creates user to use in the registerUser method.
      */
     private User createUser(UserRegistrationRequest userRegistrationRequest) {

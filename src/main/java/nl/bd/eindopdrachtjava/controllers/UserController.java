@@ -32,6 +32,9 @@ public class UserController {
         return userService.loadUserByUsername(username);
     }
 
-    //TODO Add delete user
-    //TODO add get user(?)
+    @AdminAuthorization
+    @DeleteMapping("/user/{userId}")
+    public void deleteUser(@PathVariable Long userId) {
+        userService.deleteUser(userId);
+    }
 }
