@@ -55,6 +55,13 @@ public class CoverArtService {
     }
 
     /**
+     * Deletes CoverArt entity from database with given Id.
+     */
+    public void deleteCoverArt(Long coverArtId) {
+        coverArtRepository.deleteById(coverArtId);
+    }
+
+    /**
      * List of accepted content types. Currently only one file type is accepted
      */
     private static final List<String> contentTypes = List.of("image/png");

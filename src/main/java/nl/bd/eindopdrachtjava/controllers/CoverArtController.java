@@ -57,6 +57,14 @@ public class CoverArtController {
         return coverArtService.downloadCoverArt(recordId);
     }
 
-    //TODO Where is the delete method!?
+    /**
+     * Deletes CoverArt entity from database with given Id.
+     */
+    @DeleteMapping("/coverart/{coverArtId}")
+    public void deleteCoverArt(@PathVariable Long coverArtId){
+        coverArtService.deleteCoverArt(coverArtId);
+    }
+
+
     //TODO Update method!
 }
