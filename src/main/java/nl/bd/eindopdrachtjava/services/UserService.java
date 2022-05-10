@@ -35,7 +35,7 @@ public class UserService implements UserDetailsService {
     }
 
     /**
-     * Updates user.
+     * Checks if User with given Id exists and updates user.
      */
     public User updateUser(UserRegistrationRequest userRegistrationRequest, Long userId) throws ResourceNotFoundException {
         return userDetailsRepository.findById(userId).map(user -> updatedUser(userRegistrationRequest, user))

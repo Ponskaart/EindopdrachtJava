@@ -5,6 +5,7 @@ import nl.bd.eindopdrachtjava.models.annotations.AdminAuthorization;
 import nl.bd.eindopdrachtjava.models.entities.User;
 import nl.bd.eindopdrachtjava.models.requests.UserRegistrationRequest;
 import nl.bd.eindopdrachtjava.services.UserService;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -24,7 +25,13 @@ public class UserController {
     public User updateUser(@RequestBody UserRegistrationRequest userRegistrationRequest, @PathVariable Long userId) {
         return userService.updateUser(userRegistrationRequest,userId);
     }
-    //TODO Add update user
+
+    @AdminAuthorization
+    @GetMapping("/user/{username}")
+    public UserDetails getUser(@PathVariable String username) {
+        return userService.loadUserByUsername(username);
+    }
+
     //TODO Add delete user
     //TODO add get user(?)
 }
