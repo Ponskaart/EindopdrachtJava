@@ -1,9 +1,7 @@
 package nl.bd.eindopdrachtjava.controllers;
 
 import lombok.AllArgsConstructor;
-import nl.bd.eindopdrachtjava.models.annotations.AdminAuthorization;
-import nl.bd.eindopdrachtjava.models.annotations.CustomerAuthorization;
-import nl.bd.eindopdrachtjava.models.annotations.EmployeeAuthorization;
+import nl.bd.eindopdrachtjava.models.annotations.*;
 import nl.bd.eindopdrachtjava.services.CoverArtService;
 import nl.bd.eindopdrachtjava.models.entities.Record;
 import org.springframework.core.io.ByteArrayResource;
@@ -26,8 +24,7 @@ public class CoverArtController {
     /**
      * Uploads an image to the database and assigns it to a record.
      */
-    @AdminAuthorization
-    @EmployeeAuthorization
+    @AdminAndEmployeeAuthorization
     @PostMapping("/uploadcoverart/{recordId}")
     public Record uploadCoverArt
     (@RequestBody MultipartFile multipartImage, @PathVariable Long recordId) throws IOException {
@@ -37,9 +34,7 @@ public class CoverArtController {
     /**
      * Downloads an image from the database. Had to use response entity, could not get it to work otherwise.
      */
-    @AdminAuthorization
-    @EmployeeAuthorization
-    @CustomerAuthorization
+    @AllUserAuthorization
     @GetMapping(value = "/downloadcoverart/{recordId}")
     public ResponseEntity<Resource> download(@PathVariable Long recordId) {
         ByteArrayResource resource = (coverArtService.downloadCoverArt(recordId));
@@ -56,9 +51,7 @@ public class CoverArtController {
     /**
      * Shows an image from the database in the browser.
      */
-    @AdminAuthorization
-    @EmployeeAuthorization
-    @CustomerAuthorization
+    @AllUserAuthorization
     @GetMapping(value = "/viewcoverart/{recordId}", produces = MediaType.IMAGE_PNG_VALUE)
     public ByteArrayResource downloadCoverArt(@PathVariable Long recordId) {
         return coverArtService.downloadCoverArt(recordId);
