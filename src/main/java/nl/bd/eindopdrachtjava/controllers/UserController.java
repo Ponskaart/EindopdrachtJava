@@ -22,7 +22,8 @@ public class UserController {
 
     @AdminAuthorization
     @PutMapping("/update/user/{userId}")
-    public User updateUser(@RequestBody UserRegistrationRequest userRegistrationRequest, @PathVariable Long userId) {
+    public User updateUser(@RequestBody UserRegistrationRequest userRegistrationRequest,
+                           @PathVariable Long userId) {
         return userService.updateUser(userRegistrationRequest,userId);
     }
 
