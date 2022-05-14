@@ -47,4 +47,9 @@ public class ArtistIntegrationTests {
                 .andExpect(jsonPath("$", hasSize(1)))
                 .andExpect(status().isOk());
     }
+
+    //TODO Test specific values
+    //TODO Test all endpoints
+    //TODO Have tests fail to be sure they work
+    //TODO Test exceptions?
 }
