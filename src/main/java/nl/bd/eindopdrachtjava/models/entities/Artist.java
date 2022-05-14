@@ -45,4 +45,9 @@ public class Artist {
     @JsonIgnore
     @OneToMany(mappedBy = "artist")
     private Set<Record> records = new HashSet<>();
+
+    public Artist(String artistName, int established) {
+        this.artistName = artistName;
+        this.established = established;
+    }
 }
