@@ -37,7 +37,7 @@ public class RecordIntegrationTests {
     @Test
     public void registerRecordTest() throws Exception {
         //Arrange
-        //Artist 1 with two records
+        //Artist 1 with one records
         ArtistRegistrationRequest artist1 = createTestArtist1();
         String jsonBodyArtist1 = objectMapper.writeValueAsString(artist1);
 
