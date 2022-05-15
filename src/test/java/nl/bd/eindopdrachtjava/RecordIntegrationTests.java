@@ -102,18 +102,18 @@ public class RecordIntegrationTests {
     @Test
     public void registerRecordTest() throws Exception {
         //Arrange
-        ArtistRegistrationRequest artistRegistrationRequest1 = createTestArtist1();
-        String jsonBodyArtist = objectMapper.writeValueAsString(artistRegistrationRequest1);
+        ArtistRegistrationRequest artist1 = createTestArtist1();
+        String jsonBodyArtist1 = objectMapper.writeValueAsString(artist1);
 
-        RecordRegistrationRequest recordRegistrationRequest1 = createTestRecord1WithTestArtist1();
-        String jsonBodyRecord = objectMapper.writeValueAsString(recordRegistrationRequest1);
+        RecordRegistrationRequest record1WithArtist1 = createTestRecord1WithTestArtist1();
+        String jsonBodyRecord1 = objectMapper.writeValueAsString(record1WithArtist1);
 
         //Act
-        this.mockMvc.perform(post("/recordstore/artist").contentType(APPLICATION_JSON_UTF8).content(jsonBodyArtist))
+        this.mockMvc.perform(post("/recordstore/artist").contentType(APPLICATION_JSON_UTF8).content(jsonBodyArtist1))
                 .andDo(print())
                 .andExpect(status().isOk());
 
-        this.mockMvc.perform(post("/recordstore/record").contentType(APPLICATION_JSON_UTF8).content(jsonBodyRecord))
+        this.mockMvc.perform(post("/recordstore/record").contentType(APPLICATION_JSON_UTF8).content(jsonBodyRecord1))
                 .andDo(print())
                 .andExpect(status().isOk());
 
@@ -121,15 +121,15 @@ public class RecordIntegrationTests {
         this.mockMvc.perform(get("/recordstore/record/" + 1))
                 .andDo(print())
                 .andExpect(content().contentType("application/json"))
-                .andExpect(jsonPath("$.artist.artistName").value(artistRegistrationRequest1.getArtistName()))
-                .andExpect(jsonPath("$.title").value(recordRegistrationRequest1.getTitle()))
-                .andExpect(jsonPath("$.genre").value(recordRegistrationRequest1.getGenre()))
-                .andExpect(jsonPath("$.label").value(recordRegistrationRequest1.getLabel()))
-                .andExpect(jsonPath("$.color").value(recordRegistrationRequest1.getColor()))
-                .andExpect(jsonPath("$.year").value(recordRegistrationRequest1.getYear()))
-                .andExpect(jsonPath("$.country").value(recordRegistrationRequest1.getCountry()))
-                .andExpect(jsonPath("$.price").value(recordRegistrationRequest1.getPrice()))
-                .andExpect(jsonPath("$.qtyInStock").value(recordRegistrationRequest1.getQtyInStock()))
+                .andExpect(jsonPath("$.artist.artistName").value(artist1.getArtistName()))
+                .andExpect(jsonPath("$.title").value(record1WithArtist1.getTitle()))
+                .andExpect(jsonPath("$.genre").value(record1WithArtist1.getGenre()))
+                .andExpect(jsonPath("$.label").value(record1WithArtist1.getLabel()))
+                .andExpect(jsonPath("$.color").value(record1WithArtist1.getColor()))
+                .andExpect(jsonPath("$.year").value(record1WithArtist1.getYear()))
+                .andExpect(jsonPath("$.country").value(record1WithArtist1.getCountry()))
+                .andExpect(jsonPath("$.price").value(record1WithArtist1.getPrice()))
+                .andExpect(jsonPath("$.qtyInStock").value(record1WithArtist1.getQtyInStock()))
                 .andExpect(status().isOk());
     }
 
@@ -139,25 +139,25 @@ public class RecordIntegrationTests {
     @Test
     public void getAllRecordTest() throws Exception {
         //Arrange
-        ArtistRegistrationRequest artistRegistrationRequest1 = createTestArtist1();
-        String jsonBodyArtist = objectMapper.writeValueAsString(artistRegistrationRequest1);
+        ArtistRegistrationRequest artist1 = createTestArtist1();
+        String jsonBodyArtist1 = objectMapper.writeValueAsString(artist1);
 
-        RecordRegistrationRequest recordRegistrationRequest1 = createTestRecord1WithTestArtist1();
-        String jsonBodyRequest = objectMapper.writeValueAsString(recordRegistrationRequest1);
+        RecordRegistrationRequest record1WithArtist1 = createTestRecord1WithTestArtist1();
+        String jsonBodyRecord1 = objectMapper.writeValueAsString(record1WithArtist1);
 
-        RecordRegistrationRequest recordRegistrationRequest2 = createTestRecord2WithTestArtist1();
-        String jsonBodyRequest2 = objectMapper.writeValueAsString(recordRegistrationRequest2);
+        RecordRegistrationRequest record2WithArtist1 = createTestRecord2WithTestArtist1();
+        String jsonBodyRecord2 = objectMapper.writeValueAsString(record2WithArtist1);
 
         //Act
-        this.mockMvc.perform(post("/recordstore/artist").contentType(APPLICATION_JSON_UTF8).content(jsonBodyArtist))
+        this.mockMvc.perform(post("/recordstore/artist").contentType(APPLICATION_JSON_UTF8).content(jsonBodyArtist1))
                 .andDo(print())
                 .andExpect(status().isOk());
 
-        this.mockMvc.perform(post("/recordstore/record").contentType(APPLICATION_JSON_UTF8).content(jsonBodyRequest))
+        this.mockMvc.perform(post("/recordstore/record").contentType(APPLICATION_JSON_UTF8).content(jsonBodyRecord1))
                 .andDo(print())
                 .andExpect(status().isOk());
 
-        this.mockMvc.perform(post("/recordstore/record").contentType(APPLICATION_JSON_UTF8).content(jsonBodyRequest2))
+        this.mockMvc.perform(post("/recordstore/record").contentType(APPLICATION_JSON_UTF8).content(jsonBodyRecord2))
                 .andDo(print())
                 .andExpect(status().isOk());
 
@@ -172,47 +172,51 @@ public class RecordIntegrationTests {
     @Test
     public void getAllRecordsByArtistTest() throws Exception {
         //Arrange
-        ArtistRegistrationRequest artistRegistrationRequest1 = createTestArtist1();
-        String jsonBodyArtist = objectMapper.writeValueAsString(artistRegistrationRequest1);
+        //Artist 1 with two records
+        ArtistRegistrationRequest artist1 = createTestArtist1();
+        String jsonBodyArtist1 = objectMapper.writeValueAsString(artist1);
 
-        RecordRegistrationRequest recordRegistrationRequest1 = createTestRecord1WithTestArtist1();
-        String jsonBodyRequest = objectMapper.writeValueAsString(recordRegistrationRequest1);
+        RecordRegistrationRequest record1WithArtist1 = createTestRecord1WithTestArtist1();
+        String jsonBodyRecord1 = objectMapper.writeValueAsString(record1WithArtist1);
 
-        RecordRegistrationRequest recordRegistrationRequest2 = createTestRecord2WithTestArtist1();
-        String jsonBodyRequest2 = objectMapper.writeValueAsString(recordRegistrationRequest2);
+        RecordRegistrationRequest record2WithArtist1 = createTestRecord2WithTestArtist1();
+        String jsonBodyRecord2 = objectMapper.writeValueAsString(record2WithArtist1);
 
-        ArtistRegistrationRequest artistRegistrationRequest2 = createTestArtist2();
-        String jsonBodyArtist2 = objectMapper.writeValueAsString(artistRegistrationRequest2);
+        //Artist 2 with two records
+        ArtistRegistrationRequest artist2 = createTestArtist2();
+        String jsonBodyArtist2 = objectMapper.writeValueAsString(artist2);
 
-        RecordRegistrationRequest recordRegistrationRequest3 = createTestRecord1WithTestArtist2();
-        String jsonBodyRequest3 = objectMapper.writeValueAsString(recordRegistrationRequest3);
+        RecordRegistrationRequest record1WithArtist2 = createTestRecord1WithTestArtist2();
+        String jsonBodyRecord3 = objectMapper.writeValueAsString(record1WithArtist2);
 
-        RecordRegistrationRequest recordRegistrationRequest4 = createTestRecord2WithTestArtist2();
-        String jsonBodyRequest4 = objectMapper.writeValueAsString(recordRegistrationRequest4);
+        RecordRegistrationRequest record2WithArtist2 = createTestRecord2WithTestArtist2();
+        String jsonBodyRecord4 = objectMapper.writeValueAsString(record2WithArtist2);
 
 
         //Act
-        this.mockMvc.perform(post("/recordstore/artist").contentType(APPLICATION_JSON_UTF8).content(jsonBodyArtist))
+        //Upload artist 1 and 2 records to database
+        this.mockMvc.perform(post("/recordstore/artist").contentType(APPLICATION_JSON_UTF8).content(jsonBodyArtist1))
                 .andDo(print())
                 .andExpect(status().isOk());
 
-        this.mockMvc.perform(post("/recordstore/record").contentType(APPLICATION_JSON_UTF8).content(jsonBodyRequest))
+        this.mockMvc.perform(post("/recordstore/record").contentType(APPLICATION_JSON_UTF8).content(jsonBodyRecord1))
                 .andDo(print())
                 .andExpect(status().isOk());
 
-        this.mockMvc.perform(post("/recordstore/record").contentType(APPLICATION_JSON_UTF8).content(jsonBodyRequest2))
+        this.mockMvc.perform(post("/recordstore/record").contentType(APPLICATION_JSON_UTF8).content(jsonBodyRecord2))
                 .andDo(print())
                 .andExpect(status().isOk());
 
+        //Upload artist 2 and 2 records to database
         this.mockMvc.perform(post("/recordstore/artist").contentType(APPLICATION_JSON_UTF8).content(jsonBodyArtist2))
                 .andDo(print())
                 .andExpect(status().isOk());
 
-        this.mockMvc.perform(post("/recordstore/record").contentType(APPLICATION_JSON_UTF8).content(jsonBodyRequest3))
+        this.mockMvc.perform(post("/recordstore/record").contentType(APPLICATION_JSON_UTF8).content(jsonBodyRecord3))
                 .andDo(print())
                 .andExpect(status().isOk());
 
-        this.mockMvc.perform(post("/recordstore/record").contentType(APPLICATION_JSON_UTF8).content(jsonBodyRequest4))
+        this.mockMvc.perform(post("/recordstore/record").contentType(APPLICATION_JSON_UTF8).content(jsonBodyRecord4))
                 .andDo(print())
                 .andExpect(status().isOk());
 
