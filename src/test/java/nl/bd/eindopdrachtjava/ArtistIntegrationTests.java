@@ -1,5 +1,6 @@
 package nl.bd.eindopdrachtjava;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import nl.bd.eindopdrachtjava.models.entities.Artist;
 import org.junit.jupiter.api.Test;
@@ -8,6 +9,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.nio.charset.Charset;
@@ -20,7 +22,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
-@WithMockUser(username = "Employee", password = "TheBestPassword", authorities = {"EMPLOYEE"})
+@WithMockUser(username = "Admin", password = "VeryGoodPassword", authorities = {"ADMIN"})
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 public class ArtistIntegrationTests {
     public static final MediaType APPLICATION_JSON_UTF8 = new MediaType(MediaType.APPLICATION_JSON.getType(), MediaType.APPLICATION_JSON.getSubtype(), Charset.forName("utf8"));
 
@@ -28,7 +31,7 @@ public class ArtistIntegrationTests {
     private MockMvc mockMvc;
 
     @Test
-    public void addArtistTest() throws Exception {
+    public void registerArtistTest() throws Exception {
         //Arrange
         ObjectMapper objectMapper = new ObjectMapper();
 
@@ -42,6 +45,34 @@ public class ArtistIntegrationTests {
 
         //Assert
         this.mockMvc.perform(get("/recordstore/artists"))
+                .andDo(print())
+                .andExpect(content().contentType("application/json"))
+                .andExpect(jsonPath("$", hasSize(1)))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    public void getArtistByEstablishedTest() throws Exception {
+        //Arrange
+        ObjectMapper objectMapper = new ObjectMapper();
+
+        Artist artist = new Artist("Ben de Jager", 2001);
+        String jsonBody = objectMapper.writeValueAsString(artist);
+
+        Artist artist2 = new Artist("Ben de Knager", 2003);
+        String jsonBody2 = objectMapper.writeValueAsString(artist2);
+
+        //Act
+        this.mockMvc.perform(post("/recordstore/artist").contentType(APPLICATION_JSON_UTF8).content(jsonBody))
+                .andDo(print())
+                .andExpect(status().isOk());
+
+        this.mockMvc.perform(post("/recordstore/artist").contentType(APPLICATION_JSON_UTF8).content(jsonBody2))
+                .andDo(print())
+                .andExpect(status().isOk());
+
+        //Assert
+        this.mockMvc.perform(get("/recordstore/artists/" + 2001))
                 .andDo(print())
                 .andExpect(content().contentType("application/json"))
                 .andExpect(jsonPath("$", hasSize(1)))

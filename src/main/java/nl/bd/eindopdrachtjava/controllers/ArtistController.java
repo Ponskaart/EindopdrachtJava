@@ -74,4 +74,6 @@ public class ArtistController {
     public void deleteArtist(@PathVariable Long artistId){
         artistService.deleteArtist(artistId);
     }
+
+    //TODO CREATE PUT MAPPING!
 }
