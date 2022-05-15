@@ -148,7 +148,11 @@ public class RecordService {
     private Record updatedRecord(RecordRegistrationRequest recordRegistrationRequest, Record record) {
         Long tempRecordId = record.getRecordId();
 
-        record.setArtist(artistRepository.findByArtistName(recordRegistrationRequest.getArtistName()).get());
+        if (recordRegistrationRequest.getArtistName() == null) {
+            record.setArtist(recordRepository.findById(tempRecordId).get().getArtist());
+        } else {
+            record.setArtist(artistRepository.findByArtistName(recordRegistrationRequest.getArtistName()).get());
+        }
 
         if (recordRegistrationRequest.getTitle() == null) {
             record.setTitle(recordRepository.findById(tempRecordId).get().getTitle());
