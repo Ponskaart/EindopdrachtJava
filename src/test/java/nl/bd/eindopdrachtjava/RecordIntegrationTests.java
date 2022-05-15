@@ -31,89 +31,13 @@ public class RecordIntegrationTests {
     private MockMvc mockMvc;
     ObjectMapper objectMapper = new ObjectMapper();
 
-    private ArtistRegistrationRequest createTestArtist1() {
-        return new ArtistRegistrationRequest(
-                "Ben de Jager",
-                2001);
-    }
-
-    private ArtistRegistrationRequest createTestArtist2() {
-        return new ArtistRegistrationRequest(
-                "Ben de Knager",
-                2022);
-    }
-
-    private RecordRegistrationRequest createTestRecord1WithTestArtist1() {
-        return new RecordRegistrationRequest(
-                "Ben de Jager",
-                "Ben de Musical",
-                "Post Heavy Negative Wizard Metal",
-                "STERK Records",
-                "Pink",
-                2001,
-                "Cocos Eilanden",
-                65.50,
-                1);
-    }
-
-    private RecordRegistrationRequest createTestRecord2WithTestArtist1() {
-        return new RecordRegistrationRequest(
-                "Ben de Jager",
-                "Ben de Musical 2, De BenPocalypse",
-                "Post Heavy Negative Wizard Metal",
-                "STERK Records",
-                "Pink",
-                2003,
-                "Cocos Eilanden",
-                75.50,
-                3);
-    }
-
-    private RecordRegistrationRequest createTestRecord1WithTestArtist2() {
-        return new RecordRegistrationRequest(
-                "Ben de Knager",
-                "De Knaagzang",
-                "Blackened Churning Progressive Neoclassical Powergrind",
-                "STREK Records",
-                "Black",
-                2022,
-                "Luxemburg",
-                2.50,
-                10);
-    }
-
-    private RecordRegistrationRequest createTestRecord2WithTestArtist2() {
-        return new RecordRegistrationRequest(
-                "Ben de Knager",
-                "De Knaagzang vol. 2, Als je dacht dat het voorbij was.",
-                "Blackened Churning Progressive Neoclassical Powergrind",
-                "STREK Records",
-                "Black",
-                2022,
-                "Luxemburg",
-                1.50,
-                48);
-    }
-
-    private RecordRegistrationRequest updatedRecord() {
-        return new RecordRegistrationRequest(
-                null,
-                null,
-                null,
-                null,
-                null,
-                0,
-                null,
-                0,
-                10);
-    }
-
     /**
      * Tests if Artist object is saved to the database.
      */
     @Test
     public void registerRecordTest() throws Exception {
         //Arrange
+        //Artist 1 with two records
         ArtistRegistrationRequest artist1 = createTestArtist1();
         String jsonBodyArtist1 = objectMapper.writeValueAsString(artist1);
 
@@ -121,6 +45,7 @@ public class RecordIntegrationTests {
         String jsonBodyRecord1 = objectMapper.writeValueAsString(record1WithArtist1);
 
         //Act
+        //Upload artist 1 and 2 records to database
         this.mockMvc.perform(post("/recordstore/artist").contentType(APPLICATION_JSON_UTF8).content(jsonBodyArtist1))
                 .andDo(print())
                 .andExpect(status().isOk());
@@ -151,6 +76,7 @@ public class RecordIntegrationTests {
     @Test
     public void getAllRecordTest() throws Exception {
         //Arrange
+        //Artist 1 with two records
         ArtistRegistrationRequest artist1 = createTestArtist1();
         String jsonBodyArtist1 = objectMapper.writeValueAsString(artist1);
 
@@ -161,6 +87,7 @@ public class RecordIntegrationTests {
         String jsonBodyRecord2 = objectMapper.writeValueAsString(record2WithArtist1);
 
         //Act
+        //Upload artist 1 and 2 records to database
         this.mockMvc.perform(post("/recordstore/artist").contentType(APPLICATION_JSON_UTF8).content(jsonBodyArtist1))
                 .andDo(print())
                 .andExpect(status().isOk());
@@ -470,4 +397,82 @@ public class RecordIntegrationTests {
                 .andExpect(jsonPath("$", hasSize(1)))
                 .andExpect(status().isOk());
     }
+
+    private ArtistRegistrationRequest createTestArtist1() {
+        return new ArtistRegistrationRequest(
+                "Ben de Jager",
+                2001);
+    }
+
+    private ArtistRegistrationRequest createTestArtist2() {
+        return new ArtistRegistrationRequest(
+                "Ben de Knager",
+                2022);
+    }
+
+    private RecordRegistrationRequest createTestRecord1WithTestArtist1() {
+        return new RecordRegistrationRequest(
+                "Ben de Jager",
+                "Ben de Musical",
+                "Post Heavy Negative Wizard Metal",
+                "STERK Records",
+                "Pink",
+                2001,
+                "Cocos Eilanden",
+                65.50,
+                1);
+    }
+
+    private RecordRegistrationRequest createTestRecord2WithTestArtist1() {
+        return new RecordRegistrationRequest(
+                "Ben de Jager",
+                "Ben de Musical 2, De BenPocalypse",
+                "Post Heavy Negative Wizard Metal",
+                "STERK Records",
+                "Pink",
+                2003,
+                "Cocos Eilanden",
+                75.50,
+                3);
+    }
+
+    private RecordRegistrationRequest createTestRecord1WithTestArtist2() {
+        return new RecordRegistrationRequest(
+                "Ben de Knager",
+                "De Knaagzang",
+                "Blackened Churning Progressive Neoclassical Powergrind",
+                "STREK Records",
+                "Black",
+                2022,
+                "Luxemburg",
+                2.50,
+                10);
+    }
+
+    private RecordRegistrationRequest createTestRecord2WithTestArtist2() {
+        return new RecordRegistrationRequest(
+                "Ben de Knager",
+                "De Knaagzang vol. 2, Als je dacht dat het voorbij was.",
+                "Blackened Churning Progressive Neoclassical Powergrind",
+                "STREK Records",
+                "Black",
+                2022,
+                "Luxemburg",
+                1.50,
+                48);
+    }
+
+    private RecordRegistrationRequest updatedRecord() {
+        return new RecordRegistrationRequest(
+                null,
+                null,
+                null,
+                null,
+                null,
+                0,
+                null,
+                0,
+                10);
+    }
+
 }
