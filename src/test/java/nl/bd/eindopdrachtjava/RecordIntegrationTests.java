@@ -81,6 +81,59 @@ public class RecordIntegrationTests {
                 .andExpect(status().isOk());
     }
 
-    
+    /**
+     * Tests if Record with specific Id can be retrieved from database.
+     */
+    @Test
+    public void getAllRecordTest() throws Exception {
+        //Arrange
+        ObjectMapper objectMapper = new ObjectMapper();
+
+        Artist artist = new Artist("Ben de Jager", 2001);
+        String jsonBodyArtist = objectMapper.writeValueAsString(artist);
+
+        RecordRegistrationRequest recordRegistrationRequest = new RecordRegistrationRequest(
+                "Ben de Jager",
+                "Ben de Musical",
+                "Post Heavy Negative Wizard Metal",
+                "STERK Records",
+                "Pink",
+                2001,
+                "Cocos Eilanden",
+                65.50,
+                1);
+        String jsonBodyRequest = objectMapper.writeValueAsString(recordRegistrationRequest);
+
+        RecordRegistrationRequest recordRegistrationRequest2 = new RecordRegistrationRequest(
+                "Ben de Jager",
+                "Ben de Musical 2, De BenPocalypse",
+                "Post Heavy Negative Wizard Metal",
+                "STERK Records",
+                "Pink",
+                2003,
+                "Cocos Eilanden",
+                75.50,
+                3);
+        String jsonBodyRequest2 = objectMapper.writeValueAsString(recordRegistrationRequest2);
+
+        //Act
+        this.mockMvc.perform(post("/recordstore/artist").contentType(APPLICATION_JSON_UTF8).content(jsonBodyArtist))
+                .andDo(print())
+                .andExpect(status().isOk());
+
+        this.mockMvc.perform(post("/recordstore/record").contentType(APPLICATION_JSON_UTF8).content(jsonBodyRequest))
+                .andDo(print())
+                .andExpect(status().isOk());
+
+        this.mockMvc.perform(post("/recordstore/record").contentType(APPLICATION_JSON_UTF8).content(jsonBodyRequest2))
+                .andDo(print())
+                .andExpect(status().isOk());
+
+        this.mockMvc.perform(get("/recordstore"))
+                .andDo(print())
+                .andExpect(content().contentType("application/json"))
+                .andExpect(jsonPath("$", hasSize(2)))
+                .andExpect(status().isOk());
+    }
 
 }
