@@ -52,7 +52,7 @@ public class ArtistController {
      * Endpoint shows an artist with a specific Id.
      */
     @AllUserAuthorization
-    @GetMapping("/artist/{artistId}")
+    @GetMapping("/artist/id/{artistId}")
     public Artist getArtistByArtistId(@PathVariable Long artistId){
         return artistService.getArtistByArtistId(artistId);
     }
