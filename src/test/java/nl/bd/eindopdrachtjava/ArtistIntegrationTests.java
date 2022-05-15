@@ -15,8 +15,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.nio.charset.Charset;
 
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -147,8 +146,41 @@ public class ArtistIntegrationTests {
                 .andExpect(status().isOk());
     }
 
-    //TODO Test specific values
-    //TODO Test all endpoints
+    /**
+     * Tests if Artist with a specific Id is deleted from the database.
+     */
+    @Test
+    public void deleteArtistByIdTest() throws Exception {
+        //Arrange
+        ObjectMapper objectMapper = new ObjectMapper();
+
+        Artist artist = new Artist("Ben de Jager", 2001);
+        String jsonBody = objectMapper.writeValueAsString(artist);
+
+        Artist artist2 = new Artist("Ben de Knager", 2003);
+        String jsonBody2 = objectMapper.writeValueAsString(artist2);
+
+        //Act
+        this.mockMvc.perform(post("/recordstore/artist").contentType(APPLICATION_JSON_UTF8).content(jsonBody))
+                .andDo(print())
+                .andExpect(status().isOk());
+
+        this.mockMvc.perform(post("/recordstore/artist").contentType(APPLICATION_JSON_UTF8).content(jsonBody2))
+                .andDo(print())
+                .andExpect(status().isOk());
+
+        this.mockMvc.perform(delete("/recordstore/artist/" + 1).contentType(APPLICATION_JSON_UTF8).content(jsonBody2))
+                .andDo(print())
+                .andExpect(status().isOk());
+
+        //Assert
+        this.mockMvc.perform(get("/recordstore/artists"))
+                .andDo(print())
+                .andExpect(content().contentType("application/json"))
+                .andExpect(jsonPath("$", hasSize(1)))
+                .andExpect(status().isOk());
+    }
+
     //TODO Have tests fail to be sure they work
     //TODO Test exceptions?
 }
