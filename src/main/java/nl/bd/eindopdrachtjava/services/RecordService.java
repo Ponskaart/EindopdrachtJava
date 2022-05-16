@@ -72,7 +72,7 @@ public class RecordService {
             throw new ResourceAlreadyExistsException("Record with name: " + recordRegistrationRequest.getTitle() +
                     ", and with artist: " + recordRegistrationRequest.getArtistName() + ", is already registered.");
         } else {
-            if(doesArtistExist(recordRegistrationRequest)){
+            if(doesArtistExist(recordRegistrationRequest)) {
                 Record record = createRecord(recordRegistrationRequest);
                 return recordRepository.save(record);
             } else {
@@ -145,10 +145,7 @@ public class RecordService {
      * Returns updated record. Very large method, but it should make sure that if the user does not specify a value
      * the old value does not get overridden with null or 0.
      */
-    //TODO if(wat je meestuurt !null) { set } is veel minder omslachtig
     private Record updatedRecord(RecordRegistrationRequest recordRegistrationRequest, Record record) {
-        Long tempRecordId = record.getRecordId();
-
         if (recordRegistrationRequest.getArtistName() != null) {
             record.setArtist(artistRepository.findByArtistName(recordRegistrationRequest.getArtistName()).get());
         }

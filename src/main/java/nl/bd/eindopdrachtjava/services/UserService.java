@@ -1,5 +1,6 @@
 package nl.bd.eindopdrachtjava.services;
 
+import lombok.AllArgsConstructor;
 import nl.bd.eindopdrachtjava.exceptions.ResourceNotFoundException;
 import nl.bd.eindopdrachtjava.models.entities.User;
 import nl.bd.eindopdrachtjava.models.requests.UserRegistrationRequest;
@@ -8,28 +9,28 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+@AllArgsConstructor
 @Service
 public class UserService implements UserDetailsService {
 
-    @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     /**
      * Loads user from the database if username exists.
      */
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        UserDetails userDetails = (UserDetails) userRepository.findByUsername(username)
+        return (UserDetails) userRepository.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User does not exist!"));
-        return userDetails;
     }
 
     /**
      * Registers new user in the database.
      */
-    //TODO check if this even works
     public User registerUser(UserRegistrationRequest userRegistrationRequest){
         User user = createUser(userRegistrationRequest);
         return userRepository.save(user);
@@ -57,7 +58,7 @@ public class UserService implements UserDetailsService {
     private User createUser(UserRegistrationRequest userRegistrationRequest) {
         return User.builder()
                 .username(userRegistrationRequest.getUsername())
-                .password(userRegistrationRequest.getPassword())
+                .password(bCryptPasswordEncoder.encode(userRegistrationRequest.getPassword()))
                 .role(userRegistrationRequest.getRole())
                 .build();
     }
