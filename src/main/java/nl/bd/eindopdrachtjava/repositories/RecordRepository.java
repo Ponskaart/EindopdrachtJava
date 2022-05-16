@@ -15,8 +15,8 @@ public interface RecordRepository extends JpaRepository<Record, Long> {
      * Custom queries to retrieve specific data from the database.
      */
     @Query( "SELECT a " +
-            "FROM Artist a " +
-            "WHERE a.artistId = :artistId")
+            "FROM Record a " +
+            "WHERE a.artist.artistId = :artistId")
     Optional<List<Record>> findByArtistArtistId(
             @Param("artistId") Long artistId);
 

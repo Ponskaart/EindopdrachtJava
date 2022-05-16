@@ -52,7 +52,7 @@ public class ArtistController {
      * Endpoint shows an artist with a specific Id.
      */
     @AllUserAuthorization
-    @GetMapping("/artist/{artistId}")
+    @GetMapping("/artist/id/{artistId}")
     public Artist getArtistByArtistId(@PathVariable Long artistId){
         return artistService.getArtistByArtistId(artistId);
     }
@@ -74,4 +74,6 @@ public class ArtistController {
     public void deleteArtist(@PathVariable Long artistId){
         artistService.deleteArtist(artistId);
     }
+
+    //TODO CREATE PUT MAPPING!
 }

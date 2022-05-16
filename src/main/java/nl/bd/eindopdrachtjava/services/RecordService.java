@@ -145,10 +145,15 @@ public class RecordService {
      * Returns updated record. Very large method, but it should make sure that if the user does not specify a value
      * the old value does not get overridden with null or 0.
      */
+    //TODO if(wat je meestuurt !null) { set } is veel minder omslachtig
     private Record updatedRecord(RecordRegistrationRequest recordRegistrationRequest, Record record) {
         Long tempRecordId = record.getRecordId();
 
-        record.setArtist(artistRepository.findByArtistName(recordRegistrationRequest.getArtistName()).get());
+        if (recordRegistrationRequest.getArtistName() == null) {
+            record.setArtist(recordRepository.findById(tempRecordId).get().getArtist());
+        } else {
+            record.setArtist(artistRepository.findByArtistName(recordRegistrationRequest.getArtistName()).get());
+        }
 
         if (recordRegistrationRequest.getTitle() == null) {
             record.setTitle(recordRepository.findById(tempRecordId).get().getTitle());
