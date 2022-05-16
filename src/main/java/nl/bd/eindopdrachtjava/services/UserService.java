@@ -67,23 +67,15 @@ public class UserService implements UserDetailsService {
      * Checks if userRegistrationRequest has empty fields, and uses the old values where no new values were given.
      */
     private User updatedUser(UserRegistrationRequest userRegistrationRequest, User user) {
-        Long tempUserId = user.getUserId();
-
-        if (userRegistrationRequest.getUsername() == null) {
-            user.setUsername(userRepository.findById(tempUserId).get().getUsername());
-        } else {
+        if (userRegistrationRequest.getUsername() != null) {
             user.setUsername(userRegistrationRequest.getUsername());
         }
 
-        if (userRegistrationRequest.getPassword() == null) {
-            user.setPassword(userRepository.findById(tempUserId).get().getPassword());
-        } else {
+        if (userRegistrationRequest.getPassword() != null) {
             user.setPassword(userRegistrationRequest.getPassword());
         }
 
-        if (userRegistrationRequest.getRole() == null) {
-            user.setRole(userRepository.findById(tempUserId).get().getRole());
-        } else {
+        if (userRegistrationRequest.getRole() != null) {
             user.setRole(userRegistrationRequest.getRole());
         }
 
