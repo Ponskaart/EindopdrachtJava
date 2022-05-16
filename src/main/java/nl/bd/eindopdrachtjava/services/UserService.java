@@ -29,6 +29,7 @@ public class UserService implements UserDetailsService {
     /**
      * Registers new user in the database.
      */
+    //TODO check if this even works
     public User registerUser(UserRegistrationRequest userRegistrationRequest){
         User user = createUser(userRegistrationRequest);
         return userRepository.save(user);

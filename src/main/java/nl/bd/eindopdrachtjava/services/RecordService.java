@@ -149,57 +149,39 @@ public class RecordService {
     private Record updatedRecord(RecordRegistrationRequest recordRegistrationRequest, Record record) {
         Long tempRecordId = record.getRecordId();
 
-        if (recordRegistrationRequest.getArtistName() == null) {
-            record.setArtist(recordRepository.findById(tempRecordId).get().getArtist());
-        } else {
+        if (recordRegistrationRequest.getArtistName() != null) {
             record.setArtist(artistRepository.findByArtistName(recordRegistrationRequest.getArtistName()).get());
         }
 
-        if (recordRegistrationRequest.getTitle() == null) {
-            record.setTitle(recordRepository.findById(tempRecordId).get().getTitle());
-        } else {
+        if (recordRegistrationRequest.getTitle() != null) {
             record.setTitle(recordRegistrationRequest.getTitle());
         }
 
-        if (recordRegistrationRequest.getGenre() == null) {
-            record.setGenre(recordRepository.findById(tempRecordId).get().getGenre());
-        } else {
+        if (recordRegistrationRequest.getGenre() != null) {
             record.setGenre(recordRegistrationRequest.getGenre());
         }
 
-        if (recordRegistrationRequest.getLabel() == null) {
-            record.setLabel(recordRepository.findById(tempRecordId).get().getLabel());
-        } else {
+        if (recordRegistrationRequest.getLabel() != null) {
             record.setLabel(recordRegistrationRequest.getLabel());
         }
 
-        if (recordRegistrationRequest.getColor() == null){
-            record.setColor(recordRepository.findById(tempRecordId).get().getColor());
-        } else {
+        if (recordRegistrationRequest.getColor() != null){
             record.setColor(recordRegistrationRequest.getColor());
         }
 
-        if (recordRegistrationRequest.getYear() == 0){
-            record.setYear(recordRepository.findById(tempRecordId).get().getYear());
-        } else {
+        if (recordRegistrationRequest.getYear() != 0){
             record.setYear(recordRegistrationRequest.getYear());
         }
 
-        if (recordRegistrationRequest.getCountry() == null){
-            record.setCountry(recordRepository.findById(tempRecordId).get().getCountry());
-        } else {
+        if (recordRegistrationRequest.getCountry() != null){
             record.setCountry(recordRegistrationRequest.getCountry());
         }
 
-        if (recordRegistrationRequest.getPrice() == 0.0) {
-            record.setPrice(recordRepository.findById(tempRecordId).get().getPrice());
-        } else {
+        if (recordRegistrationRequest.getPrice() != 0.0) {
             record.setPrice(recordRegistrationRequest.getPrice());
         }
 
-        if (recordRegistrationRequest.getQtyInStock() == 0) {
-            record.setQtyInStock(recordRepository.findById(tempRecordId).get().getQtyInStock());
-        } else {
+        if (recordRegistrationRequest.getQtyInStock() != 0) {
             record.setQtyInStock(recordRegistrationRequest.getQtyInStock());
         }
 
