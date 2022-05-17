@@ -68,7 +68,7 @@ public class RecordService {
      * the database does not get double entries.
      */
     public Record registerRecord(RecordRegistrationRequest recordRegistrationRequest) {
-        if (doesRecordExist(recordRegistrationRequest)){
+        if (recordExists(recordRegistrationRequest)){
             throw new ResourceAlreadyExistsException("Record with name: " + recordRegistrationRequest.getTitle() +
                     ", and with artist: " + recordRegistrationRequest.getArtistName() + ", is already registered.");
         } else {
@@ -128,7 +128,7 @@ public class RecordService {
     /**
      * Returns boolean true if record already exists in database.
      */
-    private boolean doesRecordExist(RecordRegistrationRequest recordRegistrationRequest) {
+    private boolean recordExists(RecordRegistrationRequest recordRegistrationRequest) {
         return recordRepository.findRecordByTitle(recordRegistrationRequest.getTitle()).isPresent() &&
                 recordRepository.findRecordByTitle(recordRegistrationRequest.getTitle()).get().getArtist()
                         .getArtistName().equals(recordRegistrationRequest.getArtistName());
