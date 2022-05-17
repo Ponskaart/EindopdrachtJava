@@ -13,7 +13,7 @@ import java.util.List;
  * Class governs all the Record related endpoints.
  */
 @RestController
-@RequestMapping(path = "recordstore")
+@RequestMapping(path = "recordstore/records")
 @AllArgsConstructor
 public class RecordController {
     private final RecordService recordService;
@@ -32,7 +32,7 @@ public class RecordController {
      * Shows all records of a specific artist.
      * */
     @AllUserAuthorization
-    @GetMapping("/records/artist/{artistId}")
+    @GetMapping("/artist/{artistId}")
     public List<Record> getRecordsByArtist(@PathVariable Long artistId){
         return recordService.getRecordsByArtist(artistId);
     }
@@ -41,7 +41,7 @@ public class RecordController {
      * Shows record with specific Id.
      */
     @AllUserAuthorization
-    @GetMapping("/record/{recordId}")
+    @GetMapping("/{recordId}")
     public Record getRecordById(@PathVariable Long recordId) {
         return recordService.getRecordById(recordId);
     }
@@ -50,7 +50,7 @@ public class RecordController {
      * Shows record with specific title.
      */
     @AllUserAuthorization
-    @GetMapping("/record/title/{title}")
+    @GetMapping("/title/{title}")
     public Record getRecordByTitle(@PathVariable String title){
         return recordService.getRecordByTitle(title);
     }
@@ -59,7 +59,7 @@ public class RecordController {
      * Shows all records with a specific genre.
      * */
     @AllUserAuthorization
-    @GetMapping("/record/genre/{genre}")
+    @GetMapping("/genre/{genre}")
     public List<Record> getRecordsByGenre(@PathVariable String genre){
         return recordService.getRecordsByGenre(genre);
     }
@@ -69,7 +69,7 @@ public class RecordController {
      * in the database.
      */
    @AdminAndEmployeeAuthorization
-    @PostMapping("/record")
+    @PostMapping("/register")
     public Record registerNewRecord(@RequestBody RecordRegistrationRequest recordRegistrationRequest){
         return recordService.registerRecord(recordRegistrationRequest);
     }
@@ -78,7 +78,7 @@ public class RecordController {
      * Updates an existing record, if recordId does not exist it publishes a new record.
      */
     @AdminAndEmployeeAuthorization
-    @PutMapping("/record/{recordId}")
+    @PutMapping("/{recordId}")
     public Record updateRecord(@PathVariable Long recordId,
                                @RequestBody RecordRegistrationRequest recordRegistrationRequest){
         return recordService.updateRecord(recordRegistrationRequest, recordId);
@@ -88,7 +88,7 @@ public class RecordController {
      * Deletes record with specific id.
      */
     @AdminAuthorization
-    @DeleteMapping("/record/{recordId}")
+    @DeleteMapping("/{recordId}")
     public void deleteRecord(@PathVariable Long recordId){
         recordService.deleteRecord(recordId);
     }
