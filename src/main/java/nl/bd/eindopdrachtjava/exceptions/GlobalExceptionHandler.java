@@ -1,17 +1,12 @@
 package nl.bd.eindopdrachtjava.exceptions;
 
-import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
-import org.springframework.web.multipart.MultipartException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
-
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 
 /**
  * This class globaly handles all the exceptions using the @ControllerAdvice annotation.
@@ -49,4 +44,15 @@ public class GlobalExceptionHandler
         String bodyOfResponse = ex.getMessage();
         return handleExceptionInternal(ex, bodyOfResponse, new HttpHeaders(), HttpStatus.FORBIDDEN, request);
     }
+
+//    /**
+//     * Handles InvalidInputException, returns the exception, http status and a message to ensure the origins
+//     * of the exception are properly communicated to the user.
+//     */
+//    @ExceptionHandler(value = {InvalidInputException.class})
+//    protected ResponseEntity<Object> handleInvalidInputConflict
+//    (InvalidInputException ex, WebRequest request) {
+//        String bodyOfResponse = "Invalid input.";
+//        return handleExceptionInternal(ex, bodyOfResponse, new HttpHeaders(), HttpStatus.CONFLICT, request);
+//    }
 }

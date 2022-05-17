@@ -9,7 +9,6 @@ import lombok.Getter;
 @AllArgsConstructor
 @Getter
 public class RecordRegistrationRequest {
-
     private final String artistName;
     private final String title;
     private final String genre;

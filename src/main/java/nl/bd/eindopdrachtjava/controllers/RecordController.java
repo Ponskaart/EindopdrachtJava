@@ -68,10 +68,10 @@ public class RecordController {
      * Endpoint uses data provided by the user in the recordRegistrationRequest to fill a new Record entity and saves it
      * in the database.
      */
-   @AdminAndEmployeeAuthorization
+    @AdminAndEmployeeAuthorization
     @PostMapping("/register")
-    public Record registerNewRecord(@RequestBody RecordRegistrationRequest recordRegistrationRequest){
-        return recordService.registerRecord(recordRegistrationRequest);
+    public Record registerNewRecord(@RequestBody RecordRegistrationRequest recordRegistrationRequest) {
+           return recordService.registerRecord(recordRegistrationRequest);
     }
 
     /**
