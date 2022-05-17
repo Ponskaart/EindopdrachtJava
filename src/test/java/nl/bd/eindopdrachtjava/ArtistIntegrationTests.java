@@ -1,8 +1,6 @@
 package nl.bd.eindopdrachtjava;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import nl.bd.eindopdrachtjava.models.entities.Artist;
 import nl.bd.eindopdrachtjava.models.requests.ArtistRegistrationRequest;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -189,5 +187,5 @@ public class ArtistIntegrationTests {
     }
 
     //TODO Have tests fail to be sure they work
-    //TODO Test exceptions?
+    //TODO Test exceptions? IF THERE IS TIME
 }
