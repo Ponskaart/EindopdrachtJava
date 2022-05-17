@@ -23,7 +23,7 @@ public class ArtistService {
      * happening.
      */
     public Artist registerArtist(ArtistRegistrationRequest artistRegistrationRequest){
-        if (doesArtistExist(artistRegistrationRequest)){
+        if (artistExists(artistRegistrationRequest)){
             throw new ResourceAlreadyExistsException(
                     "Artist with name: " +
                             artistRegistrationRequest.getArtistName() +
@@ -80,7 +80,7 @@ public class ArtistService {
     /**
      * Returns boolean true if artist already exists in database.
      */
-    private boolean doesArtistExist(ArtistRegistrationRequest artistRegistrationRequest) {
+    private boolean artistExists(ArtistRegistrationRequest artistRegistrationRequest) {
         return artistRepository.findByArtistName(artistRegistrationRequest.getArtistName()).isPresent() &&
                 artistRepository.findByArtistName(artistRegistrationRequest.getArtistName()).get().getEstablished()
                         == artistRegistrationRequest.getEstablished();
