@@ -46,7 +46,7 @@ public class RecordIntegrationTests {
 
         //Act
         //Upload artist 1 and 2 records to database
-        this.mockMvc.perform(post("/recordstore/artist").contentType(APPLICATION_JSON_UTF8).content(jsonBodyArtist1))
+        this.mockMvc.perform(post("/recordstore/artists/register").contentType(APPLICATION_JSON_UTF8).content(jsonBodyArtist1))
                 .andDo(print())
                 .andExpect(status().isOk());
 
@@ -88,7 +88,7 @@ public class RecordIntegrationTests {
 
         //Act
         //Upload artist 1 and 2 records to database
-        this.mockMvc.perform(post("/recordstore/artist").contentType(APPLICATION_JSON_UTF8).content(jsonBodyArtist1))
+        this.mockMvc.perform(post("/recordstore/artists/register").contentType(APPLICATION_JSON_UTF8).content(jsonBodyArtist1))
                 .andDo(print())
                 .andExpect(status().isOk());
 
@@ -137,7 +137,7 @@ public class RecordIntegrationTests {
 
         //Act
         //Upload artist 1 and 2 records to database
-        this.mockMvc.perform(post("/recordstore/artist").contentType(APPLICATION_JSON_UTF8).content(jsonBodyArtist1))
+        this.mockMvc.perform(post("/recordstore/artists/register").contentType(APPLICATION_JSON_UTF8).content(jsonBodyArtist1))
                 .andDo(print())
                 .andExpect(status().isOk());
 
@@ -150,7 +150,7 @@ public class RecordIntegrationTests {
                 .andExpect(status().isOk());
 
         //Upload artist 2 and 2 records to database
-        this.mockMvc.perform(post("/recordstore/artist").contentType(APPLICATION_JSON_UTF8).content(jsonBodyArtist2))
+        this.mockMvc.perform(post("/recordstore/artists/register").contentType(APPLICATION_JSON_UTF8).content(jsonBodyArtist2))
                 .andDo(print())
                 .andExpect(status().isOk());
 
@@ -188,7 +188,7 @@ public class RecordIntegrationTests {
 
         //Act
         //Upload artist 1 and 2 records to database
-        this.mockMvc.perform(post("/recordstore/artist").contentType(APPLICATION_JSON_UTF8).content(jsonBodyArtist1))
+        this.mockMvc.perform(post("/recordstore/artists/register").contentType(APPLICATION_JSON_UTF8).content(jsonBodyArtist1))
                 .andDo(print())
                 .andExpect(status().isOk());
 
@@ -226,7 +226,7 @@ public class RecordIntegrationTests {
 
         //Act
         //Upload artist 1 and 2 records to database
-        this.mockMvc.perform(post("/recordstore/artist").contentType(APPLICATION_JSON_UTF8).content(jsonBodyArtist1))
+        this.mockMvc.perform(post("/recordstore/artists/register").contentType(APPLICATION_JSON_UTF8).content(jsonBodyArtist1))
                 .andDo(print())
                 .andExpect(status().isOk());
 
@@ -275,7 +275,7 @@ public class RecordIntegrationTests {
 
         //Act
         //Upload artist 1 and 2 records to database
-        this.mockMvc.perform(post("/recordstore/artist").contentType(APPLICATION_JSON_UTF8).content(jsonBodyArtist1))
+        this.mockMvc.perform(post("/recordstore/artists/register").contentType(APPLICATION_JSON_UTF8).content(jsonBodyArtist1))
                 .andDo(print())
                 .andExpect(status().isOk());
 
@@ -288,7 +288,7 @@ public class RecordIntegrationTests {
                 .andExpect(status().isOk());
 
         //Upload artist 2 and 2 records to database
-        this.mockMvc.perform(post("/recordstore/artist").contentType(APPLICATION_JSON_UTF8).content(jsonBodyArtist2))
+        this.mockMvc.perform(post("/recordstore/artists/register").contentType(APPLICATION_JSON_UTF8).content(jsonBodyArtist2))
                 .andDo(print())
                 .andExpect(status().isOk());
 
@@ -329,7 +329,7 @@ public class RecordIntegrationTests {
 
         //Act
         //Upload artist 1 and 2 records to database
-        this.mockMvc.perform(post("/recordstore/artist").contentType(APPLICATION_JSON_UTF8).content(jsonBodyArtist1))
+        this.mockMvc.perform(post("/recordstore/artists/register").contentType(APPLICATION_JSON_UTF8).content(jsonBodyArtist1))
                 .andDo(print())
                 .andExpect(status().isOk());
 
@@ -374,7 +374,7 @@ public class RecordIntegrationTests {
 
         //Act
         //Upload artist 1 and 2 records to database
-        this.mockMvc.perform(post("/recordstore/artist").contentType(APPLICATION_JSON_UTF8).content(jsonBodyArtist1))
+        this.mockMvc.perform(post("/recordstore/artists/register").contentType(APPLICATION_JSON_UTF8).content(jsonBodyArtist1))
                 .andDo(print())
                 .andExpect(status().isOk());
 
