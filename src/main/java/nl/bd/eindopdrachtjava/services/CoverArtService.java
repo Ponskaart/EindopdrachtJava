@@ -65,7 +65,7 @@ public class CoverArtService {
     public void deleteCoverArt(Long coverArtId) {
         coverArtRepository.deleteById(coverArtId);
     }
-    
+
     /**
      * Method to save validated image to the database, returns the newly created cover art object to assign the
      * database reference.

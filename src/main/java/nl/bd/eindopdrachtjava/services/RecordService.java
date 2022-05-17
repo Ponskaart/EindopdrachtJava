@@ -129,9 +129,7 @@ public class RecordService {
      * Returns boolean true if record already exists in database.
      */
     private boolean recordExists(RecordRegistrationRequest recordRegistrationRequest) {
-        return recordRepository.findRecordByTitle(recordRegistrationRequest.getTitle()).isPresent() &&
-                recordRepository.findRecordByTitle(recordRegistrationRequest.getTitle()).get().getArtist()
-                        .getArtistName().equals(recordRegistrationRequest.getArtistName());
+        return recordRepository.findRecordByTitleAndArtistName(recordRegistrationRequest).isPresent();
     }
 
     /**

@@ -1,5 +1,6 @@
 package nl.bd.eindopdrachtjava.repositories;
 
+import nl.bd.eindopdrachtjava.models.requests.RecordRegistrationRequest;
 import org.springframework.data.jpa.repository.JpaRepository;
 import nl.bd.eindopdrachtjava.models.entities.Record;
 import org.springframework.data.jpa.repository.Query;
@@ -28,7 +29,14 @@ public interface RecordRepository extends JpaRepository<Record, Long> {
 
     @Query("SELECT r " +
             "FROM Record r " +
-            "WHERE r.title = :title")
+            "WHERE r.title = :title ")
     Optional<Record> findRecordByTitle(
-            @Param("title") String title);
+            @Param("title")String title);
+
+    @Query("SELECT r " +
+            "FROM Record r " +
+            "WHERE r.title = :#{#recordRegistrationRequest.title} " +
+            "AND r.artist.artistName = :#{#recordRegistrationRequest.artistName}")
+    Optional<Record> findRecordByTitleAndArtistName(
+            @Param("recordRegistrationRequest")RecordRegistrationRequest recordRegistrationRequest);
 }
