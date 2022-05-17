@@ -41,7 +41,7 @@ public class ArtistIntegrationTests {
         String jsonBody = objectMapper.writeValueAsString(artist);
 
         //Act
-        this.mockMvc.perform(post("/recordstore/artist").contentType(APPLICATION_JSON_UTF8).content(jsonBody))
+        this.mockMvc.perform(post("/recordstore/artists/register").contentType(APPLICATION_JSON_UTF8).content(jsonBody))
                 .andDo(print())
                 .andExpect(status().isOk());
 
@@ -68,16 +68,16 @@ public class ArtistIntegrationTests {
         String jsonBody2 = objectMapper.writeValueAsString(artist2);
 
         //Act
-        this.mockMvc.perform(post("/recordstore/artist").contentType(APPLICATION_JSON_UTF8).content(jsonBody))
+        this.mockMvc.perform(post("/recordstore/artists/register").contentType(APPLICATION_JSON_UTF8).content(jsonBody))
                 .andDo(print())
                 .andExpect(status().isOk());
 
-        this.mockMvc.perform(post("/recordstore/artist").contentType(APPLICATION_JSON_UTF8).content(jsonBody2))
+        this.mockMvc.perform(post("/recordstore/artists/register").contentType(APPLICATION_JSON_UTF8).content(jsonBody2))
                 .andDo(print())
                 .andExpect(status().isOk());
 
         //Assert
-        this.mockMvc.perform(get("/recordstore/artists/" + 2001))
+        this.mockMvc.perform(get("/recordstore/artists/established/" + 2001))
                 .andDo(print())
                 .andExpect(content().contentType("application/json"))
                 .andExpect(jsonPath("$", hasSize(1)))
@@ -99,16 +99,16 @@ public class ArtistIntegrationTests {
         String jsonBody2 = objectMapper.writeValueAsString(artist2);
 
         //Act
-        this.mockMvc.perform(post("/recordstore/artist").contentType(APPLICATION_JSON_UTF8).content(jsonBody))
+        this.mockMvc.perform(post("/recordstore/artists/register").contentType(APPLICATION_JSON_UTF8).content(jsonBody))
                 .andDo(print())
                 .andExpect(status().isOk());
 
-        this.mockMvc.perform(post("/recordstore/artist").contentType(APPLICATION_JSON_UTF8).content(jsonBody2))
+        this.mockMvc.perform(post("/recordstore/artists/register").contentType(APPLICATION_JSON_UTF8).content(jsonBody2))
                 .andDo(print())
                 .andExpect(status().isOk());
 
         //Assert
-        this.mockMvc.perform(get("/recordstore/artist/id/" + 2))
+        this.mockMvc.perform(get("/recordstore/artists/" + 2))
                 .andDo(print())
                 .andExpect(content().contentType("application/json"))
                 .andExpect(jsonPath("$.artistId").value(2))
@@ -130,16 +130,16 @@ public class ArtistIntegrationTests {
         String jsonBody2 = objectMapper.writeValueAsString(artist2);
 
         //Act
-        this.mockMvc.perform(post("/recordstore/artist").contentType(APPLICATION_JSON_UTF8).content(jsonBody))
+        this.mockMvc.perform(post("/recordstore/artists/register").contentType(APPLICATION_JSON_UTF8).content(jsonBody))
                 .andDo(print())
                 .andExpect(status().isOk());
 
-        this.mockMvc.perform(post("/recordstore/artist").contentType(APPLICATION_JSON_UTF8).content(jsonBody2))
+        this.mockMvc.perform(post("/recordstore/artists/register").contentType(APPLICATION_JSON_UTF8).content(jsonBody2))
                 .andDo(print())
                 .andExpect(status().isOk());
 
         //Assert
-        this.mockMvc.perform(get("/recordstore/artist/" + "Ben de Jager"))
+        this.mockMvc.perform(get("/recordstore/artists/name/" + "Ben de Jager"))
                 .andDo(print())
                 .andExpect(content().contentType("application/json"))
                 .andExpect(jsonPath("$.artistName").value("Ben de Jager"))
@@ -161,15 +161,15 @@ public class ArtistIntegrationTests {
         String jsonBody2 = objectMapper.writeValueAsString(artist2);
 
         //Act
-        this.mockMvc.perform(post("/recordstore/artist").contentType(APPLICATION_JSON_UTF8).content(jsonBody))
+        this.mockMvc.perform(post("/recordstore/artists/register").contentType(APPLICATION_JSON_UTF8).content(jsonBody))
                 .andDo(print())
                 .andExpect(status().isOk());
 
-        this.mockMvc.perform(post("/recordstore/artist").contentType(APPLICATION_JSON_UTF8).content(jsonBody2))
+        this.mockMvc.perform(post("/recordstore/artists/register").contentType(APPLICATION_JSON_UTF8).content(jsonBody2))
                 .andDo(print())
                 .andExpect(status().isOk());
 
-        this.mockMvc.perform(delete("/recordstore/artist/" + 1).contentType(APPLICATION_JSON_UTF8).content(jsonBody2))
+        this.mockMvc.perform(delete("/recordstore/artists/" + 1).contentType(APPLICATION_JSON_UTF8).content(jsonBody2))
                 .andDo(print())
                 .andExpect(status().isOk());
 

@@ -16,7 +16,7 @@ import java.util.List;
  * Class governs the artist related endpoints.
  */
 @RestController
-@RequestMapping("recordstore")
+@RequestMapping("recordstore/artists")
 @AllArgsConstructor
 public class ArtistController {
     private final ArtistService artistService;
@@ -25,7 +25,7 @@ public class ArtistController {
      * Endpoint creates a new artist object and saves it to te database.
      */
     @AdminAndEmployeeAuthorization
-    @PostMapping("/artist")
+    @PostMapping("/register")
     public Artist registerArtist(@RequestBody ArtistRegistrationRequest artistRegistrationRequest){
         return artistService.registerArtist(artistRegistrationRequest);
     }
@@ -34,7 +34,7 @@ public class ArtistController {
      * Endpoint shows all registered artists.
      */
     @AllUserAuthorization
-    @GetMapping("/artists")
+    @GetMapping()
     public List<Artist> getAllArtists(){
         return artistService.getAllArtists();
     }
@@ -43,7 +43,7 @@ public class ArtistController {
      * Endpoint shows all artists established in a specific year.
      */
     @AllUserAuthorization
-    @GetMapping("/artists/{established}")
+    @GetMapping("/established/{established}")
     public List<Artist> getArtistsByYearEstablished(@PathVariable int established){
         return artistService.getArtistsByYearEstablished(established);
     }
@@ -52,7 +52,7 @@ public class ArtistController {
      * Endpoint shows an artist with a specific Id.
      */
     @AllUserAuthorization
-    @GetMapping("/artist/id/{artistId}")
+    @GetMapping("/{artistId}")
     public Artist getArtistByArtistId(@PathVariable Long artistId){
         return artistService.getArtistByArtistId(artistId);
     }
@@ -61,7 +61,7 @@ public class ArtistController {
      * Endpoint to show an artist with a specific name.
      */
     @AllUserAuthorization
-    @GetMapping("/artist/{artistName}")
+    @GetMapping("/name/{artistName}")
     public Artist getArtistByArtistName(@PathVariable String artistName){
         return artistService.getArtistByArtistName(artistName);
     }
@@ -70,7 +70,7 @@ public class ArtistController {
      * Endpoint deletes artist with a specific Id.
      */
     @AdminAuthorization
-    @DeleteMapping("/artist/{artistId}")
+    @DeleteMapping("/{artistId}")
     public void deleteArtist(@PathVariable Long artistId){
         artistService.deleteArtist(artistId);
     }
