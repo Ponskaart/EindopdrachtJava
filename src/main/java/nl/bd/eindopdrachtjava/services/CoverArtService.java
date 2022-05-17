@@ -26,15 +26,20 @@ public class CoverArtService {
     private final RecordService recordService;
 
     /**
+     * List of accepted content types. Currently only one file type is accepted
+     */
+    private static final List<String> contentTypes = List.of("image/png");
+
+    /**
      * Method saves an image to the database and returns the record object it belongs to if the file is a PNG.
      * Otherwise, the system throws an exception.
      */
-    public Record uploadCoverArt(MultipartFile multipartImage, Long recordId)
+    public Record storeCoverArt(MultipartFile multipartImage, Long recordId)
             throws MultipartException, IOException, ResourceNotFoundException {
         String fileContentType = multipartImage.getContentType();
 
         if (recordRepository.findById(recordId).isPresent()) {
-            return validateAndUpload(multipartImage, recordId, fileContentType);
+            return validateAndStore(multipartImage, recordId, fileContentType);
         } else {
             throw new ResourceNotFoundException("Record with id " + recordId + ", does not exist");
         }
@@ -44,7 +49,7 @@ public class CoverArtService {
      * Method retrieves cover art from database and returns it as a byte array. Tried to use custom query to find
      * cover art by record id, but method would return a record and not a cover art object.
      */
-    public ByteArrayResource downloadCoverArt(Long recordId) throws ResourceNotFoundException {
+    public ByteArrayResource retrieveCoverArt(Long recordId) throws ResourceNotFoundException {
         if (recordRepository.findById(recordId).isPresent()){
             CoverArt coverArt = coverArtRepository.findCoverArtByRecordId(recordId).orElseThrow(() ->
                     new ResourceNotFoundException("No cover art was found."));
@@ -60,12 +65,7 @@ public class CoverArtService {
     public void deleteCoverArt(Long coverArtId) {
         coverArtRepository.deleteById(coverArtId);
     }
-
-    /**
-     * List of accepted content types. Currently only one file type is accepted
-     */
-    private static final List<String> contentTypes = List.of("image/png");
-
+    
     /**
      * Method to save validated image to the database, returns the newly created cover art object to assign the
      * database reference.
@@ -80,7 +80,7 @@ public class CoverArtService {
     /**
      * Validates and uploads an image to the database.
      */
-    private Record validateAndUpload(MultipartFile multipartImage, Long recordId, String fileContentType) throws IOException {
+    private Record validateAndStore(MultipartFile multipartImage, Long recordId, String fileContentType) throws IOException {
         if (contentTypes.contains(fileContentType)) {
             CoverArt coverArt = ValidatedImage(multipartImage, recordId);
             coverArtRepository.save(coverArt);

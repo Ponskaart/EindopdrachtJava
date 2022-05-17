@@ -31,7 +31,7 @@ public class CoverArtController {
     @PostMapping("/upload/coverart/{recordId}")
     public Record uploadCoverArt
     (@RequestBody MultipartFile multipartImage, @PathVariable Long recordId) throws IOException {
-            return coverArtService.uploadCoverArt(multipartImage, recordId);
+            return coverArtService.storeCoverArt(multipartImage, recordId);
     }
 
     /**
@@ -40,7 +40,7 @@ public class CoverArtController {
     @AllUserAuthorization
     @GetMapping(value = "/download/coverart/{recordId}")
     public ResponseEntity<Resource> download(@PathVariable Long recordId) {
-        ByteArrayResource resource = (coverArtService.downloadCoverArt(recordId));
+        ByteArrayResource resource = (coverArtService.retrieveCoverArt(recordId));
         return ResponseEntity.ok()
                 .contentType(MediaType.APPLICATION_OCTET_STREAM)
                 .contentLength(resource.contentLength())
@@ -57,7 +57,7 @@ public class CoverArtController {
     @AllUserAuthorization
     @GetMapping(value = "/view/coverart/{recordId}", produces = MediaType.IMAGE_PNG_VALUE)
     public ByteArrayResource downloadCoverArt(@PathVariable Long recordId) {
-        return coverArtService.downloadCoverArt(recordId);
+        return coverArtService.retrieveCoverArt(recordId);
     }
 
     /**
@@ -67,7 +67,7 @@ public class CoverArtController {
     @PutMapping("/coverart/{recordId}")
     public Record updateCoverArt
             (@RequestBody MultipartFile multipartImage, @PathVariable Long recordId) throws IOException {
-        return coverArtService.uploadCoverArt(multipartImage, recordId);
+        return coverArtService.storeCoverArt(multipartImage, recordId);
     }
 
     /**
