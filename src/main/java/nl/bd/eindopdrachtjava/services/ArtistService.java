@@ -81,9 +81,7 @@ public class ArtistService {
      * Returns boolean true if artist already exists in database.
      */
     private boolean artistExists(ArtistRegistrationRequest artistRegistrationRequest) {
-        return artistRepository.findByArtistName(artistRegistrationRequest.getArtistName()).isPresent() &&
-                artistRepository.findByArtistName(artistRegistrationRequest.getArtistName()).get().getEstablished()
-                        == artistRegistrationRequest.getEstablished();
+        return artistRepository.findArtistByArtistNameAndEstablished(artistRegistrationRequest).isPresent();
     }
 
     /**
