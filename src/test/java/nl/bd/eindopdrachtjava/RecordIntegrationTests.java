@@ -398,6 +398,9 @@ public class RecordIntegrationTests {
                 .andExpect(status().isOk());
     }
 
+    /**
+     * The following private methods contain registration requests for several artists and records for testing purposes.
+     */
     private ArtistRegistrationRequest createTestArtist1() {
         return new ArtistRegistrationRequest(
                 "Ben de Jager",

@@ -3,6 +3,7 @@ package nl.bd.eindopdrachtjava;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import nl.bd.eindopdrachtjava.models.entities.Artist;
+import nl.bd.eindopdrachtjava.models.requests.ArtistRegistrationRequest;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -28,6 +29,7 @@ public class ArtistIntegrationTests {
 
     @Autowired
     private MockMvc mockMvc;
+    ObjectMapper objectMapper = new ObjectMapper();
 
     /**
      * Tests if Artist object is saved to the database.
@@ -35,13 +37,11 @@ public class ArtistIntegrationTests {
     @Test
     public void registerArtistTest() throws Exception {
         //Arrange
-        ObjectMapper objectMapper = new ObjectMapper();
-
-        Artist artist = new Artist("Ben de Jager", 2001);
-        String jsonBody = objectMapper.writeValueAsString(artist);
+        ArtistRegistrationRequest artist1 = createTestArtist1();
+        String jsonBodyArtist1 = objectMapper.writeValueAsString(artist1);
 
         //Act
-        this.mockMvc.perform(post("/recordstore/artists/register").contentType(APPLICATION_JSON_UTF8).content(jsonBody))
+        this.mockMvc.perform(post("/recordstore/artists/register").contentType(APPLICATION_JSON_UTF8).content(jsonBodyArtist1))
                 .andDo(print())
                 .andExpect(status().isOk());
 
@@ -59,20 +59,18 @@ public class ArtistIntegrationTests {
     @Test
     public void getArtistByEstablishedTest() throws Exception {
         //Arrange
-        ObjectMapper objectMapper = new ObjectMapper();
+        ArtistRegistrationRequest artist1 = createTestArtist1();
+        String jsonBodyArtist1 = objectMapper.writeValueAsString(artist1);
 
-        Artist artist = new Artist("Ben de Jager", 2001);
-        String jsonBody = objectMapper.writeValueAsString(artist);
-
-        Artist artist2 = new Artist("Ben de Knager", 2003);
-        String jsonBody2 = objectMapper.writeValueAsString(artist2);
+        ArtistRegistrationRequest artist2 = createTestArtist2();
+        String jsonBodyArtist2 = objectMapper.writeValueAsString(artist2);
 
         //Act
-        this.mockMvc.perform(post("/recordstore/artists/register").contentType(APPLICATION_JSON_UTF8).content(jsonBody))
+        this.mockMvc.perform(post("/recordstore/artists/register").contentType(APPLICATION_JSON_UTF8).content(jsonBodyArtist1))
                 .andDo(print())
                 .andExpect(status().isOk());
 
-        this.mockMvc.perform(post("/recordstore/artists/register").contentType(APPLICATION_JSON_UTF8).content(jsonBody2))
+        this.mockMvc.perform(post("/recordstore/artists/register").contentType(APPLICATION_JSON_UTF8).content(jsonBodyArtist2))
                 .andDo(print())
                 .andExpect(status().isOk());
 
@@ -90,20 +88,18 @@ public class ArtistIntegrationTests {
     @Test
     public void getArtistArtistIdTest() throws Exception {
         //Arrange
-        ObjectMapper objectMapper = new ObjectMapper();
+        ArtistRegistrationRequest artist1 = createTestArtist1();
+        String jsonBodyArtist1 = objectMapper.writeValueAsString(artist1);
 
-        Artist artist = new Artist("Ben de Jager", 2001);
-        String jsonBody = objectMapper.writeValueAsString(artist);
-
-        Artist artist2 = new Artist("Ben de Knager", 2003);
-        String jsonBody2 = objectMapper.writeValueAsString(artist2);
+        ArtistRegistrationRequest artist2 = createTestArtist2();
+        String jsonBodyArtist2 = objectMapper.writeValueAsString(artist2);
 
         //Act
-        this.mockMvc.perform(post("/recordstore/artists/register").contentType(APPLICATION_JSON_UTF8).content(jsonBody))
+        this.mockMvc.perform(post("/recordstore/artists/register").contentType(APPLICATION_JSON_UTF8).content(jsonBodyArtist1))
                 .andDo(print())
                 .andExpect(status().isOk());
 
-        this.mockMvc.perform(post("/recordstore/artists/register").contentType(APPLICATION_JSON_UTF8).content(jsonBody2))
+        this.mockMvc.perform(post("/recordstore/artists/register").contentType(APPLICATION_JSON_UTF8).content(jsonBodyArtist2))
                 .andDo(print())
                 .andExpect(status().isOk());
 
@@ -121,20 +117,18 @@ public class ArtistIntegrationTests {
     @Test
     public void getArtistArtistNameTest() throws Exception {
         //Arrange
-        ObjectMapper objectMapper = new ObjectMapper();
+        ArtistRegistrationRequest artist1 = createTestArtist1();
+        String jsonBodyArtist1 = objectMapper.writeValueAsString(artist1);
 
-        Artist artist = new Artist("Ben de Jager", 2001);
-        String jsonBody = objectMapper.writeValueAsString(artist);
-
-        Artist artist2 = new Artist("Ben de Knager", 2003);
-        String jsonBody2 = objectMapper.writeValueAsString(artist2);
+        ArtistRegistrationRequest artist2 = createTestArtist2();
+        String jsonBodyArtist2 = objectMapper.writeValueAsString(artist2);
 
         //Act
-        this.mockMvc.perform(post("/recordstore/artists/register").contentType(APPLICATION_JSON_UTF8).content(jsonBody))
+        this.mockMvc.perform(post("/recordstore/artists/register").contentType(APPLICATION_JSON_UTF8).content(jsonBodyArtist1))
                 .andDo(print())
                 .andExpect(status().isOk());
 
-        this.mockMvc.perform(post("/recordstore/artists/register").contentType(APPLICATION_JSON_UTF8).content(jsonBody2))
+        this.mockMvc.perform(post("/recordstore/artists/register").contentType(APPLICATION_JSON_UTF8).content(jsonBodyArtist2))
                 .andDo(print())
                 .andExpect(status().isOk());
 
@@ -152,24 +146,22 @@ public class ArtistIntegrationTests {
     @Test
     public void deleteArtistByIdTest() throws Exception {
         //Arrange
-        ObjectMapper objectMapper = new ObjectMapper();
+        ArtistRegistrationRequest artist1 = createTestArtist1();
+        String jsonBodyArtist1 = objectMapper.writeValueAsString(artist1);
 
-        Artist artist = new Artist("Ben de Jager", 2001);
-        String jsonBody = objectMapper.writeValueAsString(artist);
-
-        Artist artist2 = new Artist("Ben de Knager", 2003);
-        String jsonBody2 = objectMapper.writeValueAsString(artist2);
+        ArtistRegistrationRequest artist2 = createTestArtist2();
+        String jsonBodyArtist2 = objectMapper.writeValueAsString(artist2);
 
         //Act
-        this.mockMvc.perform(post("/recordstore/artists/register").contentType(APPLICATION_JSON_UTF8).content(jsonBody))
+        this.mockMvc.perform(post("/recordstore/artists/register").contentType(APPLICATION_JSON_UTF8).content(jsonBodyArtist1))
                 .andDo(print())
                 .andExpect(status().isOk());
 
-        this.mockMvc.perform(post("/recordstore/artists/register").contentType(APPLICATION_JSON_UTF8).content(jsonBody2))
+        this.mockMvc.perform(post("/recordstore/artists/register").contentType(APPLICATION_JSON_UTF8).content(jsonBodyArtist2))
                 .andDo(print())
                 .andExpect(status().isOk());
 
-        this.mockMvc.perform(delete("/recordstore/artists/" + 1).contentType(APPLICATION_JSON_UTF8).content(jsonBody2))
+        this.mockMvc.perform(delete("/recordstore/artists/" + 1).contentType(APPLICATION_JSON_UTF8).content(jsonBodyArtist2))
                 .andDo(print())
                 .andExpect(status().isOk());
 
@@ -179,6 +171,21 @@ public class ArtistIntegrationTests {
                 .andExpect(content().contentType("application/json"))
                 .andExpect(jsonPath("$", hasSize(1)))
                 .andExpect(status().isOk());
+    }
+
+    /**
+     * The following private methods contain registration requests for several artists for testing purposes.
+     */
+    private ArtistRegistrationRequest createTestArtist1() {
+        return new ArtistRegistrationRequest(
+                "Ben de Jager",
+                2001);
+    }
+
+    private ArtistRegistrationRequest createTestArtist2() {
+        return new ArtistRegistrationRequest(
+                "Ben de Knager",
+                2022);
     }
 
     //TODO Have tests fail to be sure they work
