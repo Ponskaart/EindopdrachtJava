@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
  * Contains endpoints for all user related functions.
  */
 @RestController
-@RequestMapping("recordstore")
+@RequestMapping("recordstore/users")
 @AllArgsConstructor
 public class UserController {
     private final UserService userService;
@@ -20,35 +20,35 @@ public class UserController {
      * Creates a user and registers it in the database.
      */
     @AdminAuthorization
-    @PostMapping("/add/user")
+    @PostMapping("/add")
     public User registerUser(@RequestBody UserRegistrationRequest userRegistrationRequest) {
         return userService.registerUser(userRegistrationRequest);
-    }
-
-    /**
-     * Updates an existing user.
-     */
-    @AdminAuthorization
-    @PutMapping("/update/user/{userId}")
-    public User updateUser(@RequestBody UserRegistrationRequest userRegistrationRequest,
-                           @PathVariable Long userId) {
-        return userService.updateUser(userRegistrationRequest,userId);
     }
 
     /**
      * Returns the user details of a specific user.
      */
     @AdminAuthorization
-    @GetMapping("/user/{username}")
+    @GetMapping("/{username}")
     public User getUser(@PathVariable String username) {
         return userService.loadUserByUsername(username);
+    }
+
+    /**
+     * Updates an existing user.
+     */
+    @AdminAuthorization
+    @PutMapping("/update/{userId}")
+    public User updateUser(@RequestBody UserRegistrationRequest userRegistrationRequest,
+                           @PathVariable Long userId) {
+        return userService.updateUser(userRegistrationRequest,userId);
     }
 
     /**
      * Deletes a specific user.
      */
     @AdminAuthorization
-    @DeleteMapping("/user/{userId}")
+    @DeleteMapping("/{userId}")
     public void deleteUser(@PathVariable Long userId) {
         userService.deleteUser(userId);
     }

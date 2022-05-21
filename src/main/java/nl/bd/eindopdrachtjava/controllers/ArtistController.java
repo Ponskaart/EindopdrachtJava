@@ -67,18 +67,21 @@ public class ArtistController {
     }
 
     /**
+     * Updates an artist object and overwrites the old entry in the database
+     */
+    @AdminAuthorization
+    @PutMapping("/{artistId}")
+    public Artist updateArtist(@PathVariable Long artistId,
+                               @RequestBody ArtistRegistrationRequest artistRegistrationRequest) {
+        return artistService.updateArtist(artistRegistrationRequest, artistId);
+    }
+
+    /**
      * Endpoint deletes artist with a specific Id.
      */
     @AdminAuthorization
     @DeleteMapping("/{artistId}")
     public void deleteArtist(@PathVariable Long artistId){
         artistService.deleteArtist(artistId);
-    }
-
-    @AdminAuthorization
-    @PutMapping("/{artistId}")
-    public Artist updateArtist(@PathVariable Long artistId,
-                               @RequestBody ArtistRegistrationRequest artistRegistrationRequest) {
-        return artistService.updateArtist(artistRegistrationRequest, artistId);
     }
 }

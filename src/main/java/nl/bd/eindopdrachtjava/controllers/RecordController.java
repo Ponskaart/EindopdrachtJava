@@ -17,6 +17,15 @@ import java.util.List;
 @AllArgsConstructor
 public class RecordController {
     private final RecordService recordService;
+    /**
+     * Endpoint uses data provided by the user in the recordRegistrationRequest to fill a new Record entity and saves it
+     * in the database.
+     */
+    @AdminAndEmployeeAuthorization
+    @PostMapping("/register")
+    public Record registerNewRecord(@RequestBody RecordRegistrationRequest recordRegistrationRequest) {
+        return recordService.registerRecord(recordRegistrationRequest);
+    }
 
     /**
      * This endpoint will be the default when loading up the API, hence there is no path specified. Endpoint shows all
@@ -62,16 +71,6 @@ public class RecordController {
     @GetMapping("/genre/{genre}")
     public List<Record> getRecordsByGenre(@PathVariable String genre){
         return recordService.getRecordsByGenre(genre);
-    }
-
-    /**
-     * Endpoint uses data provided by the user in the recordRegistrationRequest to fill a new Record entity and saves it
-     * in the database.
-     */
-    @AdminAndEmployeeAuthorization
-    @PostMapping("/register")
-    public Record registerNewRecord(@RequestBody RecordRegistrationRequest recordRegistrationRequest) {
-           return recordService.registerRecord(recordRegistrationRequest);
     }
 
     /**

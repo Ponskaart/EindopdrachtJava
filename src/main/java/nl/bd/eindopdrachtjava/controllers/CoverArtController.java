@@ -19,7 +19,7 @@ import java.io.IOException;
  * Contains endpoints for all CoverArt related functions.
  */
 @AllArgsConstructor
-@RequestMapping(path = "recordstore")
+@RequestMapping(path = "recordstore/coverart")
 @RestController
 public class CoverArtController {
     private CoverArtService coverArtService;
@@ -28,7 +28,7 @@ public class CoverArtController {
      * Uploads an image to the database and assigns it to a record.
      */
     @AdminAndEmployeeAuthorization
-    @PostMapping("/upload/coverart/{recordId}")
+    @PostMapping("/upload/{recordId}")
     public Record uploadCoverArt
     (@RequestBody MultipartFile multipartImage, @PathVariable Long recordId) throws IOException {
             return coverArtService.storeCoverArt(multipartImage, recordId);
@@ -38,7 +38,7 @@ public class CoverArtController {
      * Downloads an image from the database. Had to use response entity, could not get it to work otherwise.
      */
     @AllUserAuthorization
-    @GetMapping(value = "/download/coverart/{recordId}")
+    @GetMapping(value = "/download/{recordId}")
     public ResponseEntity<Resource> download(@PathVariable Long recordId) {
         ByteArrayResource resource = (coverArtService.retrieveCoverArt(recordId));
         return ResponseEntity.ok()
@@ -55,7 +55,7 @@ public class CoverArtController {
      * Shows an image from the database in the browser.
      */
     @AllUserAuthorization
-    @GetMapping(value = "/view/coverart/{recordId}", produces = MediaType.IMAGE_PNG_VALUE)
+    @GetMapping(value = "/view/{recordId}", produces = MediaType.IMAGE_PNG_VALUE)
     public ByteArrayResource downloadCoverArt(@PathVariable Long recordId) {
         return coverArtService.retrieveCoverArt(recordId);
     }
@@ -64,7 +64,7 @@ public class CoverArtController {
      * Method is the same as the uploadCoverArt PostMapping, however this is a PutMapping. Purely a formality.
      */
     @AdminAndEmployeeAuthorization
-    @PutMapping("/coverart/{recordId}")
+    @PutMapping("/{recordId}")
     public Record updateCoverArt
             (@RequestBody MultipartFile multipartImage, @PathVariable Long recordId) throws IOException {
         return coverArtService.storeCoverArt(multipartImage, recordId);
@@ -74,7 +74,7 @@ public class CoverArtController {
      * Deletes CoverArt entity from database with given Id.
      */
     @AdminAuthorization
-    @DeleteMapping("/coverart/{coverArtId}")
+    @DeleteMapping("/{coverArtId}")
     public void deleteCoverArt(@PathVariable Long coverArtId){
         coverArtService.deleteCoverArt(coverArtId);
     }
