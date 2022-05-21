@@ -1,6 +1,7 @@
 package nl.bd.eindopdrachtjava.services;
 
 import lombok.AllArgsConstructor;
+import nl.bd.eindopdrachtjava.exceptions.ResourceAlreadyExistsException;
 import nl.bd.eindopdrachtjava.exceptions.ResourceNotFoundException;
 import nl.bd.eindopdrachtjava.models.entities.User;
 import nl.bd.eindopdrachtjava.models.requests.UserRegistrationRequest;
@@ -31,7 +32,11 @@ public class UserService implements UserDetailsService {
     /**
      * Registers new user in the database.
      */
-    public User registerUser(UserRegistrationRequest userRegistrationRequest){
+    public User registerUser(UserRegistrationRequest userRegistrationRequest) throws ResourceAlreadyExistsException {
+        if (userExists(userRegistrationRequest)) {
+            throw new ResourceAlreadyExistsException("User with username: " + userRegistrationRequest.getUsername() +
+                    " already exists!");
+        }
         User user = createUser(userRegistrationRequest);
         return userRepository.save(user);
     }
@@ -50,6 +55,13 @@ public class UserService implements UserDetailsService {
      */
     public void deleteUser(Long userId) {
         userRepository.deleteById(userId);
+    }
+
+    /**
+     * Checks if user with given username exists
+     */
+    private boolean userExists(UserRegistrationRequest userRegistrationRequest) {
+        return userRepository.findByUsername(userRegistrationRequest.getUsername()).isPresent();
     }
 
     /**
