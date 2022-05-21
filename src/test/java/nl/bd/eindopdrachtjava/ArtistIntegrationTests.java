@@ -2,6 +2,7 @@ package nl.bd.eindopdrachtjava;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import nl.bd.eindopdrachtjava.models.requests.ArtistRegistrationRequest;
+import nl.bd.eindopdrachtjava.models.requests.RecordRegistrationRequest;
 import nl.bd.eindopdrachtjava.services.ArtistService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,6 +56,9 @@ public class ArtistIntegrationTests {
                 .andExpect(status().isOk());
     }
 
+    /**
+     * Tests if exception is thrown when artist already exists.
+     */
     @Test
     public void ArtistAlreadyExistsTest() throws Exception {
         //Arrange
@@ -103,6 +107,9 @@ public class ArtistIntegrationTests {
                 .andExpect(status().isOk());
     }
 
+    /**
+     * Tests if exception is thrown when invalid year of establishment is given.
+     */
     @Test
     public void getArtistByInvalidEstablishedTest() throws Exception {
         //Arrange
@@ -157,6 +164,26 @@ public class ArtistIntegrationTests {
     }
 
     /**
+     * Tests if exception is thrown when an invalid userID is inserted.
+     */
+    @Test
+    public void getArtistInvalidArtistIdTest() throws Exception {
+        //Arrange
+        ArtistRegistrationRequest artist1 = createTestArtist1();
+        String jsonBodyArtist1 = objectMapper.writeValueAsString(artist1);
+
+        //Act
+        this.mockMvc.perform(post("/recordstore/artists/register").contentType(APPLICATION_JSON_UTF8).content(jsonBodyArtist1))
+                .andDo(print())
+                .andExpect(status().isOk());
+
+        //Assert
+        this.mockMvc.perform(get("/recordstore/artists/" + 2))
+                .andDo(print())
+                .andExpect(status().isNotFound());
+    }
+
+    /**
      * Tests if Artist with a specific artistName is retrieved from the database.
      */
     @Test
@@ -183,6 +210,75 @@ public class ArtistIntegrationTests {
                 .andExpect(content().contentType("application/json"))
                 .andExpect(jsonPath("$.artistName").value("Ben de Jager"))
                 .andExpect(status().isOk());
+    }
+
+    /**
+     * Tests if exception is thrown when invalid artistName is given.
+     */
+    @Test
+    public void getArtistInvalidArtistNameTest() throws Exception {
+        //Arrange
+        ArtistRegistrationRequest artist1 = createTestArtist1();
+        String jsonBodyArtist1 = objectMapper.writeValueAsString(artist1);
+
+        //Act
+        this.mockMvc.perform(post("/recordstore/artists/register").contentType(APPLICATION_JSON_UTF8).content(jsonBodyArtist1))
+                .andDo(print())
+                .andExpect(status().isOk());
+
+        //Assert
+        this.mockMvc.perform(get("/recordstore/artists/name/" + "Ben de Imposter"))
+                .andDo(print())
+                .andExpect(status().isNotFound());
+    }
+
+    /**
+     * Test to see if artist object is correctly updated whilst keeping old id
+     */
+    @Test
+    public void updateArtistTest() throws Exception {
+        //Arrange
+        //Artist 1 and update request
+        ArtistRegistrationRequest artist1 = createTestArtist1();
+        String jsonBodyArtist1 = objectMapper.writeValueAsString(artist1);
+
+        ArtistRegistrationRequest updatedArtist = updatedArtist();
+        String jsonBodyUpdatedAtist = objectMapper.writeValueAsString(updatedArtist);
+
+        //Act
+        //Upload artist 1
+        this.mockMvc.perform(post("/recordstore/artists/register").contentType(APPLICATION_JSON_UTF8).content(jsonBodyArtist1))
+                .andDo(print())
+                .andExpect(status().isOk());
+
+        //Assert
+        //Check if values actually changed
+        this.mockMvc.perform(put("/recordstore/artists/" + 1).contentType(APPLICATION_JSON_UTF8).content(jsonBodyUpdatedAtist))
+                .andDo(print())
+                .andExpect(jsonPath("$.artistName").value(updatedArtist.getArtistName()))
+                .andExpect(jsonPath("$.established").value(updatedArtist.getEstablished()))
+                .andExpect(jsonPath("$.artistId").value(1))
+                .andExpect(status().isOk());
+    }
+
+    /**
+     * Test to see if exception is thrown when invalid artistId is given.
+     */
+    @Test
+    public void updateInvalidArtistTest() throws Exception {
+        //Arrange
+        //Artist 1 and update request
+
+        ArtistRegistrationRequest updatedArtist = updatedArtist();
+        String jsonBodyUpdatedAtist = objectMapper.writeValueAsString(updatedArtist);
+
+        //Act
+
+        //Assert
+        //Check if values actually changed
+        this.mockMvc.perform(put("/recordstore/artists/" + 486).contentType(APPLICATION_JSON_UTF8).content(jsonBodyUpdatedAtist))
+                .andDo(print())
+                .andExpect(status().isNotFound());
     }
 
     /**
@@ -219,6 +315,26 @@ public class ArtistIntegrationTests {
     }
 
     /**
+     * Tests if Exception is thrown when an invalid artistId is given.
+     */
+    @Test
+    public void deleteArtistByInvalidIdTest() throws Exception {
+        //Arrange
+        ArtistRegistrationRequest artist1 = createTestArtist1();
+        String jsonBodyArtist1 = objectMapper.writeValueAsString(artist1);
+
+        //Act
+        this.mockMvc.perform(post("/recordstore/artists/register").contentType(APPLICATION_JSON_UTF8).content(jsonBodyArtist1))
+                .andDo(print())
+                .andExpect(status().isOk());
+
+        //Assert
+        this.mockMvc.perform(delete("/recordstore/artists/" + 2))
+                .andDo(print())
+                .andExpect(status().isNotFound());
+    }
+
+    /**
      * The following private methods contain registration requests for several artists for testing purposes.
      */
     private ArtistRegistrationRequest createTestArtist1() {
@@ -233,6 +349,9 @@ public class ArtistIntegrationTests {
                 2022);
     }
 
-    //TODO Have tests fail to be sure they work
-    //TODO Test exceptions? IF THERE IS TIME
+    private ArtistRegistrationRequest updatedArtist() {
+        return new ArtistRegistrationRequest(
+                "Bennardus IV, Hertog van Jagertopia",
+                1576);
+    }
 }

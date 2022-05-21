@@ -86,6 +86,15 @@ public class ArtistService {
     }
 
     /**
+     * Updates an Artist, throws exception if artistId is invalid.
+     */
+    public Artist updateArtist(ArtistRegistrationRequest artistRegistrationRequest, Long artistId)
+            throws ResourceNotFoundException {
+        return artistRepository.findById(artistId).map(artist -> updatedArtist(artistRegistrationRequest, artist))
+                .orElseThrow(() -> new ResourceNotFoundException("Artist with id " + artistId + " was not found" ));
+    }
+
+    /**
      * Returns boolean true if artist already exists in database.
      */
     private boolean artistExists(ArtistRegistrationRequest artistRegistrationRequest) {
@@ -102,12 +111,9 @@ public class ArtistService {
                 .build();
     }
 
-    public Artist updateArtist(ArtistRegistrationRequest artistRegistrationRequest, Long artistId)
-            throws ResourceNotFoundException {
-            return artistRepository.findById(artistId).map(artist -> updatedArtist(artistRegistrationRequest, artist))
-                    .orElseThrow(() -> new ResourceNotFoundException("Artist with id " + artistId + " was not found" ));
-    }
-
+    /**
+     * Checks to see if fields need updating or not.
+     */
     private Artist updatedArtist(ArtistRegistrationRequest artistRegistrationRequest, Artist artist) {
         if (artistRegistrationRequest.getArtistName() != null) {
             artist.setArtistName(artistRegistrationRequest.getArtistName());
@@ -119,5 +125,4 @@ public class ArtistService {
 
         return artistRepository.save(artist);
     }
-
 }
