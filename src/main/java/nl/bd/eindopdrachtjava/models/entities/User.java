@@ -36,9 +36,6 @@ public class User implements UserDetails {
     @Column
     private String password;
 
-//    @Column
-//    private boolean enabled;
-
     public User(String username, String password,  UserRole role) {
         this.username = username;
         this.password = password;
