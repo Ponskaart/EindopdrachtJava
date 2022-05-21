@@ -9,6 +9,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.nio.charset.Charset;
@@ -18,6 +19,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+@ActiveProfiles("test")
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
 @WithMockUser(username = "Admin", password = "VeryGoodPassword", authorities = {"ADMIN"})
@@ -159,7 +161,7 @@ public class ArtistIntegrationTests {
                 .andDo(print())
                 .andExpect(status().isOk());
 
-        this.mockMvc.perform(delete("/recordstore/artists/" + 1).contentType(APPLICATION_JSON_UTF8).content(jsonBodyArtist2))
+        this.mockMvc.perform(delete("/recordstore/artists/" + 2))
                 .andDo(print())
                 .andExpect(status().isOk());
 

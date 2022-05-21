@@ -13,6 +13,7 @@ import nl.bd.eindopdrachtjava.repositories.UserRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import java.io.*;
 import java.awt.image.*;
@@ -21,6 +22,7 @@ import javax.imageio.*;
 /**
  * Class runs before actual program starts and loads database with an admin user and a customer user.
  */
+@Profile("!test")
 @Configuration
 @AllArgsConstructor
 public class CommandLineAppStartupRunner {
