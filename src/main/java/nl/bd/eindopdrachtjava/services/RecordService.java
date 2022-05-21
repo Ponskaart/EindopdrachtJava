@@ -103,7 +103,10 @@ public class RecordService {
     /**
      * Deletes a record with a specific id
      */
-    public void deleteRecord(Long recordId){
+    public void deleteRecord(Long recordId) throws ResourceNotFoundException {
+        if (recordRepository.findById(recordId).isEmpty()) {
+            throw new ResourceNotFoundException("Record with id " + recordId + ", was not found" );
+        }
         recordRepository.deleteById(recordId);
     }
 
@@ -160,15 +163,15 @@ public class RecordService {
             record.setLabel(recordRegistrationRequest.getLabel());
         }
 
-        if (recordRegistrationRequest.getColor() != null){
+        if (recordRegistrationRequest.getColor() != null) {
             record.setColor(recordRegistrationRequest.getColor());
         }
 
-        if (recordRegistrationRequest.getYear() != 0){
+        if (recordRegistrationRequest.getYear() != 0) {
             record.setYear(recordRegistrationRequest.getYear());
         }
 
-        if (recordRegistrationRequest.getCountry() != null){
+        if (recordRegistrationRequest.getCountry() != null) {
             record.setCountry(recordRegistrationRequest.getCountry());
         }
 

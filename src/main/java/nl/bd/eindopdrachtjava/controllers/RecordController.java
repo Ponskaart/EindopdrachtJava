@@ -88,7 +88,8 @@ public class RecordController {
      */
     @AdminAuthorization
     @DeleteMapping("/{recordId}")
-    public void deleteRecord(@PathVariable Long recordId){
+    public String deleteRecord(@PathVariable Long recordId){
         recordService.deleteRecord(recordId);
+        return "Record with id: " + recordId + " had been deleted";
     }
 }
