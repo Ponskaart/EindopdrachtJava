@@ -22,8 +22,8 @@ public class ArtistService {
      * Method to register a new artist using the builder design pattern to make it easier to see what is actually
      * happening.
      */
-    public Artist registerArtist(ArtistRegistrationRequest artistRegistrationRequest){
-        if (artistExists(artistRegistrationRequest)){
+    public Artist registerArtist(ArtistRegistrationRequest artistRegistrationRequest) {
+        if (artistExists(artistRegistrationRequest)) {
             throw new ResourceAlreadyExistsException(
                     "Artist with name: " +
                             artistRegistrationRequest.getArtistName() +
@@ -63,7 +63,7 @@ public class ArtistService {
     /**
      * Method searches repo for artist by name.
      */
-    public Artist getArtistByArtistName(String artistName){
+    public Artist getArtistByArtistName(String artistName) {
         return artistRepository
                 .findByArtistName(artistName)
                 .orElseThrow(() ->
@@ -73,7 +73,10 @@ public class ArtistService {
     /**
      * Deletes an Arist with a specific Id.
      */
-    public void deleteArtist(Long artistId){
+    public void deleteArtist(Long artistId) throws ResourceNotFoundException {
+        if (artistRepository.findById(artistId).isEmpty()) {
+            throw new ResourceNotFoundException("Artist with id " + artistId + ", was not found" );
+        }
         artistRepository.deleteById(artistId);
     }
 

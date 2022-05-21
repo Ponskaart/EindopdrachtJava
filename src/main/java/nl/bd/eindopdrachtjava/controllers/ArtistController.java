@@ -81,7 +81,8 @@ public class ArtistController {
      */
     @AdminAuthorization
     @DeleteMapping("/{artistId}")
-    public void deleteArtist(@PathVariable Long artistId){
+    public String deleteArtist(@PathVariable Long artistId){
         artistService.deleteArtist(artistId);
+        return "Artist with id: " + artistId + " had been deleted";
     }
 }
