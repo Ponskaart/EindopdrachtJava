@@ -49,7 +49,8 @@ public class UserController {
      */
     @AdminAuthorization
     @DeleteMapping("/{userId}")
-    public void deleteUser(@PathVariable Long userId) {
+    public String deleteUser(@PathVariable Long userId) {
         userService.deleteUser(userId);
+        return "User with id " + userId + "has been deleted";
     }
 }
