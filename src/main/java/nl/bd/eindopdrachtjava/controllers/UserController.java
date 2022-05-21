@@ -41,7 +41,7 @@ public class UserController {
      */
     @AdminAuthorization
     @GetMapping("/user/{username}")
-    public UserDetails getUser(@PathVariable String username) {
+    public User getUser(@PathVariable String username) {
         return userService.loadUserByUsername(username);
     }
 

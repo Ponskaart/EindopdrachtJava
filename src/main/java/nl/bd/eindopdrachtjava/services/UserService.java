@@ -23,8 +23,8 @@ public class UserService implements UserDetailsService {
      * Loads user from the database if username exists.
      */
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return (UserDetails) userRepository.findByUsername(username)
+    public User loadUserByUsername(String username) throws UsernameNotFoundException {
+        return userRepository.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User does not exist!"));
     }
 
@@ -72,7 +72,7 @@ public class UserService implements UserDetailsService {
         }
 
         if (userRegistrationRequest.getPassword() != null) {
-            user.setPassword(userRegistrationRequest.getPassword());
+            user.setPassword(bCryptPasswordEncoder.encode(userRegistrationRequest.getPassword()));
         }
 
         if (userRegistrationRequest.getRole() != null) {
