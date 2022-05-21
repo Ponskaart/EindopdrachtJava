@@ -10,6 +10,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.nio.charset.Charset;
@@ -20,6 +21,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+@ActiveProfiles("test")
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
 @WithMockUser(username = "Admin", password = "VeryGoodPassword", authorities = {"ADMIN"})
@@ -37,7 +39,7 @@ public class RecordIntegrationTests {
     @Test
     public void registerRecordTest() throws Exception {
         //Arrange
-        //Artist 1 with one records
+        //Artist 1 with one record
         ArtistRegistrationRequest artist1 = createTestArtist1();
         String jsonBodyArtist1 = objectMapper.writeValueAsString(artist1);
 
@@ -45,7 +47,7 @@ public class RecordIntegrationTests {
         String jsonBodyRecord1 = objectMapper.writeValueAsString(record1WithArtist1);
 
         //Act
-        //Upload artist 1 and 2 records to database
+        //Upload artist 1 and record to database
         this.mockMvc.perform(post("/recordstore/artists/register").contentType(APPLICATION_JSON_UTF8).content(jsonBodyArtist1))
                 .andDo(print())
                 .andExpect(status().isOk());

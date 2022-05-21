@@ -8,7 +8,9 @@ import nl.bd.eindopdrachtjava.models.requests.ArtistRegistrationRequest;
 import nl.bd.eindopdrachtjava.repositories.ArtistRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Service layer with methods to facilitate CRUD operations
@@ -46,10 +48,13 @@ public class ArtistService {
     /**
      * Method that retrieves al artists in a specific year.
      */
-    public List<Artist> getArtistsByYearEstablished(int established) {
-        return artistRepository.findArtistByEstablished(established).orElseThrow(() ->
-                new ResourceNotFoundException("Artists with year of establishment: "
-                        + established + ", were not found" ));
+    public List<Artist> getArtistsByYearEstablished(int established) throws ResourceNotFoundException {
+        if ((artistRepository.findArtistByEstablished(established)).isEmpty()){
+            throw new ResourceNotFoundException("Artists with year of establishment: "
+                    + established + ", were not found" );
+        } else {
+            return artistRepository.findArtistByEstablished(established);
+        }
     }
 
     /**
@@ -63,7 +68,7 @@ public class ArtistService {
     /**
      * Method searches repo for artist by name.
      */
-    public Artist getArtistByArtistName(String artistName) {
+    public Artist getArtistByArtistName(String artistName) throws ResourceNotFoundException {
         return artistRepository
                 .findByArtistName(artistName)
                 .orElseThrow(() ->

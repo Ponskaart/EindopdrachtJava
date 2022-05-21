@@ -2,10 +2,12 @@ package nl.bd.eindopdrachtjava;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import nl.bd.eindopdrachtjava.models.requests.ArtistRegistrationRequest;
+import nl.bd.eindopdrachtjava.services.ArtistService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.annotation.DirtiesContext;
@@ -53,6 +55,25 @@ public class ArtistIntegrationTests {
                 .andExpect(status().isOk());
     }
 
+    @Test
+    public void ArtistAlreadyExistsTest() throws Exception {
+        //Arrange
+        ArtistRegistrationRequest artist1 = createTestArtist1();
+        String jsonBodyArtist1 = objectMapper.writeValueAsString(artist1);
+
+        //Act
+        //Upload first artist
+        this.mockMvc.perform(post("/recordstore/artists/register").contentType(APPLICATION_JSON_UTF8).content(jsonBodyArtist1))
+                .andDo(print())
+                .andExpect(status().isOk());
+
+        //Assert
+        //Upload identical artist
+        this.mockMvc.perform(post("/recordstore/artists/register").contentType(APPLICATION_JSON_UTF8).content(jsonBodyArtist1))
+                .andDo(print())
+                .andExpect(status().isConflict());
+    }
+
     /**
      * Tests if Artist with a specific year of establishment is retrieved from the database.
      */
@@ -80,6 +101,30 @@ public class ArtistIntegrationTests {
                 .andExpect(content().contentType("application/json"))
                 .andExpect(jsonPath("$", hasSize(1)))
                 .andExpect(status().isOk());
+    }
+
+    @Test
+    public void getArtistByInvalidEstablishedTest() throws Exception {
+        //Arrange
+        ArtistRegistrationRequest artist1 = createTestArtist1();
+        String jsonBodyArtist1 = objectMapper.writeValueAsString(artist1);
+
+        ArtistRegistrationRequest artist2 = createTestArtist2();
+        String jsonBodyArtist2 = objectMapper.writeValueAsString(artist2);
+
+        //Act
+        this.mockMvc.perform(post("/recordstore/artists/register").contentType(APPLICATION_JSON_UTF8).content(jsonBodyArtist1))
+                .andDo(print())
+                .andExpect(status().isOk());
+
+        this.mockMvc.perform(post("/recordstore/artists/register").contentType(APPLICATION_JSON_UTF8).content(jsonBodyArtist2))
+                .andDo(print())
+                .andExpect(status().isOk());
+
+        //Assert
+        this.mockMvc.perform(get("/recordstore/artists/established/" + 9999))
+                .andDo(print())
+                .andExpect(status().isNotFound());
     }
 
     /**
