@@ -69,7 +69,7 @@ public class ArtistController {
     /**
      * Updates an artist object and overwrites the old entry in the database
      */
-    @AdminAuthorization
+    @AdminAndEmployeeAuthorization
     @PutMapping("/{artistId}")
     public Artist updateArtist(@PathVariable Long artistId,
                                @RequestBody ArtistRegistrationRequest artistRegistrationRequest) {
