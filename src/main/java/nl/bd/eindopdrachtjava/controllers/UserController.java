@@ -5,7 +5,6 @@ import nl.bd.eindopdrachtjava.models.annotations.AdminAuthorization;
 import nl.bd.eindopdrachtjava.models.entities.User;
 import nl.bd.eindopdrachtjava.models.requests.UserRegistrationRequest;
 import nl.bd.eindopdrachtjava.services.UserService;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 /**

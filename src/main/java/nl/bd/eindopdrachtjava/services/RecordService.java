@@ -86,7 +86,7 @@ public class RecordService {
      * Updates a Record with new data.
      */
     public Record updateRecord(RecordRegistrationRequest recordRegistrationRequest,
-                               Long recordId) throws ResourceNotFoundException{
+                               Long recordId) throws ResourceNotFoundException {
         return recordRepository.findById(recordId).map(record -> updatedRecord(recordRegistrationRequest, record))
                 .orElseThrow(() -> new ResourceNotFoundException("Record with id " + recordId + " was not found" ));
     }

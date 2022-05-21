@@ -93,4 +93,23 @@ public class ArtistService {
                 .established(artistRegistrationRequest.getEstablished())
                 .build();
     }
+
+    public Artist updateArtist(ArtistRegistrationRequest artistRegistrationRequest, Long artistId)
+            throws ResourceNotFoundException {
+            return artistRepository.findById(artistId).map(artist -> updatedArtist(artistRegistrationRequest, artist))
+                    .orElseThrow(() -> new ResourceNotFoundException("Artist with id " + artistId + " was not found" ));
+    }
+
+    private Artist updatedArtist(ArtistRegistrationRequest artistRegistrationRequest, Artist artist) {
+        if (artistRegistrationRequest.getArtistName() != null) {
+            artist.setArtistName(artistRegistrationRequest.getArtistName());
+        }
+
+        if (artistRegistrationRequest.getEstablished() != 0) {
+            artist.setEstablished(artistRegistrationRequest.getEstablished());
+        }
+
+        return artistRepository.save(artist);
+    }
+
 }

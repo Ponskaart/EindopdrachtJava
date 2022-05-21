@@ -75,5 +75,10 @@ public class ArtistController {
         artistService.deleteArtist(artistId);
     }
 
-    //TODO CREATE PUT MAPPING!
+    @AdminAuthorization
+    @PutMapping("/{artistId}")
+    public Artist updateArtist(@PathVariable Long artistId,
+                               @RequestBody ArtistRegistrationRequest artistRegistrationRequest) {
+        return artistService.updateArtist(artistRegistrationRequest, artistId);
+    }
 }

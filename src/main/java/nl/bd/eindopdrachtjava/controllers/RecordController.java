@@ -80,7 +80,7 @@ public class RecordController {
     @AdminAndEmployeeAuthorization
     @PutMapping("/{recordId}")
     public Record updateRecord(@PathVariable Long recordId,
-                               @RequestBody RecordRegistrationRequest recordRegistrationRequest){
+                               @RequestBody RecordRegistrationRequest recordRegistrationRequest) {
         return recordService.updateRecord(recordRegistrationRequest, recordId);
     }
 
