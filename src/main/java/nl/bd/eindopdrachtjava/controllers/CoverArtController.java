@@ -75,7 +75,8 @@ public class CoverArtController {
      */
     @AdminAuthorization
     @DeleteMapping("/{coverArtId}")
-    public void deleteCoverArt(@PathVariable Long coverArtId){
+    public String deleteCoverArt(@PathVariable Long coverArtId){
         coverArtService.deleteCoverArt(coverArtId);
+        return "CoverArt with id: " + coverArtId + " had been deleted";
     }
 }

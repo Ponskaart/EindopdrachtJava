@@ -2,6 +2,7 @@ package nl.bd.eindopdrachtjava.services;
 
 import lombok.AllArgsConstructor;
 import nl.bd.eindopdrachtjava.exceptions.InvalidFileException;
+import nl.bd.eindopdrachtjava.exceptions.ResourceAlreadyExistsException;
 import nl.bd.eindopdrachtjava.exceptions.ResourceNotFoundException;
 import nl.bd.eindopdrachtjava.models.entities.CoverArt;
 import nl.bd.eindopdrachtjava.models.entities.Record;
@@ -38,11 +39,10 @@ public class CoverArtService {
             throws MultipartException, IOException, ResourceNotFoundException {
         String fileContentType = multipartImage.getContentType();
 
-        if (recordRepository.findById(recordId).isPresent()) {
-            return validateAndStore(multipartImage, recordId, fileContentType);
-        } else {
+        if (recordRepository.findById(recordId).isEmpty()) {
             throw new ResourceNotFoundException("Record with id " + recordId + ", does not exist");
         }
+        return validateAndStore(multipartImage, recordId, fileContentType);
     }
 
     /**
@@ -63,6 +63,9 @@ public class CoverArtService {
      * Deletes CoverArt entity from database with given Id.
      */
     public void deleteCoverArt(Long coverArtId) {
+        if (coverArtRepository.findById(coverArtId).isEmpty()) {
+            throw new ResourceNotFoundException("CoverArt with id " + coverArtId + ", was not found" );
+        }
         coverArtRepository.deleteById(coverArtId);
     }
 
