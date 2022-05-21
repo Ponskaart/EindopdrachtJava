@@ -27,7 +27,7 @@ public class ArtistService {
     public Artist registerArtist(ArtistRegistrationRequest artistRegistrationRequest) {
         if (artistExists(artistRegistrationRequest)) {
             throw new ResourceAlreadyExistsException(
-                    "Artist with name: " +
+                            "Artist with name: " +
                             artistRegistrationRequest.getArtistName() +
                             ", and with year established: " +
                             artistRegistrationRequest.getEstablished() +

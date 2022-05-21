@@ -41,8 +41,11 @@ public class RecordService {
      * Returns all records of a specific artist
      */
     public List<Record> getRecordsByArtist(Long artistId)  throws ResourceNotFoundException {
-        return recordRepository.findByArtistArtistId(artistId).orElseThrow(() ->
-                new ResourceNotFoundException("Record with artist " + artistId + " were not found" ));
+        if ((recordRepository.findByArtistArtistId(artistId)).isEmpty()){
+            throw new ResourceNotFoundException("Record with artist " + artistId + " were not found"  );
+        } else {
+            return recordRepository.findByArtistArtistId(artistId);
+        }
     }
 
     /**
@@ -50,15 +53,18 @@ public class RecordService {
      */
     public Record getRecordByTitle(String title)  throws ResourceNotFoundException {
         return recordRepository.findRecordByTitle(title).orElseThrow(() ->
-                new ResourceNotFoundException("Record with title " + title + " was not found" ));
+                new ResourceNotFoundException("Record with title " + title + " was not found"));
     }
 
     /**
      * Returns a list of records with a specific genre
      */
     public List<Record> getRecordsByGenre(String genre)  throws ResourceNotFoundException {
-        return recordRepository.findRecordByGenre(genre).orElseThrow(() ->
-                new ResourceNotFoundException("Record with genre " + genre + " was not found" ));
+        if ((recordRepository.findRecordByGenre(genre)).isEmpty()){
+            throw new ResourceNotFoundException("Record with genre " + genre + " was not found");
+        } else {
+            return recordRepository.findRecordByGenre(genre);
+        }
     }
 
     /**
@@ -72,7 +78,7 @@ public class RecordService {
             throw new ResourceAlreadyExistsException("Record with name: " + recordRegistrationRequest.getTitle() +
                     ", and with artist: " + recordRegistrationRequest.getArtistName() + ", is already registered.");
         } else {
-            if(doesArtistExist(recordRegistrationRequest)) {
+            if(artistExist(recordRegistrationRequest)) {
                 Record record = createRecord(recordRegistrationRequest);
                 return recordRepository.save(record);
             } else {
@@ -87,8 +93,13 @@ public class RecordService {
      */
     public Record updateRecord(RecordRegistrationRequest recordRegistrationRequest,
                                Long recordId) throws ResourceNotFoundException {
+        if (recordRegistrationRequest.getArtistName() != null & !artistExist(recordRegistrationRequest)) {
+            throw new ResourceNotFoundException("Artist with name: " + recordRegistrationRequest.getArtistName() +
+                    " was not found.");
+        }
+
         return recordRepository.findById(recordId).map(record -> updatedRecord(recordRegistrationRequest, record))
-                .orElseThrow(() -> new ResourceNotFoundException("Record with id " + recordId + " was not found" ));
+                .orElseThrow(() -> new ResourceNotFoundException("Record with id " + recordId + " was not found"));
     }
 
     /**
@@ -96,7 +107,7 @@ public class RecordService {
      */
     public Record updateCoverArt(Long recordId, Long coverArtId) {
         return recordRepository.findById(recordId).map(record -> updatedCoverArt(coverArtId, record))
-                .orElseThrow(() -> new ResourceNotFoundException("Record with id " + recordId + " was not found" ));
+                .orElseThrow(() -> new ResourceNotFoundException("Record with id " + recordId + " was not found"));
 
     }
 
@@ -138,7 +149,7 @@ public class RecordService {
     /**
      * Returns boolean true if artist exists in database.
      */
-    private boolean doesArtistExist(RecordRegistrationRequest recordRegistrationRequest) {
+    private boolean artistExist(RecordRegistrationRequest recordRegistrationRequest) {
         return artistRepository.findByArtistName(recordRegistrationRequest.getArtistName()).isPresent();
     }
 
@@ -146,7 +157,8 @@ public class RecordService {
      * Returns updated record. Very large method, but it should make sure that if the user does not specify a value
      * the old value does not get overridden with null or 0.
      */
-    private Record updatedRecord(RecordRegistrationRequest recordRegistrationRequest, Record record) {
+    private Record updatedRecord(RecordRegistrationRequest recordRegistrationRequest, Record record)
+            throws ResourceNotFoundException {
         if (recordRegistrationRequest.getArtistName() != null) {
             record.setArtist(artistRepository.findByArtistName(recordRegistrationRequest.getArtistName()).get());
         }

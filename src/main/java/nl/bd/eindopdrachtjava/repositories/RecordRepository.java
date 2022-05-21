@@ -18,13 +18,13 @@ public interface RecordRepository extends JpaRepository<Record, Long> {
     @Query( "SELECT a " +
             "FROM Record a " +
             "WHERE a.artist.artistId = :artistId")
-    Optional<List<Record>> findByArtistArtistId(
+    List<Record> findByArtistArtistId(
             @Param("artistId") Long artistId);
 
     @Query( "SELECT r" +
             " FROM Record r " +
             "WHERE r.genre = :genre")
-    Optional<List<Record>> findRecordByGenre(
+    List<Record> findRecordByGenre(
             @Param("genre") String genre);
 
     @Query("SELECT r " +
