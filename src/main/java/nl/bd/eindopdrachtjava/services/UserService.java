@@ -53,7 +53,11 @@ public class UserService implements UserDetailsService {
     /**
      * Deletes user with given Id from database.
      */
-    public void deleteUser(Long userId) {
+    public void deleteUser(Long userId) throws ResourceNotFoundException {
+        if (userRepository.findById(userId).isEmpty()) {
+            throw new ResourceNotFoundException("User with id " + userId + " was not found" );
+        }
+        
         userRepository.deleteById(userId);
     }
 
