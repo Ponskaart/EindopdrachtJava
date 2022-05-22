@@ -40,7 +40,11 @@ public class ArtistService {
      * Method retrieves all Artist entities from the database and returns them as a list.
      */
     public List<Artist> getAllArtists() throws ResourceNotFoundException {
-        return artistRepository.findAll();
+        if ((artistRepository.findAll().isEmpty())) {
+            throw new ResourceNotFoundException("No Artists were found");
+        } else {
+            return artistRepository.findAll();
+        }
     }
 
     /**
@@ -48,8 +52,10 @@ public class ArtistService {
      */
     public List<Artist> getArtistsByYearEstablished(int established) throws ResourceNotFoundException {
         if ((artistRepository.findArtistByEstablished(established)).isEmpty()) {
-            throw new ResourceNotFoundException("Artists with year of establishment: "
-                    + established + ", were not found");
+            throw new ResourceNotFoundException(
+                    "Artists with year of establishment: " +
+                            established +
+                            ", were not found");
         } else {
             return artistRepository.findArtistByEstablished(established);
         }
@@ -60,7 +66,10 @@ public class ArtistService {
      */
     public Artist getArtistByArtistId(Long artistId) throws ResourceNotFoundException {
         return artistRepository.findById(artistId).orElseThrow(() ->
-                new ResourceNotFoundException("Artist with id: " + artistId + ", was not found"));
+                new ResourceNotFoundException(
+                        "Artist with id: " +
+                                artistId +
+                                ", was not found"));
     }
 
     /**
@@ -70,7 +79,10 @@ public class ArtistService {
         return artistRepository
                 .findByArtistName(artistName)
                 .orElseThrow(() ->
-                        new ResourceNotFoundException("Artist with name: " + artistName + ", was not found"));
+                        new ResourceNotFoundException(
+                                "Artist with name: " +
+                                        artistName +
+                                        ", was not found"));
     }
 
     /**
@@ -78,7 +90,10 @@ public class ArtistService {
      */
     public void deleteArtist(Long artistId) throws ResourceNotFoundException {
         if (artistRepository.findById(artistId).isEmpty()) {
-            throw new ResourceNotFoundException("Artist with id " + artistId + ", was not found");
+            throw new ResourceNotFoundException(
+                    "Artist with id " +
+                            artistId + ", " +
+                            "was not found");
         }
         artistRepository.deleteById(artistId);
     }
@@ -89,7 +104,10 @@ public class ArtistService {
     public Artist updateArtist(ArtistRegistrationRequest artistRegistrationRequest, Long artistId)
             throws ResourceNotFoundException {
         return artistRepository.findById(artistId).map(artist -> updatedArtist(artistRegistrationRequest, artist))
-                .orElseThrow(() -> new ResourceNotFoundException("Artist with id " + artistId + " was not found"));
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        "Artist with id " +
+                                artistId +
+                                " was not found"));
     }
 
     /**
@@ -120,7 +138,6 @@ public class ArtistService {
         if (artistRegistrationRequest.getEstablished() != 0) {
             artist.setEstablished(artistRegistrationRequest.getEstablished());
         }
-
         return artistRepository.save(artist);
     }
 }

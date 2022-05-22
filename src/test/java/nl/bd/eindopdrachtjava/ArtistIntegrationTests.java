@@ -53,6 +53,21 @@ public class ArtistIntegrationTests {
     }
 
     /**
+     * Tests if exception is thrown when no artists are registered.
+     */
+    @Test
+    public void getAllArtistExceptionTest() throws Exception {
+        //Arrange
+
+        //Act
+
+        //Assert
+        this.mockMvc.perform(get("/recordstore/artists"))
+                .andDo(print())
+                .andExpect(status().isNotFound());
+    }
+
+    /**
      * Tests if exception is thrown when artist already exists.
      */
     @Test

@@ -38,7 +38,10 @@ public class CoverArtService {
         String fileContentType = multipartImage.getContentType();
 
         if (recordRepository.findById(recordId).isEmpty()) {
-            throw new ResourceNotFoundException("Record with id " + recordId + ", does not exist");
+            throw new ResourceNotFoundException(
+                    "Record with id " +
+                            recordId +
+                            ", does not exist");
         }
         return validateAndStore(multipartImage, recordId, fileContentType);
     }
@@ -53,7 +56,10 @@ public class CoverArtService {
                     new ResourceNotFoundException("No cover art was found."));
             return new ByteArrayResource(coverArt.getContent());
         } else {
-            throw new ResourceNotFoundException("Record with id " + recordId + ", was not found");
+            throw new ResourceNotFoundException(
+                    "Record with id " +
+                            recordId +
+                            ", was not found");
         }
     }
 
@@ -62,7 +68,10 @@ public class CoverArtService {
      */
     public void deleteCoverArt(Long coverArtId) {
         if (coverArtRepository.findById(coverArtId).isEmpty()) {
-            throw new ResourceNotFoundException("CoverArt with id " + coverArtId + ", was not found");
+            throw new ResourceNotFoundException(
+                    "CoverArt with id " +
+                            coverArtId +
+                            ", was not found");
         }
         coverArtRepository.deleteById(coverArtId);
     }

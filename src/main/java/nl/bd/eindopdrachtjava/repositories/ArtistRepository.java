@@ -27,6 +27,9 @@ public interface ArtistRepository extends JpaRepository<Artist, Long> {
     List<Artist> findArtistByEstablished(
             @Param("established") int established);
 
+    /**
+     * Receives an artistregistrationRequest object, then searches for artist that has both values matching.
+     */
     @Query("SELECT a " +
             "FROM Artist a " +
             "WHERE a.artistName = :#{#artistRegistrationRequest.artistName} " +

@@ -32,8 +32,10 @@ public class UserService implements UserDetailsService {
      */
     public User registerUser(UserRegistrationRequest userRegistrationRequest) throws ResourceAlreadyExistsException {
         if (userExists(userRegistrationRequest)) {
-            throw new ResourceAlreadyExistsException("User with username: " + userRegistrationRequest.getUsername() +
-                    " already exists!");
+            throw new ResourceAlreadyExistsException(
+                    "User with username: " +
+                            userRegistrationRequest.getUsername() +
+                            " already exists!");
         }
         User user = createUser(userRegistrationRequest);
         return userRepository.save(user);
@@ -52,7 +54,10 @@ public class UserService implements UserDetailsService {
      */
     public void deleteUser(Long userId) throws ResourceNotFoundException {
         if (userRepository.findById(userId).isEmpty()) {
-            throw new ResourceNotFoundException("User with id " + userId + " was not found");
+            throw new ResourceNotFoundException(
+                    "User with id " +
+                            userId +
+                            " was not found");
         }
         userRepository.deleteById(userId);
     }

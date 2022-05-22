@@ -20,11 +20,17 @@ import static javax.persistence.GenerationType.IDENTITY;
 @Setter
 @Builder
 public class User implements UserDetails {
+    /**
+     * Generates id for each user.
+     */
     @Id
     @GeneratedValue(strategy = IDENTITY)
     @Column
     private Long userId;
 
+    /**
+     * EnumType.STRING makes the role a readable string in the database.
+     */
     @Column
     @Enumerated(EnumType.STRING)
     private UserRole role;

@@ -33,6 +33,9 @@ public interface RecordRepository extends JpaRepository<Record, Long> {
     Optional<Record> findRecordByTitle(
             @Param("title") String title);
 
+    /**
+     * Receives recordRegistrationRequest object, then tries to find Record with both values matching.
+     */
     @Query("SELECT r " +
             "FROM Record r " +
             "WHERE r.title = :#{#recordRegistrationRequest.title} " +

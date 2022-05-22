@@ -27,7 +27,10 @@ public class RecordService {
      */
     public Record getRecordById(Long recordId) throws ResourceNotFoundException {
         return recordRepository.findById(recordId).orElseThrow(() ->
-                new ResourceNotFoundException("Record with id " + recordId + " was not found"));
+                new ResourceNotFoundException(
+                        "Record with id " +
+                                recordId +
+                                " was not found"));
     }
 
     /**
@@ -42,7 +45,10 @@ public class RecordService {
      */
     public List<Record> getRecordsByArtist(Long artistId) throws ResourceNotFoundException {
         if ((recordRepository.findByArtistArtistId(artistId)).isEmpty()) {
-            throw new ResourceNotFoundException("Record with artist " + artistId + " were not found");
+            throw new ResourceNotFoundException(
+                    "Record with artist " +
+                            artistId +
+                            " were not found");
         } else {
             return recordRepository.findByArtistArtistId(artistId);
         }
@@ -53,7 +59,10 @@ public class RecordService {
      */
     public Record getRecordByTitle(String title) throws ResourceNotFoundException {
         return recordRepository.findRecordByTitle(title).orElseThrow(() ->
-                new ResourceNotFoundException("Record with title " + title + " was not found"));
+                new ResourceNotFoundException(
+                        "Record with title " +
+                                title +
+                                " was not found"));
     }
 
     /**
@@ -61,7 +70,10 @@ public class RecordService {
      */
     public List<Record> getRecordsByGenre(String genre) throws ResourceNotFoundException {
         if ((recordRepository.findRecordByGenre(genre)).isEmpty()) {
-            throw new ResourceNotFoundException("Record with genre " + genre + " was not found");
+            throw new ResourceNotFoundException(
+                    "Record with genre " +
+                            genre +
+                            " was not found");
         } else {
             return recordRepository.findRecordByGenre(genre);
         }
@@ -75,15 +87,21 @@ public class RecordService {
      */
     public Record registerRecord(RecordRegistrationRequest recordRegistrationRequest) {
         if (recordExists(recordRegistrationRequest)) {
-            throw new ResourceAlreadyExistsException("Record with name: " + recordRegistrationRequest.getTitle() +
-                    ", and with artist: " + recordRegistrationRequest.getArtistName() + ", is already registered.");
+            throw new ResourceAlreadyExistsException(
+                    "Record with name: " +
+                            recordRegistrationRequest.getTitle() +
+                            ", and with artist: " +
+                            recordRegistrationRequest.getArtistName() +
+                            ", is already registered.");
         } else {
             if (artistExist(recordRegistrationRequest)) {
                 Record record = createRecord(recordRegistrationRequest);
                 return recordRepository.save(record);
             } else {
-                throw new ResourceNotFoundException("Artist with name: " + recordRegistrationRequest.getArtistName() +
-                        ", does not exist");
+                throw new ResourceNotFoundException(
+                        "Artist with name: " +
+                                recordRegistrationRequest.getArtistName() +
+                                ", does not exist");
             }
         }
     }
@@ -94,12 +112,17 @@ public class RecordService {
     public Record updateRecord(RecordRegistrationRequest recordRegistrationRequest,
                                Long recordId) throws ResourceNotFoundException {
         if (recordRegistrationRequest.getArtistName() != null & !artistExist(recordRegistrationRequest)) {
-            throw new ResourceNotFoundException("Artist with name: " + recordRegistrationRequest.getArtistName() +
-                    " was not found.");
+            throw new ResourceNotFoundException(
+                    "Artist with name: " +
+                            recordRegistrationRequest.getArtistName() +
+                            " was not found.");
         }
 
         return recordRepository.findById(recordId).map(record -> updatedRecord(recordRegistrationRequest, record))
-                .orElseThrow(() -> new ResourceNotFoundException("Record with id " + recordId + " was not found"));
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        "Record with id " +
+                                recordId +
+                                " was not found"));
     }
 
     /**
@@ -107,7 +130,10 @@ public class RecordService {
      */
     public Record updateCoverArt(Long recordId, Long coverArtId) {
         return recordRepository.findById(recordId).map(record -> updatedCoverArt(coverArtId, record))
-                .orElseThrow(() -> new ResourceNotFoundException("Record with id " + recordId + " was not found"));
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        "Record with id " +
+                                recordId +
+                                " was not found"));
 
     }
 
@@ -116,7 +142,10 @@ public class RecordService {
      */
     public void deleteRecord(Long recordId) throws ResourceNotFoundException {
         if (recordRepository.findById(recordId).isEmpty()) {
-            throw new ResourceNotFoundException("Record with id " + recordId + ", was not found");
+            throw new ResourceNotFoundException(
+                    "Record with id " +
+                            recordId +
+                            ", was not found");
         }
         recordRepository.deleteById(recordId);
     }
@@ -194,7 +223,6 @@ public class RecordService {
         if (recordRegistrationRequest.getQtyInStock() != 0) {
             record.setQtyInStock(recordRegistrationRequest.getQtyInStock());
         }
-
         return recordRepository.save(record);
     }
 
