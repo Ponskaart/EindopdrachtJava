@@ -47,7 +47,6 @@ public class UserService implements UserDetailsService {
     public User updateUser(UserRegistrationRequest userRegistrationRequest, Long userId) throws ResourceNotFoundException {
         return userRepository.findById(userId).map(user -> updatedUser(userRegistrationRequest, user))
                 .orElseThrow(() -> new ResourceNotFoundException("User with id " + userId + " was not found" ));
-
     }
 
     /**
@@ -57,7 +56,6 @@ public class UserService implements UserDetailsService {
         if (userRepository.findById(userId).isEmpty()) {
             throw new ResourceNotFoundException("User with id " + userId + " was not found" );
         }
-
         userRepository.deleteById(userId);
     }
 
