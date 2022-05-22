@@ -45,14 +45,4 @@ public class GlobalExceptionHandler
         return handleExceptionInternal(ex, bodyOfResponse, new HttpHeaders(), HttpStatus.FORBIDDEN, request);
     }
 
-//    /**
-//     * Handles InvalidInputException, returns the exception, http status and a message to ensure the origins
-//     * of the exception are properly communicated to the user.
-//     */
-//    @ExceptionHandler(value = {InvalidInputException.class})
-//    protected ResponseEntity<Object> handleInvalidInputConflict
-//    (InvalidInputException ex, WebRequest request) {
-//        String bodyOfResponse = "Invalid input.";
-//        return handleExceptionInternal(ex, bodyOfResponse, new HttpHeaders(), HttpStatus.CONFLICT, request);
-//    }
 }

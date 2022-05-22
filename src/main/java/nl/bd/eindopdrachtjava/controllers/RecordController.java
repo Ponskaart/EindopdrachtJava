@@ -1,10 +1,12 @@
 package nl.bd.eindopdrachtjava.controllers;
 
 import lombok.AllArgsConstructor;
-import nl.bd.eindopdrachtjava.models.annotations.*;
+import nl.bd.eindopdrachtjava.models.annotations.AdminAndEmployeeAuthorization;
+import nl.bd.eindopdrachtjava.models.annotations.AdminAuthorization;
+import nl.bd.eindopdrachtjava.models.annotations.AllUserAuthorization;
+import nl.bd.eindopdrachtjava.models.entities.Record;
 import nl.bd.eindopdrachtjava.models.requests.RecordRegistrationRequest;
 import nl.bd.eindopdrachtjava.services.RecordService;
-import nl.bd.eindopdrachtjava.models.entities.Record;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -17,6 +19,7 @@ import java.util.List;
 @AllArgsConstructor
 public class RecordController {
     private final RecordService recordService;
+
     /**
      * Endpoint uses data provided by the user in the recordRegistrationRequest to fill a new Record entity and saves it
      * in the database.
@@ -33,16 +36,16 @@ public class RecordController {
      */
     @AllUserAuthorization
     @GetMapping()
-    public List<Record> getAllRecords(){
+    public List<Record> getAllRecords() {
         return recordService.getAllRecords();
     }
 
     /**
      * Shows all records of a specific artist.
-     * */
+     */
     @AllUserAuthorization
     @GetMapping("/artist/{artistId}")
-    public List<Record> getRecordsByArtist(@PathVariable Long artistId){
+    public List<Record> getRecordsByArtist(@PathVariable Long artistId) {
         return recordService.getRecordsByArtist(artistId);
     }
 
@@ -60,16 +63,16 @@ public class RecordController {
      */
     @AllUserAuthorization
     @GetMapping("/title/{title}")
-    public Record getRecordByTitle(@PathVariable String title){
+    public Record getRecordByTitle(@PathVariable String title) {
         return recordService.getRecordByTitle(title);
     }
 
     /**
      * Shows all records with a specific genre.
-     * */
+     */
     @AllUserAuthorization
     @GetMapping("/genre/{genre}")
-    public List<Record> getRecordsByGenre(@PathVariable String genre){
+    public List<Record> getRecordsByGenre(@PathVariable String genre) {
         return recordService.getRecordsByGenre(genre);
     }
 
@@ -88,7 +91,7 @@ public class RecordController {
      */
     @AdminAuthorization
     @DeleteMapping("/{recordId}")
-    public String deleteRecord(@PathVariable Long recordId){
+    public String deleteRecord(@PathVariable Long recordId) {
         recordService.deleteRecord(recordId);
         return "Record with id: " + recordId + " had been deleted";
     }

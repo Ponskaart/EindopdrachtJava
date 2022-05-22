@@ -1,9 +1,7 @@
 package nl.bd.eindopdrachtjava.repositories;
 
 import nl.bd.eindopdrachtjava.models.entities.Artist;
-import nl.bd.eindopdrachtjava.models.entities.Record;
 import nl.bd.eindopdrachtjava.models.requests.ArtistRegistrationRequest;
-import nl.bd.eindopdrachtjava.models.requests.RecordRegistrationRequest;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -17,13 +15,13 @@ public interface ArtistRepository extends JpaRepository<Artist, Long> {
     /**
      * Custom queries to retrieve specific data from the database.
      */
-    @Query( "SELECT a " +
+    @Query("SELECT a " +
             "FROM Artist a " +
             "WHERE a.artistName = :artistName")
     Optional<Artist> findByArtistName(
             @Param("artistName") String artistName);
 
-    @Query( "SELECT a " +
+    @Query("SELECT a " +
             "FROM Artist a " +
             "WHERE a.established = :established")
     List<Artist> findArtistByEstablished(

@@ -2,8 +2,8 @@ package nl.bd.eindopdrachtjava.services;
 
 import lombok.AllArgsConstructor;
 import nl.bd.eindopdrachtjava.exceptions.ResourceAlreadyExistsException;
-import nl.bd.eindopdrachtjava.models.entities.Record;
 import nl.bd.eindopdrachtjava.exceptions.ResourceNotFoundException;
+import nl.bd.eindopdrachtjava.models.entities.Record;
 import nl.bd.eindopdrachtjava.models.requests.RecordRegistrationRequest;
 import nl.bd.eindopdrachtjava.repositories.ArtistRepository;
 import nl.bd.eindopdrachtjava.repositories.CoverArtRepository;
@@ -27,7 +27,7 @@ public class RecordService {
      */
     public Record getRecordById(Long recordId) throws ResourceNotFoundException {
         return recordRepository.findById(recordId).orElseThrow(() ->
-                new ResourceNotFoundException("Record with id " + recordId + " was not found" )) ;
+                new ResourceNotFoundException("Record with id " + recordId + " was not found"));
     }
 
     /**
@@ -40,9 +40,9 @@ public class RecordService {
     /**
      * Returns all records of a specific artist
      */
-    public List<Record> getRecordsByArtist(Long artistId)  throws ResourceNotFoundException {
-        if ((recordRepository.findByArtistArtistId(artistId)).isEmpty()){
-            throw new ResourceNotFoundException("Record with artist " + artistId + " were not found"  );
+    public List<Record> getRecordsByArtist(Long artistId) throws ResourceNotFoundException {
+        if ((recordRepository.findByArtistArtistId(artistId)).isEmpty()) {
+            throw new ResourceNotFoundException("Record with artist " + artistId + " were not found");
         } else {
             return recordRepository.findByArtistArtistId(artistId);
         }
@@ -51,7 +51,7 @@ public class RecordService {
     /**
      * Returns a record with a specific title
      */
-    public Record getRecordByTitle(String title)  throws ResourceNotFoundException {
+    public Record getRecordByTitle(String title) throws ResourceNotFoundException {
         return recordRepository.findRecordByTitle(title).orElseThrow(() ->
                 new ResourceNotFoundException("Record with title " + title + " was not found"));
     }
@@ -59,8 +59,8 @@ public class RecordService {
     /**
      * Returns a list of records with a specific genre
      */
-    public List<Record> getRecordsByGenre(String genre)  throws ResourceNotFoundException {
-        if ((recordRepository.findRecordByGenre(genre)).isEmpty()){
+    public List<Record> getRecordsByGenre(String genre) throws ResourceNotFoundException {
+        if ((recordRepository.findRecordByGenre(genre)).isEmpty()) {
             throw new ResourceNotFoundException("Record with genre " + genre + " was not found");
         } else {
             return recordRepository.findRecordByGenre(genre);
@@ -74,11 +74,11 @@ public class RecordService {
      * the database does not get double entries.
      */
     public Record registerRecord(RecordRegistrationRequest recordRegistrationRequest) {
-        if (recordExists(recordRegistrationRequest)){
+        if (recordExists(recordRegistrationRequest)) {
             throw new ResourceAlreadyExistsException("Record with name: " + recordRegistrationRequest.getTitle() +
                     ", and with artist: " + recordRegistrationRequest.getArtistName() + ", is already registered.");
         } else {
-            if(artistExist(recordRegistrationRequest)) {
+            if (artistExist(recordRegistrationRequest)) {
                 Record record = createRecord(recordRegistrationRequest);
                 return recordRepository.save(record);
             } else {
@@ -116,7 +116,7 @@ public class RecordService {
      */
     public void deleteRecord(Long recordId) throws ResourceNotFoundException {
         if (recordRepository.findById(recordId).isEmpty()) {
-            throw new ResourceNotFoundException("Record with id " + recordId + ", was not found" );
+            throw new ResourceNotFoundException("Record with id " + recordId + ", was not found");
         }
         recordRepository.deleteById(recordId);
     }

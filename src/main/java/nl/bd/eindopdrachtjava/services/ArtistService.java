@@ -8,9 +8,7 @@ import nl.bd.eindopdrachtjava.models.requests.ArtistRegistrationRequest;
 import nl.bd.eindopdrachtjava.repositories.ArtistRepository;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 
 /**
  * Service layer with methods to facilitate CRUD operations
@@ -27,7 +25,7 @@ public class ArtistService {
     public Artist registerArtist(ArtistRegistrationRequest artistRegistrationRequest) {
         if (artistExists(artistRegistrationRequest)) {
             throw new ResourceAlreadyExistsException(
-                            "Artist with name: " +
+                    "Artist with name: " +
                             artistRegistrationRequest.getArtistName() +
                             ", and with year established: " +
                             artistRegistrationRequest.getEstablished() +
@@ -49,9 +47,9 @@ public class ArtistService {
      * Method that retrieves al artists in a specific year.
      */
     public List<Artist> getArtistsByYearEstablished(int established) throws ResourceNotFoundException {
-        if ((artistRepository.findArtistByEstablished(established)).isEmpty()){
+        if ((artistRepository.findArtistByEstablished(established)).isEmpty()) {
             throw new ResourceNotFoundException("Artists with year of establishment: "
-                    + established + ", were not found" );
+                    + established + ", were not found");
         } else {
             return artistRepository.findArtistByEstablished(established);
         }
@@ -62,7 +60,7 @@ public class ArtistService {
      */
     public Artist getArtistByArtistId(Long artistId) throws ResourceNotFoundException {
         return artistRepository.findById(artistId).orElseThrow(() ->
-                new ResourceNotFoundException("Artist with id: " + artistId + ", was not found" ));
+                new ResourceNotFoundException("Artist with id: " + artistId + ", was not found"));
     }
 
     /**
@@ -72,7 +70,7 @@ public class ArtistService {
         return artistRepository
                 .findByArtistName(artistName)
                 .orElseThrow(() ->
-                new ResourceNotFoundException("Artist with name: " + artistName + ", was not found" ));
+                        new ResourceNotFoundException("Artist with name: " + artistName + ", was not found"));
     }
 
     /**
@@ -80,7 +78,7 @@ public class ArtistService {
      */
     public void deleteArtist(Long artistId) throws ResourceNotFoundException {
         if (artistRepository.findById(artistId).isEmpty()) {
-            throw new ResourceNotFoundException("Artist with id " + artistId + ", was not found" );
+            throw new ResourceNotFoundException("Artist with id " + artistId + ", was not found");
         }
         artistRepository.deleteById(artistId);
     }
@@ -91,7 +89,7 @@ public class ArtistService {
     public Artist updateArtist(ArtistRegistrationRequest artistRegistrationRequest, Long artistId)
             throws ResourceNotFoundException {
         return artistRepository.findById(artistId).map(artist -> updatedArtist(artistRegistrationRequest, artist))
-                .orElseThrow(() -> new ResourceNotFoundException("Artist with id " + artistId + " was not found" ));
+                .orElseThrow(() -> new ResourceNotFoundException("Artist with id " + artistId + " was not found"));
     }
 
     /**

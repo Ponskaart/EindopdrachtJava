@@ -7,7 +7,6 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
-
 import java.util.Collection;
 import java.util.Collections;
 
@@ -36,7 +35,7 @@ public class User implements UserDetails {
     @Column
     private String password;
 
-    public User(String username, String password,  UserRole role) {
+    public User(String username, String password, UserRole role) {
         this.username = username;
         this.password = password;
         this.role = role;

@@ -2,7 +2,6 @@ package nl.bd.eindopdrachtjava.services;
 
 import lombok.AllArgsConstructor;
 import nl.bd.eindopdrachtjava.exceptions.InvalidFileException;
-import nl.bd.eindopdrachtjava.exceptions.ResourceAlreadyExistsException;
 import nl.bd.eindopdrachtjava.exceptions.ResourceNotFoundException;
 import nl.bd.eindopdrachtjava.models.entities.CoverArt;
 import nl.bd.eindopdrachtjava.models.entities.Record;
@@ -22,14 +21,13 @@ import java.util.List;
 @Service
 @AllArgsConstructor
 public class CoverArtService {
-    private final CoverArtRepository coverArtRepository;
-    private final RecordRepository recordRepository;
-    private final RecordService recordService;
-
     /**
      * List of accepted content types. Currently only one file type is accepted
      */
     private static final List<String> contentTypes = List.of("image/png");
+    private final CoverArtRepository coverArtRepository;
+    private final RecordRepository recordRepository;
+    private final RecordService recordService;
 
     /**
      * Method saves an image to the database and returns the record object it belongs to if the file is a PNG.
@@ -50,7 +48,7 @@ public class CoverArtService {
      * cover art by record id, but method would return a record and not a cover art object.
      */
     public ByteArrayResource retrieveCoverArt(Long recordId) throws ResourceNotFoundException {
-        if (recordRepository.findById(recordId).isPresent()){
+        if (recordRepository.findById(recordId).isPresent()) {
             CoverArt coverArt = coverArtRepository.findCoverArtByRecordId(recordId).orElseThrow(() ->
                     new ResourceNotFoundException("No cover art was found."));
             return new ByteArrayResource(coverArt.getContent());
@@ -64,7 +62,7 @@ public class CoverArtService {
      */
     public void deleteCoverArt(Long coverArtId) {
         if (coverArtRepository.findById(coverArtId).isEmpty()) {
-            throw new ResourceNotFoundException("CoverArt with id " + coverArtId + ", was not found" );
+            throw new ResourceNotFoundException("CoverArt with id " + coverArtId + ", was not found");
         }
         coverArtRepository.deleteById(coverArtId);
     }

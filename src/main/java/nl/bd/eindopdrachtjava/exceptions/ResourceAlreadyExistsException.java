@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
  * a custom error message.
  */
 @ResponseStatus(value = HttpStatus.CONFLICT)
-public class ResourceAlreadyExistsException extends RuntimeException{
+public class ResourceAlreadyExistsException extends RuntimeException {
     public ResourceAlreadyExistsException(String message) {
         super(message);
     }

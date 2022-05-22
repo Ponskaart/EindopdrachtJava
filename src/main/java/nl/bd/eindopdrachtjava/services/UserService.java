@@ -6,8 +6,6 @@ import nl.bd.eindopdrachtjava.exceptions.ResourceNotFoundException;
 import nl.bd.eindopdrachtjava.models.entities.User;
 import nl.bd.eindopdrachtjava.models.requests.UserRegistrationRequest;
 import nl.bd.eindopdrachtjava.repositories.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -46,7 +44,7 @@ public class UserService implements UserDetailsService {
      */
     public User updateUser(UserRegistrationRequest userRegistrationRequest, Long userId) throws ResourceNotFoundException {
         return userRepository.findById(userId).map(user -> updatedUser(userRegistrationRequest, user))
-                .orElseThrow(() -> new ResourceNotFoundException("User with id " + userId + " was not found" ));
+                .orElseThrow(() -> new ResourceNotFoundException("User with id " + userId + " was not found"));
     }
 
     /**
@@ -54,7 +52,7 @@ public class UserService implements UserDetailsService {
      */
     public void deleteUser(Long userId) throws ResourceNotFoundException {
         if (userRepository.findById(userId).isEmpty()) {
-            throw new ResourceNotFoundException("User with id " + userId + " was not found" );
+            throw new ResourceNotFoundException("User with id " + userId + " was not found");
         }
         userRepository.deleteById(userId);
     }

@@ -31,21 +31,21 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
-            .csrf().disable()
-            .authorizeRequests()
-            .anyRequest()
-            .authenticated()
-            .and()
-            .formLogin()
-            .and()
-            .httpBasic();
-}
+                .csrf().disable()
+                .authorizeRequests()
+                .anyRequest()
+                .authenticated()
+                .and()
+                .formLogin()
+                .and()
+                .httpBasic();
+    }
 
     /**
      * Initiates DaoAuthenticationProvider Bean.
      */
     @Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+    protected void configure(AuthenticationManagerBuilder auth) {
         auth.authenticationProvider(daoAuthenticationProvider());
     }
 

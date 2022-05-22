@@ -1,9 +1,11 @@
 package nl.bd.eindopdrachtjava.controllers;
 
 import lombok.AllArgsConstructor;
-import nl.bd.eindopdrachtjava.models.annotations.*;
-import nl.bd.eindopdrachtjava.services.CoverArtService;
+import nl.bd.eindopdrachtjava.models.annotations.AdminAndEmployeeAuthorization;
+import nl.bd.eindopdrachtjava.models.annotations.AdminAuthorization;
+import nl.bd.eindopdrachtjava.models.annotations.AllUserAuthorization;
 import nl.bd.eindopdrachtjava.models.entities.Record;
+import nl.bd.eindopdrachtjava.services.CoverArtService;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.ContentDisposition;
@@ -31,7 +33,7 @@ public class CoverArtController {
     @PostMapping("/upload/{recordId}")
     public Record uploadCoverArt
     (@RequestBody MultipartFile multipartImage, @PathVariable Long recordId) throws IOException {
-            return coverArtService.storeCoverArt(multipartImage, recordId);
+        return coverArtService.storeCoverArt(multipartImage, recordId);
     }
 
     /**
@@ -66,7 +68,7 @@ public class CoverArtController {
     @AdminAndEmployeeAuthorization
     @PutMapping("/{recordId}")
     public Record updateCoverArt
-            (@RequestBody MultipartFile multipartImage, @PathVariable Long recordId) throws IOException {
+    (@RequestBody MultipartFile multipartImage, @PathVariable Long recordId) throws IOException {
         return coverArtService.storeCoverArt(multipartImage, recordId);
     }
 
@@ -75,7 +77,7 @@ public class CoverArtController {
      */
     @AdminAuthorization
     @DeleteMapping("/{coverArtId}")
-    public String deleteCoverArt(@PathVariable Long coverArtId){
+    public String deleteCoverArt(@PathVariable Long coverArtId) {
         coverArtService.deleteCoverArt(coverArtId);
         return "CoverArt with id: " + coverArtId + " had been deleted";
     }

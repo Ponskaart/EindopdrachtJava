@@ -1,17 +1,15 @@
 package nl.bd.eindopdrachtjava.controllers;
 
 import lombok.AllArgsConstructor;
-import nl.bd.eindopdrachtjava.models.annotations.*;
+import nl.bd.eindopdrachtjava.models.annotations.AdminAndEmployeeAuthorization;
+import nl.bd.eindopdrachtjava.models.annotations.AdminAuthorization;
+import nl.bd.eindopdrachtjava.models.annotations.AllUserAuthorization;
 import nl.bd.eindopdrachtjava.models.entities.Artist;
-import nl.bd.eindopdrachtjava.models.enums.UserRole;
 import nl.bd.eindopdrachtjava.models.requests.ArtistRegistrationRequest;
 import nl.bd.eindopdrachtjava.services.ArtistService;
-import org.springframework.security.access.annotation.Secured;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 /**
  * Class governs the artist related endpoints.
@@ -27,7 +25,7 @@ public class ArtistController {
      */
     @AdminAndEmployeeAuthorization
     @PostMapping("/register")
-    public Artist registerArtist(@RequestBody ArtistRegistrationRequest artistRegistrationRequest){
+    public Artist registerArtist(@RequestBody ArtistRegistrationRequest artistRegistrationRequest) {
         return artistService.registerArtist(artistRegistrationRequest);
     }
 
@@ -36,7 +34,7 @@ public class ArtistController {
      */
     @AllUserAuthorization
     @GetMapping()
-    public List<Artist> getAllArtists(){
+    public List<Artist> getAllArtists() {
         return artistService.getAllArtists();
     }
 
@@ -45,7 +43,7 @@ public class ArtistController {
      */
     @AllUserAuthorization
     @GetMapping("/established/{established}")
-    public List<Artist> getArtistsByYearEstablished(@PathVariable int established){
+    public List<Artist> getArtistsByYearEstablished(@PathVariable int established) {
         return artistService.getArtistsByYearEstablished(established);
     }
 
@@ -54,7 +52,7 @@ public class ArtistController {
      */
     @AllUserAuthorization
     @GetMapping("/{artistId}")
-    public Artist getArtistByArtistId(@PathVariable Long artistId){
+    public Artist getArtistByArtistId(@PathVariable Long artistId) {
         return artistService.getArtistByArtistId(artistId);
     }
 
@@ -63,7 +61,7 @@ public class ArtistController {
      */
     @AllUserAuthorization
     @GetMapping("/name/{artistName}")
-    public Artist getArtistByArtistName(@PathVariable String artistName){
+    public Artist getArtistByArtistName(@PathVariable String artistName) {
         return artistService.getArtistByArtistName(artistName);
     }
 
@@ -82,7 +80,7 @@ public class ArtistController {
      */
     @AdminAuthorization
     @DeleteMapping("/{artistId}")
-    public String deleteArtist(@PathVariable Long artistId){
+    public String deleteArtist(@PathVariable Long artistId) {
         artistService.deleteArtist(artistId);
         return "Artist with id: " + artistId + " had been deleted";
     }

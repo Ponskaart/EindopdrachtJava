@@ -1,9 +1,9 @@
 package nl.bd.eindopdrachtjava;
 
 import lombok.AllArgsConstructor;
+import nl.bd.eindopdrachtjava.models.entities.Artist;
 import nl.bd.eindopdrachtjava.models.entities.CoverArt;
 import nl.bd.eindopdrachtjava.models.entities.Record;
-import nl.bd.eindopdrachtjava.models.entities.Artist;
 import nl.bd.eindopdrachtjava.models.entities.User;
 import nl.bd.eindopdrachtjava.models.enums.UserRole;
 import nl.bd.eindopdrachtjava.repositories.ArtistRepository;
@@ -15,9 +15,11 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import java.io.*;
-import java.awt.image.*;
-import javax.imageio.*;
+
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
 
 /**
  * Class runs before actual program starts and loads database with an admin user and a customer user.
@@ -32,9 +34,9 @@ public class CommandLineAppStartupRunner {
     CommandLineRunner commandLineRunner(UserRepository userRepository,
                                         ArtistRepository artistRepository,
                                         RecordRepository recordRepository,
-                                        CoverArtRepository coverArtRepository){
+                                        CoverArtRepository coverArtRepository) {
         return args -> {
-            if(userRepository.findByUserRole(UserRole.ADMIN).isEmpty()) {
+            if (userRepository.findByUserRole(UserRole.ADMIN).isEmpty()) {
                 User admin = User.builder()
                         .username("Admin")
                         .password(bCryptPasswordEncoder.encode("VeryGoodPassword"))
@@ -43,7 +45,7 @@ public class CommandLineAppStartupRunner {
                 userRepository.save(admin);
             }
 
-            if(userRepository.findByUserRole(UserRole.CUSTOMER).isEmpty()) {
+            if (userRepository.findByUserRole(UserRole.CUSTOMER).isEmpty()) {
                 User customer = User.builder()
                         .username("Customer")
                         .password(bCryptPasswordEncoder.encode("EvenBetterPassword"))
@@ -52,7 +54,7 @@ public class CommandLineAppStartupRunner {
                 userRepository.save(customer);
             }
 
-            if(userRepository.findByUserRole(UserRole.EMPLOYEE).isEmpty()) {
+            if (userRepository.findByUserRole(UserRole.EMPLOYEE).isEmpty()) {
                 User employee = User.builder()
                         .username("Employee")
                         .password(bCryptPasswordEncoder.encode("TheBestPassword"))
@@ -87,8 +89,8 @@ public class CommandLineAppStartupRunner {
             if (coverArtRepository.findById(1L).isEmpty()) {
                 BufferedImage bufferimage = ImageIO.read(new File("src/main/resources/CoverArtTest.PNG"));
                 ByteArrayOutputStream output = new ByteArrayOutputStream();
-                ImageIO.write(bufferimage, "png", output );
-                byte [] data = output.toByteArray();
+                ImageIO.write(bufferimage, "png", output);
+                byte[] data = output.toByteArray();
 
                 CoverArt coverArt = new CoverArt();
                 coverArt.setRecord(recordRepository.findById(1L).get());
