@@ -37,7 +37,11 @@ public class RecordService {
      * Method retrieves all Record entities from the database and returns them as a list.
      */
     public List<Record> getAllRecords() {
-        return recordRepository.findAll();
+        if ((recordRepository.findAll().isEmpty())) {
+            throw new ResourceNotFoundException("No Records were found");
+        } else {
+            return recordRepository.findAll();
+        }
     }
 
     /**

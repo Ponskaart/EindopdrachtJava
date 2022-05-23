@@ -163,6 +163,21 @@ public class RecordIntegrationTests {
     }
 
     /**
+     * Tests if exception is thrown when no records are present in the database.
+     */
+    @Test
+    public void getAllRecordsExceptionTest() throws Exception {
+        //Arrange
+
+        //Act
+
+        //Assert
+        this.mockMvc.perform(get("/recordstore/records"))
+                .andDo(print())
+                .andExpect(status().isNotFound());
+    }
+
+    /**
      * Tests if Records with specific Artist can be retrieved from database.
      */
     @Test
