@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 /**
- * using @AllArgsConstructor allows us to easily instantiate the recordRepository.
+ * using @AllArgsConstructor allows us to easily instantiate all repositories.
  */
 @Service
 @AllArgsConstructor
