@@ -1,0 +1,63 @@
+###
+POST http://localhost:8080/recordstore/artists/register
+Content-Type: application/json
+Authorization: Basic RW1wbG95ZWU6VGhlQmVzdFBhc3N3b3Jk
+
+{
+  "artistName": "Ben de Jager",
+  "established": "1999"
+}
+
+<> 2022-05-23T151221.200.json
+
+
+###
+GET http://localhost:8080/recordstore/artists
+Accept: application/json
+Authorization: Basic Q3VzdG9tZXI6RXZlbkJldHRlclBhc3N3b3Jk
+
+<> 2022-05-23T151222.200.json
+
+
+###
+GET http://localhost:8080/recordstore/artists/established/1999
+Accept: application/json
+Authorization: Basic Q3VzdG9tZXI6RXZlbkJldHRlclBhc3N3b3Jk
+
+<> 2022-05-23T151222-1.200.json
+
+
+###
+GET http://localhost:8080/recordstore/artists/2
+Accept: application/json
+Authorization: Basic Q3VzdG9tZXI6RXZlbkJldHRlclBhc3N3b3Jk
+
+<> 2022-05-23T151222-2.200.json
+
+
+###
+GET http://localhost:8080/recordstore/artists/name/Ben de Jager
+Accept: application/json
+Authorization: Basic Q3VzdG9tZXI6RXZlbkJldHRlclBhc3N3b3Jk
+
+<> 2022-05-23T151222-3.200.json
+
+
+###
+PUT http://localhost:8080/recordstore/artists/2
+Content-Type: application/json
+Authorization: Basic RW1wbG95ZWU6VGhlQmVzdFBhc3N3b3Jk
+
+{
+  "artistName": "Ben de Zager",
+  "established": "1999"
+}
+
+<> 2022-05-23T151222-4.200.json
+
+
+###
+DELETE http://localhost:8080/recordstore/artists/2
+Authorization: Basic YWRtaW46VmVyeUdvb2RQYXNzd29yZA==
+
+<> 2022-05-23T151222.200.txt
