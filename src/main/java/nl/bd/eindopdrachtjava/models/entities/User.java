@@ -7,7 +7,6 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
-
 import java.util.Collection;
 import java.util.Collections;
 
@@ -21,11 +20,17 @@ import static javax.persistence.GenerationType.IDENTITY;
 @Setter
 @Builder
 public class User implements UserDetails {
+    /**
+     * Generates id for each user.
+     */
     @Id
     @GeneratedValue(strategy = IDENTITY)
     @Column
     private Long userId;
 
+    /**
+     * EnumType.STRING makes the role a readable string in the database.
+     */
     @Column
     @Enumerated(EnumType.STRING)
     private UserRole role;
@@ -36,10 +41,7 @@ public class User implements UserDetails {
     @Column
     private String password;
 
-//    @Column
-//    private boolean enabled;
-
-    public User(String username, String password,  UserRole role) {
+    public User(String username, String password, UserRole role) {
         this.username = username;
         this.password = password;
         this.role = role;

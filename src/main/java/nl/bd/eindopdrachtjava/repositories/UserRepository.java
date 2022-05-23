@@ -14,13 +14,13 @@ public interface UserRepository extends JpaRepository<User, Long> {
     /**
      * Custom queries to retrieve specific data from the database.
      */
-    @Query( "SELECT u " +
+    @Query("SELECT u " +
             "FROM User u" +
             " WHERE u.username = :username")
     Optional<User> findByUsername(
             @Param("username") String username);
 
-    @Query( "SELECT u " +
+    @Query("SELECT u " +
             "FROM User u" +
             " WHERE u.role = :role")
     Optional<User> findByUserRole(

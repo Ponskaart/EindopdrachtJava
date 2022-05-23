@@ -25,27 +25,27 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     /**
-     * Disables csrf, otherwise authentication does not work, also disables login page since this application is pure
-     * backend.
+     * Disables csrf, otherwise authentication does not work. Also requires all requests to the server to be
+     * authorized.
      */
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
-            .csrf().disable()
-            .authorizeRequests()
-            .anyRequest()
-            .authenticated()
-            .and()
-            .formLogin()
-            .and()
-            .httpBasic();
-}
+                .csrf().disable()
+                .authorizeRequests()
+                .anyRequest()
+                .authenticated()
+                .and()
+                .formLogin()
+                .and()
+                .httpBasic();
+    }
 
     /**
      * Initiates DaoAuthenticationProvider Bean.
      */
     @Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+    protected void configure(AuthenticationManagerBuilder auth) {
         auth.authenticationProvider(daoAuthenticationProvider());
     }
 

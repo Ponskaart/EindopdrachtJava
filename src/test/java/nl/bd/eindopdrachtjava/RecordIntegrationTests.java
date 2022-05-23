@@ -10,26 +10,26 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+@ActiveProfiles("test")
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
 @WithMockUser(username = "Admin", password = "VeryGoodPassword", authorities = {"ADMIN"})
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 public class RecordIntegrationTests {
-    public static final MediaType APPLICATION_JSON_UTF8 = new MediaType(MediaType.APPLICATION_JSON.getType(), MediaType.APPLICATION_JSON.getSubtype(), Charset.forName("utf8"));
-
+    public static final MediaType APPLICATION_JSON_UTF8 = new MediaType(MediaType.APPLICATION_JSON.getType(), MediaType.APPLICATION_JSON.getSubtype(), StandardCharsets.UTF_8);
+    final ObjectMapper objectMapper = new ObjectMapper();
     @Autowired
     private MockMvc mockMvc;
-    ObjectMapper objectMapper = new ObjectMapper();
 
     /**
      * Tests if Artist object is saved to the database.
@@ -37,7 +37,7 @@ public class RecordIntegrationTests {
     @Test
     public void registerRecordTest() throws Exception {
         //Arrange
-        //Artist 1 with one records
+        //Artist 1 with one record
         ArtistRegistrationRequest artist1 = createTestArtist1();
         String jsonBodyArtist1 = objectMapper.writeValueAsString(artist1);
 
@@ -45,17 +45,17 @@ public class RecordIntegrationTests {
         String jsonBodyRecord1 = objectMapper.writeValueAsString(record1WithArtist1);
 
         //Act
-        //Upload artist 1 and 2 records to database
-        this.mockMvc.perform(post("/recordstore/artist").contentType(APPLICATION_JSON_UTF8).content(jsonBodyArtist1))
+        //Upload artist 1 and record to database
+        this.mockMvc.perform(post("/recordstore/artists/register").contentType(APPLICATION_JSON_UTF8).content(jsonBodyArtist1))
                 .andDo(print())
                 .andExpect(status().isOk());
 
-        this.mockMvc.perform(post("/recordstore/record").contentType(APPLICATION_JSON_UTF8).content(jsonBodyRecord1))
+        this.mockMvc.perform(post("/recordstore/records/register").contentType(APPLICATION_JSON_UTF8).content(jsonBodyRecord1))
                 .andDo(print())
                 .andExpect(status().isOk());
 
         //Assert
-        this.mockMvc.perform(get("/recordstore/record/" + 1))
+        this.mockMvc.perform(get("/recordstore/records/" + 1))
                 .andDo(print())
                 .andExpect(content().contentType("application/json"))
                 .andExpect(jsonPath("$.artist.artistName").value(artist1.getArtistName()))
@@ -68,6 +68,60 @@ public class RecordIntegrationTests {
                 .andExpect(jsonPath("$.price").value(record1WithArtist1.getPrice()))
                 .andExpect(jsonPath("$.qtyInStock").value(record1WithArtist1.getQtyInStock()))
                 .andExpect(status().isOk());
+    }
+
+    /**
+     * Tests if exception is thrown when record already exists.
+     */
+    @Test
+    public void registerInvalidRecordTest() throws Exception {
+        //Arrange
+        //Artist 1 with one record
+        ArtistRegistrationRequest artist1 = createTestArtist1();
+        String jsonBodyArtist1 = objectMapper.writeValueAsString(artist1);
+
+        RecordRegistrationRequest record1WithArtist1 = createTestRecord1WithTestArtist1();
+        String jsonBodyRecord1 = objectMapper.writeValueAsString(record1WithArtist1);
+
+        //Act
+        //Upload artist 1 and record to database
+        this.mockMvc.perform(post("/recordstore/artists/register").contentType(APPLICATION_JSON_UTF8).content(jsonBodyArtist1))
+                .andDo(print())
+                .andExpect(status().isOk());
+
+        this.mockMvc.perform(post("/recordstore/records/register").contentType(APPLICATION_JSON_UTF8).content(jsonBodyRecord1))
+                .andDo(print())
+                .andExpect(status().isOk());
+
+        //Assert
+        this.mockMvc.perform(post("/recordstore/records/register").contentType(APPLICATION_JSON_UTF8).content(jsonBodyRecord1))
+                .andDo(print())
+                .andExpect(status().isConflict());
+    }
+
+    /**
+     * Tests if exception is thrown if Artist does not exist when registering Record.
+     */
+    @Test
+    public void registerRecordWithInvalidArtistTest() throws Exception {
+        //Arrange
+        //Artist 1 with one record
+        ArtistRegistrationRequest artist1 = createTestArtist1();
+        String jsonBodyArtist1 = objectMapper.writeValueAsString(artist1);
+
+        RecordRegistrationRequest record1WithArtist2 = createTestRecord1WithTestArtist2();
+        String jsonBodyRecord1 = objectMapper.writeValueAsString(record1WithArtist2);
+
+        //Act
+        //Upload artist 1 and record to database
+        this.mockMvc.perform(post("/recordstore/artists/register").contentType(APPLICATION_JSON_UTF8).content(jsonBodyArtist1))
+                .andDo(print())
+                .andExpect(status().isOk());
+
+        //Assert
+        this.mockMvc.perform(post("/recordstore/records/register").contentType(APPLICATION_JSON_UTF8).content(jsonBodyRecord1))
+                .andDo(print())
+                .andExpect(status().isNotFound());
     }
 
     /**
@@ -88,20 +142,20 @@ public class RecordIntegrationTests {
 
         //Act
         //Upload artist 1 and 2 records to database
-        this.mockMvc.perform(post("/recordstore/artist").contentType(APPLICATION_JSON_UTF8).content(jsonBodyArtist1))
+        this.mockMvc.perform(post("/recordstore/artists/register").contentType(APPLICATION_JSON_UTF8).content(jsonBodyArtist1))
                 .andDo(print())
                 .andExpect(status().isOk());
 
-        this.mockMvc.perform(post("/recordstore/record").contentType(APPLICATION_JSON_UTF8).content(jsonBodyRecord1))
+        this.mockMvc.perform(post("/recordstore/records/register").contentType(APPLICATION_JSON_UTF8).content(jsonBodyRecord1))
                 .andDo(print())
                 .andExpect(status().isOk());
 
-        this.mockMvc.perform(post("/recordstore/record").contentType(APPLICATION_JSON_UTF8).content(jsonBodyRecord2))
+        this.mockMvc.perform(post("/recordstore/records/register").contentType(APPLICATION_JSON_UTF8).content(jsonBodyRecord2))
                 .andDo(print())
                 .andExpect(status().isOk());
 
         //Assert
-        this.mockMvc.perform(get("/recordstore"))
+        this.mockMvc.perform(get("/recordstore/records"))
                 .andDo(print())
                 .andExpect(content().contentType("application/json"))
                 .andExpect(jsonPath("$", hasSize(2)))
@@ -137,28 +191,28 @@ public class RecordIntegrationTests {
 
         //Act
         //Upload artist 1 and 2 records to database
-        this.mockMvc.perform(post("/recordstore/artist").contentType(APPLICATION_JSON_UTF8).content(jsonBodyArtist1))
+        this.mockMvc.perform(post("/recordstore/artists/register").contentType(APPLICATION_JSON_UTF8).content(jsonBodyArtist1))
                 .andDo(print())
                 .andExpect(status().isOk());
 
-        this.mockMvc.perform(post("/recordstore/record").contentType(APPLICATION_JSON_UTF8).content(jsonBodyRecord1))
+        this.mockMvc.perform(post("/recordstore/records/register").contentType(APPLICATION_JSON_UTF8).content(jsonBodyRecord1))
                 .andDo(print())
                 .andExpect(status().isOk());
 
-        this.mockMvc.perform(post("/recordstore/record").contentType(APPLICATION_JSON_UTF8).content(jsonBodyRecord2))
+        this.mockMvc.perform(post("/recordstore/records/register").contentType(APPLICATION_JSON_UTF8).content(jsonBodyRecord2))
                 .andDo(print())
                 .andExpect(status().isOk());
 
         //Upload artist 2 and 2 records to database
-        this.mockMvc.perform(post("/recordstore/artist").contentType(APPLICATION_JSON_UTF8).content(jsonBodyArtist2))
+        this.mockMvc.perform(post("/recordstore/artists/register").contentType(APPLICATION_JSON_UTF8).content(jsonBodyArtist2))
                 .andDo(print())
                 .andExpect(status().isOk());
 
-        this.mockMvc.perform(post("/recordstore/record").contentType(APPLICATION_JSON_UTF8).content(jsonBodyRecord3))
+        this.mockMvc.perform(post("/recordstore/records/register").contentType(APPLICATION_JSON_UTF8).content(jsonBodyRecord3))
                 .andDo(print())
                 .andExpect(status().isOk());
 
-        this.mockMvc.perform(post("/recordstore/record").contentType(APPLICATION_JSON_UTF8).content(jsonBodyRecord4))
+        this.mockMvc.perform(post("/recordstore/records/register").contentType(APPLICATION_JSON_UTF8).content(jsonBodyRecord4))
                 .andDo(print())
                 .andExpect(status().isOk());
 
@@ -168,6 +222,21 @@ public class RecordIntegrationTests {
                 .andExpect(content().contentType("application/json"))
                 .andExpect(jsonPath("$", hasSize(2)))
                 .andExpect(status().isOk());
+    }
+
+    /**
+     * Tests if exception is thrown when invalid artistId is given.
+     */
+    @Test
+    public void getAllRecordsByInvalidArtistTest() throws Exception {
+        //Arrange
+
+        //Act
+
+        //Assert
+        this.mockMvc.perform(get("/recordstore/records/artist/" + 99))
+                .andDo(print())
+                .andExpect(status().isNotFound());
     }
 
     /**
@@ -188,24 +257,39 @@ public class RecordIntegrationTests {
 
         //Act
         //Upload artist 1 and 2 records to database
-        this.mockMvc.perform(post("/recordstore/artist").contentType(APPLICATION_JSON_UTF8).content(jsonBodyArtist1))
+        this.mockMvc.perform(post("/recordstore/artists/register").contentType(APPLICATION_JSON_UTF8).content(jsonBodyArtist1))
                 .andDo(print())
                 .andExpect(status().isOk());
 
-        this.mockMvc.perform(post("/recordstore/record").contentType(APPLICATION_JSON_UTF8).content(jsonBodyRecord1))
+        this.mockMvc.perform(post("/recordstore/records/register").contentType(APPLICATION_JSON_UTF8).content(jsonBodyRecord1))
                 .andDo(print())
                 .andExpect(status().isOk());
 
-        this.mockMvc.perform(post("/recordstore/record").contentType(APPLICATION_JSON_UTF8).content(jsonBodyRecord2))
+        this.mockMvc.perform(post("/recordstore/records/register").contentType(APPLICATION_JSON_UTF8).content(jsonBodyRecord2))
                 .andDo(print())
                 .andExpect(status().isOk());
 
         //Assert
-        this.mockMvc.perform(get("/recordstore/record/" + 2))
+        this.mockMvc.perform(get("/recordstore/records/" + 2))
                 .andDo(print())
                 .andExpect(content().contentType("application/json"))
                 .andExpect(jsonPath("$.recordId").value(2))
                 .andExpect(status().isOk());
+    }
+
+    /**
+     * Tests if exception is thrown when invalid recordId is given.
+     */
+    @Test
+    public void getRecordsByInvalidIdTest() throws Exception {
+        //Arrange
+
+        //Act
+
+        //Assert
+        this.mockMvc.perform(get("/recordstore/records/" + 2))
+                .andDo(print())
+                .andExpect(status().isNotFound());
     }
 
     /**
@@ -226,24 +310,39 @@ public class RecordIntegrationTests {
 
         //Act
         //Upload artist 1 and 2 records to database
-        this.mockMvc.perform(post("/recordstore/artist").contentType(APPLICATION_JSON_UTF8).content(jsonBodyArtist1))
+        this.mockMvc.perform(post("/recordstore/artists/register").contentType(APPLICATION_JSON_UTF8).content(jsonBodyArtist1))
                 .andDo(print())
                 .andExpect(status().isOk());
 
-        this.mockMvc.perform(post("/recordstore/record").contentType(APPLICATION_JSON_UTF8).content(jsonBodyRecord1))
+        this.mockMvc.perform(post("/recordstore/records/register").contentType(APPLICATION_JSON_UTF8).content(jsonBodyRecord1))
                 .andDo(print())
                 .andExpect(status().isOk());
 
-        this.mockMvc.perform(post("/recordstore/record").contentType(APPLICATION_JSON_UTF8).content(jsonBodyRecord2))
+        this.mockMvc.perform(post("/recordstore/records/register").contentType(APPLICATION_JSON_UTF8).content(jsonBodyRecord2))
                 .andDo(print())
                 .andExpect(status().isOk());
 
         //Assert
-        this.mockMvc.perform(get("/recordstore/record/title/" + "Ben de Musical 2, De BenPocalypse"))
+        this.mockMvc.perform(get("/recordstore/records/title/" + "Ben de Musical 2, De BenPocalypse"))
                 .andDo(print())
                 .andExpect(content().contentType("application/json"))
                 .andExpect(jsonPath("$.recordId").value(2))
                 .andExpect(status().isOk());
+    }
+
+    /**
+     * Tests if Record with specific title can be retrieved from database.
+     */
+    @Test
+    public void getRecordByInvalidTitleTest() throws Exception {
+        //Arrange
+
+        //Act
+
+        //Assert
+        this.mockMvc.perform(get("/recordstore/records/title/" + "Ben de Musical 2, De BenPocalypse"))
+                .andDo(print())
+                .andExpect(status().isNotFound());
     }
 
     /**
@@ -275,37 +374,52 @@ public class RecordIntegrationTests {
 
         //Act
         //Upload artist 1 and 2 records to database
-        this.mockMvc.perform(post("/recordstore/artist").contentType(APPLICATION_JSON_UTF8).content(jsonBodyArtist1))
+        this.mockMvc.perform(post("/recordstore/artists/register").contentType(APPLICATION_JSON_UTF8).content(jsonBodyArtist1))
                 .andDo(print())
                 .andExpect(status().isOk());
 
-        this.mockMvc.perform(post("/recordstore/record").contentType(APPLICATION_JSON_UTF8).content(jsonBodyRecord1))
+        this.mockMvc.perform(post("/recordstore/records/register").contentType(APPLICATION_JSON_UTF8).content(jsonBodyRecord1))
                 .andDo(print())
                 .andExpect(status().isOk());
 
-        this.mockMvc.perform(post("/recordstore/record").contentType(APPLICATION_JSON_UTF8).content(jsonBodyRecord2))
+        this.mockMvc.perform(post("/recordstore/records/register").contentType(APPLICATION_JSON_UTF8).content(jsonBodyRecord2))
                 .andDo(print())
                 .andExpect(status().isOk());
 
         //Upload artist 2 and 2 records to database
-        this.mockMvc.perform(post("/recordstore/artist").contentType(APPLICATION_JSON_UTF8).content(jsonBodyArtist2))
+        this.mockMvc.perform(post("/recordstore/artists/register").contentType(APPLICATION_JSON_UTF8).content(jsonBodyArtist2))
                 .andDo(print())
                 .andExpect(status().isOk());
 
-        this.mockMvc.perform(post("/recordstore/record").contentType(APPLICATION_JSON_UTF8).content(jsonBodyRecord3))
+        this.mockMvc.perform(post("/recordstore/records/register").contentType(APPLICATION_JSON_UTF8).content(jsonBodyRecord3))
                 .andDo(print())
                 .andExpect(status().isOk());
 
-        this.mockMvc.perform(post("/recordstore/record").contentType(APPLICATION_JSON_UTF8).content(jsonBodyRecord4))
+        this.mockMvc.perform(post("/recordstore/records/register").contentType(APPLICATION_JSON_UTF8).content(jsonBodyRecord4))
                 .andDo(print())
                 .andExpect(status().isOk());
 
         //Assert
-        this.mockMvc.perform(get("/recordstore/record/genre/" + "Post Heavy Negative Wizard Metal"))
+        this.mockMvc.perform(get("/recordstore/records/genre/" + "Post Heavy Negative Wizard Metal"))
                 .andDo(print())
                 .andExpect(content().contentType("application/json"))
                 .andExpect(jsonPath("$", hasSize(2)))
                 .andExpect(status().isOk());
+    }
+
+    /**
+     * Tests if exception is thrown when invalid genre is given.
+     */
+    @Test
+    public void getRecordByInvalidGenreTest() throws Exception {
+        //Arrange
+
+        //Act
+
+        //Assert
+        this.mockMvc.perform(get("/recordstore/records/genre/" + "Post Heavy Negative Wizard Metal"))
+                .andDo(print())
+                .andExpect(status().isNotFound());
     }
 
     /**
@@ -329,20 +443,20 @@ public class RecordIntegrationTests {
 
         //Act
         //Upload artist 1 and 2 records to database
-        this.mockMvc.perform(post("/recordstore/artist").contentType(APPLICATION_JSON_UTF8).content(jsonBodyArtist1))
+        this.mockMvc.perform(post("/recordstore/artists/register").contentType(APPLICATION_JSON_UTF8).content(jsonBodyArtist1))
                 .andDo(print())
                 .andExpect(status().isOk());
 
-        this.mockMvc.perform(post("/recordstore/record").contentType(APPLICATION_JSON_UTF8).content(jsonBodyRecord1))
+        this.mockMvc.perform(post("/recordstore/records/register").contentType(APPLICATION_JSON_UTF8).content(jsonBodyRecord1))
                 .andDo(print())
                 .andExpect(status().isOk());
 
-        this.mockMvc.perform(post("/recordstore/record").contentType(APPLICATION_JSON_UTF8).content(jsonBodyRecord2))
+        this.mockMvc.perform(post("/recordstore/records/register").contentType(APPLICATION_JSON_UTF8).content(jsonBodyRecord2))
                 .andDo(print())
                 .andExpect(status().isOk());
 
         //Assert
-        this.mockMvc.perform(put("/recordstore/record/" + 1).contentType(APPLICATION_JSON_UTF8).content(jsonBodyUpdatedRecord))
+        this.mockMvc.perform(put("/recordstore/records/" + 1).contentType(APPLICATION_JSON_UTF8).content(jsonBodyUpdatedRecord))
                 .andDo(print())
                 .andExpect(jsonPath("$.artist.artistName").value(artist1.getArtistName()))
                 .andExpect(jsonPath("$.title").value(record1WithArtist1.getTitle()))
@@ -357,7 +471,91 @@ public class RecordIntegrationTests {
     }
 
     /**
-     * Tests if Record with specific Id can be deleted from database.
+     * Tests if Record update function works and tests if record can be retrieved from database.
+     */
+    @Test
+    public void updateRecordTest2() throws Exception {
+        //Arrange
+        //Artist 1 with one records
+        ArtistRegistrationRequest artist1 = createTestArtist1();
+        String jsonBodyArtist1 = objectMapper.writeValueAsString(artist1);
+
+        RecordRegistrationRequest record1WithArtist1 = createTestRecord1WithTestArtist1();
+        String jsonBodyRecord1 = objectMapper.writeValueAsString(record1WithArtist1);
+
+        //Artist 2
+        ArtistRegistrationRequest artist2 = createTestArtist2();
+        String jsonBodyArtist2 = objectMapper.writeValueAsString(artist2);
+
+        //Updated record
+        RecordRegistrationRequest updatedRecord2 = updatedRecord2();
+        String jsonBodyUpdatedRecord2 = objectMapper.writeValueAsString(updatedRecord2);
+
+        //Act
+        //Upload artist 1 and record to database
+        this.mockMvc.perform(post("/recordstore/artists/register").contentType(APPLICATION_JSON_UTF8).content(jsonBodyArtist1))
+                .andDo(print())
+                .andExpect(status().isOk());
+
+        this.mockMvc.perform(post("/recordstore/records/register").contentType(APPLICATION_JSON_UTF8).content(jsonBodyRecord1))
+                .andDo(print())
+                .andExpect(status().isOk());
+
+        //Upload artist 2
+        this.mockMvc.perform(post("/recordstore/artists/register").contentType(APPLICATION_JSON_UTF8).content(jsonBodyArtist2))
+                .andDo(print())
+                .andExpect(status().isOk());
+
+        //Assert
+        this.mockMvc.perform(put("/recordstore/records/" + 1).contentType(APPLICATION_JSON_UTF8).content(jsonBodyUpdatedRecord2))
+                .andDo(print())
+                .andExpect(jsonPath("$.artist.artistName").value(updatedRecord2.getArtistName()))
+                .andExpect(jsonPath("$.title").value(updatedRecord2.getTitle()))
+                .andExpect(jsonPath("$.genre").value(updatedRecord2.getGenre()))
+                .andExpect(jsonPath("$.label").value(updatedRecord2.getLabel()))
+                .andExpect(jsonPath("$.color").value(updatedRecord2.getColor()))
+                .andExpect(jsonPath("$.year").value(updatedRecord2.getYear()))
+                .andExpect(jsonPath("$.country").value(updatedRecord2.getCountry()))
+                .andExpect(jsonPath("$.price").value(updatedRecord2.getPrice()))
+                .andExpect(jsonPath("$.qtyInStock").value(record1WithArtist1.getQtyInStock()))
+                .andExpect(status().isOk());
+    }
+
+    /**
+     * Tests if Record update function works and tests if record can be retrieved from database.
+     */
+    @Test
+    public void updateRecordWithInvalidArtistTest() throws Exception {
+        //Arrange
+        //Artist 1 with one records
+        ArtistRegistrationRequest artist1 = createTestArtist1();
+        String jsonBodyArtist1 = objectMapper.writeValueAsString(artist1);
+
+        RecordRegistrationRequest record1WithArtist1 = createTestRecord1WithTestArtist1();
+        String jsonBodyRecord1 = objectMapper.writeValueAsString(record1WithArtist1);
+
+        //Updated record
+        RecordRegistrationRequest updatedRecord2 = updatedRecord2();
+        String jsonBodyUpdatedRecord2 = objectMapper.writeValueAsString(updatedRecord2);
+
+        //Act
+        //Upload artist 1 and record to database
+        this.mockMvc.perform(post("/recordstore/artists/register").contentType(APPLICATION_JSON_UTF8).content(jsonBodyArtist1))
+                .andDo(print())
+                .andExpect(status().isOk());
+
+        this.mockMvc.perform(post("/recordstore/records/register").contentType(APPLICATION_JSON_UTF8).content(jsonBodyRecord1))
+                .andDo(print())
+                .andExpect(status().isOk());
+
+        //Assert
+        this.mockMvc.perform(put("/recordstore/records/" + 1).contentType(APPLICATION_JSON_UTF8).content(jsonBodyUpdatedRecord2))
+                .andDo(print())
+                .andExpect(status().isNotFound());
+    }
+
+    /**
+     * Tests if exception is thrown when a not registered artist is given.
      */
     @Test
     public void deleteRecordTest() throws Exception {
@@ -374,30 +572,48 @@ public class RecordIntegrationTests {
 
         //Act
         //Upload artist 1 and 2 records to database
-        this.mockMvc.perform(post("/recordstore/artist").contentType(APPLICATION_JSON_UTF8).content(jsonBodyArtist1))
+        this.mockMvc.perform(post("/recordstore/artists/register").contentType(APPLICATION_JSON_UTF8).content(jsonBodyArtist1))
                 .andDo(print())
                 .andExpect(status().isOk());
 
-        this.mockMvc.perform(post("/recordstore/record").contentType(APPLICATION_JSON_UTF8).content(jsonBodyRecord1))
+        this.mockMvc.perform(post("/recordstore/records/register").contentType(APPLICATION_JSON_UTF8).content(jsonBodyRecord1))
                 .andDo(print())
                 .andExpect(status().isOk());
 
-        this.mockMvc.perform(post("/recordstore/record").contentType(APPLICATION_JSON_UTF8).content(jsonBodyRecord2))
+        this.mockMvc.perform(post("/recordstore/records/register").contentType(APPLICATION_JSON_UTF8).content(jsonBodyRecord2))
                 .andDo(print())
                 .andExpect(status().isOk());
 
         //Assert
-        this.mockMvc.perform(delete("/recordstore/record/" + 1))
+        this.mockMvc.perform(delete("/recordstore/records/" + 1))
                 .andDo(print())
                 .andExpect(status().isOk());
 
-        this.mockMvc.perform(get("/recordstore"))
+        this.mockMvc.perform(get("/recordstore/records"))
                 .andDo(print())
                 .andExpect(content().contentType("application/json"))
                 .andExpect(jsonPath("$", hasSize(1)))
                 .andExpect(status().isOk());
     }
 
+    /**
+     * Tests if exception is thrown when invalid recordId is given.
+     */
+    @Test
+    public void deleteInvalidRecordTest() throws Exception {
+        //Arrange
+
+        //Act
+
+        //Assert
+        this.mockMvc.perform(delete("/recordstore/records/" + 1))
+                .andDo(print())
+                .andExpect(status().isNotFound());
+    }
+
+    /**
+     * The following private methods contain registration requests for several artists and records for testing purposes.
+     */
     private ArtistRegistrationRequest createTestArtist1() {
         return new ArtistRegistrationRequest(
                 "Ben de Jager",
@@ -475,4 +691,16 @@ public class RecordIntegrationTests {
                 10);
     }
 
+    private RecordRegistrationRequest updatedRecord2() {
+        return new RecordRegistrationRequest(
+                "Ben de Knager",
+                "De Knaagzang vol. 3, Het houdt niet op.",
+                "Blackened Churning Progressive Neoclassical Powergrind",
+                "STREK Records",
+                "White",
+                2023,
+                "Luxemburg",
+                2.50,
+                1);
+    }
 }

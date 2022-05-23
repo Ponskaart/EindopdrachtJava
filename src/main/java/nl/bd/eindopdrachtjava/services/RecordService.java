@@ -2,8 +2,8 @@ package nl.bd.eindopdrachtjava.services;
 
 import lombok.AllArgsConstructor;
 import nl.bd.eindopdrachtjava.exceptions.ResourceAlreadyExistsException;
-import nl.bd.eindopdrachtjava.models.entities.Record;
 import nl.bd.eindopdrachtjava.exceptions.ResourceNotFoundException;
+import nl.bd.eindopdrachtjava.models.entities.Record;
 import nl.bd.eindopdrachtjava.models.requests.RecordRegistrationRequest;
 import nl.bd.eindopdrachtjava.repositories.ArtistRepository;
 import nl.bd.eindopdrachtjava.repositories.CoverArtRepository;
@@ -27,7 +27,10 @@ public class RecordService {
      */
     public Record getRecordById(Long recordId) throws ResourceNotFoundException {
         return recordRepository.findById(recordId).orElseThrow(() ->
-                new ResourceNotFoundException("Record with id " + recordId + " was not found" )) ;
+                new ResourceNotFoundException(
+                        "Record with id " +
+                                recordId +
+                                " was not found"));
     }
 
     /**
@@ -40,25 +43,40 @@ public class RecordService {
     /**
      * Returns all records of a specific artist
      */
-    public List<Record> getRecordsByArtist(Long artistId)  throws ResourceNotFoundException {
-        return recordRepository.findByArtistArtistId(artistId).orElseThrow(() ->
-                new ResourceNotFoundException("Record with artist " + artistId + " were not found" ));
+    public List<Record> getRecordsByArtist(Long artistId) throws ResourceNotFoundException {
+        if ((recordRepository.findByArtistArtistId(artistId)).isEmpty()) {
+            throw new ResourceNotFoundException(
+                    "Record with artist " +
+                            artistId +
+                            " were not found");
+        } else {
+            return recordRepository.findByArtistArtistId(artistId);
+        }
     }
 
     /**
      * Returns a record with a specific title
      */
-    public Record getRecordByTitle(String title)  throws ResourceNotFoundException {
+    public Record getRecordByTitle(String title) throws ResourceNotFoundException {
         return recordRepository.findRecordByTitle(title).orElseThrow(() ->
-                new ResourceNotFoundException("Record with title " + title + " was not found" ));
+                new ResourceNotFoundException(
+                        "Record with title " +
+                                title +
+                                " was not found"));
     }
 
     /**
      * Returns a list of records with a specific genre
      */
-    public List<Record> getRecordsByGenre(String genre)  throws ResourceNotFoundException {
-        return recordRepository.findRecordByGenre(genre).orElseThrow(() ->
-                new ResourceNotFoundException("Record with genre " + genre + " was not found" ));
+    public List<Record> getRecordsByGenre(String genre) throws ResourceNotFoundException {
+        if ((recordRepository.findRecordByGenre(genre)).isEmpty()) {
+            throw new ResourceNotFoundException(
+                    "Record with genre " +
+                            genre +
+                            " was not found");
+        } else {
+            return recordRepository.findRecordByGenre(genre);
+        }
     }
 
     /**
@@ -68,16 +86,22 @@ public class RecordService {
      * the database does not get double entries.
      */
     public Record registerRecord(RecordRegistrationRequest recordRegistrationRequest) {
-        if (doesRecordExist(recordRegistrationRequest)){
-            throw new ResourceAlreadyExistsException("Record with name: " + recordRegistrationRequest.getTitle() +
-                    ", and with artist: " + recordRegistrationRequest.getArtistName() + ", is already registered.");
+        if (recordExists(recordRegistrationRequest)) {
+            throw new ResourceAlreadyExistsException(
+                    "Record with name: " +
+                            recordRegistrationRequest.getTitle() +
+                            ", and with artist: " +
+                            recordRegistrationRequest.getArtistName() +
+                            ", is already registered.");
         } else {
-            if(doesArtistExist(recordRegistrationRequest)){
+            if (artistExist(recordRegistrationRequest)) {
                 Record record = createRecord(recordRegistrationRequest);
                 return recordRepository.save(record);
             } else {
-                throw new ResourceNotFoundException("Artist with name: " + recordRegistrationRequest.getArtistName() +
-                        ", does not exist");
+                throw new ResourceNotFoundException(
+                        "Artist with name: " +
+                                recordRegistrationRequest.getArtistName() +
+                                ", does not exist");
             }
         }
     }
@@ -86,9 +110,19 @@ public class RecordService {
      * Updates a Record with new data.
      */
     public Record updateRecord(RecordRegistrationRequest recordRegistrationRequest,
-                               Long recordId) throws ResourceNotFoundException{
+                               Long recordId) throws ResourceNotFoundException {
+        if (recordRegistrationRequest.getArtistName() != null & !artistExist(recordRegistrationRequest)) {
+            throw new ResourceNotFoundException(
+                    "Artist with name: " +
+                            recordRegistrationRequest.getArtistName() +
+                            " was not found.");
+        }
+
         return recordRepository.findById(recordId).map(record -> updatedRecord(recordRegistrationRequest, record))
-                .orElseThrow(() -> new ResourceNotFoundException("Record with id " + recordId + " was not found" ));
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        "Record with id " +
+                                recordId +
+                                " was not found"));
     }
 
     /**
@@ -96,14 +130,23 @@ public class RecordService {
      */
     public Record updateCoverArt(Long recordId, Long coverArtId) {
         return recordRepository.findById(recordId).map(record -> updatedCoverArt(coverArtId, record))
-                .orElseThrow(() -> new ResourceNotFoundException("Record with id " + recordId + " was not found" ));
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        "Record with id " +
+                                recordId +
+                                " was not found"));
 
     }
 
     /**
      * Deletes a record with a specific id
      */
-    public void deleteRecord(Long recordId){
+    public void deleteRecord(Long recordId) throws ResourceNotFoundException {
+        if (recordRepository.findById(recordId).isEmpty()) {
+            throw new ResourceNotFoundException(
+                    "Record with id " +
+                            recordId +
+                            ", was not found");
+        }
         recordRepository.deleteById(recordId);
     }
 
@@ -128,16 +171,14 @@ public class RecordService {
     /**
      * Returns boolean true if record already exists in database.
      */
-    private boolean doesRecordExist(RecordRegistrationRequest recordRegistrationRequest) {
-        return recordRepository.findRecordByTitle(recordRegistrationRequest.getTitle()).isPresent() &&
-                recordRepository.findRecordByTitle(recordRegistrationRequest.getTitle()).get().getArtist()
-                        .getArtistName().equals(recordRegistrationRequest.getArtistName());
+    private boolean recordExists(RecordRegistrationRequest recordRegistrationRequest) {
+        return recordRepository.findRecordByTitleAndArtistName(recordRegistrationRequest).isPresent();
     }
 
     /**
      * Returns boolean true if artist exists in database.
      */
-    private boolean doesArtistExist(RecordRegistrationRequest recordRegistrationRequest) {
+    private boolean artistExist(RecordRegistrationRequest recordRegistrationRequest) {
         return artistRepository.findByArtistName(recordRegistrationRequest.getArtistName()).isPresent();
     }
 
@@ -145,64 +186,43 @@ public class RecordService {
      * Returns updated record. Very large method, but it should make sure that if the user does not specify a value
      * the old value does not get overridden with null or 0.
      */
-    //TODO if(wat je meestuurt !null) { set } is veel minder omslachtig
-    private Record updatedRecord(RecordRegistrationRequest recordRegistrationRequest, Record record) {
-        Long tempRecordId = record.getRecordId();
-
-        if (recordRegistrationRequest.getArtistName() == null) {
-            record.setArtist(recordRepository.findById(tempRecordId).get().getArtist());
-        } else {
+    private Record updatedRecord(RecordRegistrationRequest recordRegistrationRequest, Record record)
+            throws ResourceNotFoundException {
+        if (recordRegistrationRequest.getArtistName() != null) {
             record.setArtist(artistRepository.findByArtistName(recordRegistrationRequest.getArtistName()).get());
         }
 
-        if (recordRegistrationRequest.getTitle() == null) {
-            record.setTitle(recordRepository.findById(tempRecordId).get().getTitle());
-        } else {
+        if (recordRegistrationRequest.getTitle() != null) {
             record.setTitle(recordRegistrationRequest.getTitle());
         }
 
-        if (recordRegistrationRequest.getGenre() == null) {
-            record.setGenre(recordRepository.findById(tempRecordId).get().getGenre());
-        } else {
+        if (recordRegistrationRequest.getGenre() != null) {
             record.setGenre(recordRegistrationRequest.getGenre());
         }
 
-        if (recordRegistrationRequest.getLabel() == null) {
-            record.setLabel(recordRepository.findById(tempRecordId).get().getLabel());
-        } else {
+        if (recordRegistrationRequest.getLabel() != null) {
             record.setLabel(recordRegistrationRequest.getLabel());
         }
 
-        if (recordRegistrationRequest.getColor() == null){
-            record.setColor(recordRepository.findById(tempRecordId).get().getColor());
-        } else {
+        if (recordRegistrationRequest.getColor() != null) {
             record.setColor(recordRegistrationRequest.getColor());
         }
 
-        if (recordRegistrationRequest.getYear() == 0){
-            record.setYear(recordRepository.findById(tempRecordId).get().getYear());
-        } else {
+        if (recordRegistrationRequest.getYear() != 0) {
             record.setYear(recordRegistrationRequest.getYear());
         }
 
-        if (recordRegistrationRequest.getCountry() == null){
-            record.setCountry(recordRepository.findById(tempRecordId).get().getCountry());
-        } else {
+        if (recordRegistrationRequest.getCountry() != null) {
             record.setCountry(recordRegistrationRequest.getCountry());
         }
 
-        if (recordRegistrationRequest.getPrice() == 0.0) {
-            record.setPrice(recordRepository.findById(tempRecordId).get().getPrice());
-        } else {
+        if (recordRegistrationRequest.getPrice() != 0.0) {
             record.setPrice(recordRegistrationRequest.getPrice());
         }
 
-        if (recordRegistrationRequest.getQtyInStock() == 0) {
-            record.setQtyInStock(recordRepository.findById(tempRecordId).get().getQtyInStock());
-        } else {
+        if (recordRegistrationRequest.getQtyInStock() != 0) {
             record.setQtyInStock(recordRegistrationRequest.getQtyInStock());
         }
-
         return recordRepository.save(record);
     }
 

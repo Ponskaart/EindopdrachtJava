@@ -1,10 +1,10 @@
 package nl.bd.eindopdrachtjava.models.enums;
 
+import com.google.common.collect.Sets;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import java.util.Set;
 import java.util.stream.Collectors;
-import com.google.common.collect.Sets;
 
 /**
  * Enums to differentiate the different roles in the system.
@@ -23,7 +23,7 @@ public enum UserRole {
         this.permissions = permissions;
     }
 
-    public Set<UserPermissions> getPermissions(){
+    public Set<UserPermissions> getPermissions() {
         return this.permissions;
     }
 

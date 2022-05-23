@@ -7,7 +7,7 @@ import java.lang.annotation.*;
 /**
  * Custom annotation to enable easy authorization for users
  */
-@Target({ ElementType.METHOD, ElementType.TYPE })
+@Target({ElementType.METHOD, ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
 @Inherited
 @PreAuthorize("hasAuthority(T(nl.bd.eindopdrachtjava.models.enums.UserRole).ADMIN)")

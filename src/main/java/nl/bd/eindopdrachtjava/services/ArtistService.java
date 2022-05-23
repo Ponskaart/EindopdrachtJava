@@ -22,8 +22,8 @@ public class ArtistService {
      * Method to register a new artist using the builder design pattern to make it easier to see what is actually
      * happening.
      */
-    public Artist registerArtist(ArtistRegistrationRequest artistRegistrationRequest){
-        if (doesArtistExist(artistRegistrationRequest)){
+    public Artist registerArtist(ArtistRegistrationRequest artistRegistrationRequest) {
+        if (artistExists(artistRegistrationRequest)) {
             throw new ResourceAlreadyExistsException(
                     "Artist with name: " +
                             artistRegistrationRequest.getArtistName() +
@@ -40,16 +40,25 @@ public class ArtistService {
      * Method retrieves all Artist entities from the database and returns them as a list.
      */
     public List<Artist> getAllArtists() throws ResourceNotFoundException {
-        return artistRepository.findAll();
+        if ((artistRepository.findAll().isEmpty())) {
+            throw new ResourceNotFoundException("No Artists were found");
+        } else {
+            return artistRepository.findAll();
+        }
     }
 
     /**
      * Method that retrieves al artists in a specific year.
      */
-    public List<Artist> getArtistsByYearEstablished(int established) {
-        return artistRepository.findArtistByEstablished(established).orElseThrow(() ->
-                new ResourceNotFoundException("Artists with year of establishment: "
-                        + established + ", were not found" ));
+    public List<Artist> getArtistsByYearEstablished(int established) throws ResourceNotFoundException {
+        if ((artistRepository.findArtistByEstablished(established)).isEmpty()) {
+            throw new ResourceNotFoundException(
+                    "Artists with year of establishment: " +
+                            established +
+                            ", were not found");
+        } else {
+            return artistRepository.findArtistByEstablished(established);
+        }
     }
 
     /**
@@ -57,33 +66,55 @@ public class ArtistService {
      */
     public Artist getArtistByArtistId(Long artistId) throws ResourceNotFoundException {
         return artistRepository.findById(artistId).orElseThrow(() ->
-                new ResourceNotFoundException("Artist with id: " + artistId + ", was not found" ));
+                new ResourceNotFoundException(
+                        "Artist with id: " +
+                                artistId +
+                                ", was not found"));
     }
 
     /**
      * Method searches repo for artist by name.
      */
-    public Artist getArtistByArtistName(String artistName){
+    public Artist getArtistByArtistName(String artistName) throws ResourceNotFoundException {
         return artistRepository
                 .findByArtistName(artistName)
                 .orElseThrow(() ->
-                new ResourceNotFoundException("Artist with name: " + artistName + ", was not found" ));
+                        new ResourceNotFoundException(
+                                "Artist with name: " +
+                                        artistName +
+                                        ", was not found"));
     }
 
     /**
      * Deletes an Arist with a specific Id.
      */
-    public void deleteArtist(Long artistId){
+    public void deleteArtist(Long artistId) throws ResourceNotFoundException {
+        if (artistRepository.findById(artistId).isEmpty()) {
+            throw new ResourceNotFoundException(
+                    "Artist with id " +
+                            artistId + ", " +
+                            "was not found");
+        }
         artistRepository.deleteById(artistId);
+    }
+
+    /**
+     * Updates an Artist, throws exception if artistId is invalid.
+     */
+    public Artist updateArtist(ArtistRegistrationRequest artistRegistrationRequest, Long artistId)
+            throws ResourceNotFoundException {
+        return artistRepository.findById(artistId).map(artist -> updatedArtist(artistRegistrationRequest, artist))
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        "Artist with id " +
+                                artistId +
+                                " was not found"));
     }
 
     /**
      * Returns boolean true if artist already exists in database.
      */
-    private boolean doesArtistExist(ArtistRegistrationRequest artistRegistrationRequest) {
-        return artistRepository.findByArtistName(artistRegistrationRequest.getArtistName()).isPresent() &&
-                artistRepository.findByArtistName(artistRegistrationRequest.getArtistName()).get().getEstablished()
-                        == artistRegistrationRequest.getEstablished();
+    private boolean artistExists(ArtistRegistrationRequest artistRegistrationRequest) {
+        return artistRepository.findArtistByArtistNameAndEstablished(artistRegistrationRequest).isPresent();
     }
 
     /**
@@ -94,5 +125,19 @@ public class ArtistService {
                 .artistName(artistRegistrationRequest.getArtistName())
                 .established(artistRegistrationRequest.getEstablished())
                 .build();
+    }
+
+    /**
+     * Checks to see if fields need updating or not.
+     */
+    private Artist updatedArtist(ArtistRegistrationRequest artistRegistrationRequest, Artist artist) {
+        if (artistRegistrationRequest.getArtistName() != null) {
+            artist.setArtistName(artistRegistrationRequest.getArtistName());
+        }
+
+        if (artistRegistrationRequest.getEstablished() != 0) {
+            artist.setEstablished(artistRegistrationRequest.getEstablished());
+        }
+        return artistRepository.save(artist);
     }
 }

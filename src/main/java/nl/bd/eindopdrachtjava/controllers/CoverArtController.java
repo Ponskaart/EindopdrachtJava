@@ -1,9 +1,11 @@
 package nl.bd.eindopdrachtjava.controllers;
 
 import lombok.AllArgsConstructor;
-import nl.bd.eindopdrachtjava.models.annotations.*;
-import nl.bd.eindopdrachtjava.services.CoverArtService;
+import nl.bd.eindopdrachtjava.models.annotations.AdminAndEmployeeAuthorization;
+import nl.bd.eindopdrachtjava.models.annotations.AdminAuthorization;
+import nl.bd.eindopdrachtjava.models.annotations.AllUserAuthorization;
 import nl.bd.eindopdrachtjava.models.entities.Record;
+import nl.bd.eindopdrachtjava.services.CoverArtService;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.ContentDisposition;
@@ -19,7 +21,7 @@ import java.io.IOException;
  * Contains endpoints for all CoverArt related functions.
  */
 @AllArgsConstructor
-@RequestMapping(path = "recordstore")
+@RequestMapping(path = "recordstore/coverart")
 @RestController
 public class CoverArtController {
     private CoverArtService coverArtService;
@@ -28,19 +30,19 @@ public class CoverArtController {
      * Uploads an image to the database and assigns it to a record.
      */
     @AdminAndEmployeeAuthorization
-    @PostMapping("/upload/coverart/{recordId}")
+    @PostMapping("/upload/{recordId}")
     public Record uploadCoverArt
     (@RequestBody MultipartFile multipartImage, @PathVariable Long recordId) throws IOException {
-            return coverArtService.uploadCoverArt(multipartImage, recordId);
+        return coverArtService.storeCoverArt(multipartImage, recordId);
     }
 
     /**
      * Downloads an image from the database. Had to use response entity, could not get it to work otherwise.
      */
     @AllUserAuthorization
-    @GetMapping(value = "/download/coverart/{recordId}")
+    @GetMapping(value = "/download/{recordId}")
     public ResponseEntity<Resource> download(@PathVariable Long recordId) {
-        ByteArrayResource resource = (coverArtService.downloadCoverArt(recordId));
+        ByteArrayResource resource = (coverArtService.retrieveCoverArt(recordId));
         return ResponseEntity.ok()
                 .contentType(MediaType.APPLICATION_OCTET_STREAM)
                 .contentLength(resource.contentLength())
@@ -55,27 +57,28 @@ public class CoverArtController {
      * Shows an image from the database in the browser.
      */
     @AllUserAuthorization
-    @GetMapping(value = "/view/coverart/{recordId}", produces = MediaType.IMAGE_PNG_VALUE)
+    @GetMapping(value = "/view/{recordId}", produces = MediaType.IMAGE_PNG_VALUE)
     public ByteArrayResource downloadCoverArt(@PathVariable Long recordId) {
-        return coverArtService.downloadCoverArt(recordId);
+        return coverArtService.retrieveCoverArt(recordId);
     }
 
     /**
      * Method is the same as the uploadCoverArt PostMapping, however this is a PutMapping. Purely a formality.
      */
     @AdminAndEmployeeAuthorization
-    @PutMapping("/coverart/{recordId}")
+    @PutMapping("/{recordId}")
     public Record updateCoverArt
-            (@RequestBody MultipartFile multipartImage, @PathVariable Long recordId) throws IOException {
-        return coverArtService.uploadCoverArt(multipartImage, recordId);
+    (@RequestBody MultipartFile multipartImage, @PathVariable Long recordId) throws IOException {
+        return coverArtService.storeCoverArt(multipartImage, recordId);
     }
 
     /**
      * Deletes CoverArt entity from database with given Id.
      */
     @AdminAuthorization
-    @DeleteMapping("/coverart/{coverArtId}")
-    public void deleteCoverArt(@PathVariable Long coverArtId){
+    @DeleteMapping("/{coverArtId}")
+    public String deleteCoverArt(@PathVariable Long coverArtId) {
         coverArtService.deleteCoverArt(coverArtId);
+        return "CoverArt with id: " + coverArtId + " had been deleted";
     }
 }

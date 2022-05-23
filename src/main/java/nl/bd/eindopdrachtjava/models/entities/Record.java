@@ -1,6 +1,5 @@
 package nl.bd.eindopdrachtjava.models.entities;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
@@ -39,12 +38,16 @@ public class Record {
      */
 
     @ManyToOne
-    @JoinColumn
-            (name = "artist_Id",
-                    referencedColumnName = "artist_Id")
+    @JoinColumn(
+            name = "artist_Id",
+            referencedColumnName = "artist_Id"
+    )
     private Artist artist;
 
-    @OneToOne(orphanRemoval = true, cascade = CascadeType.PERSIST, mappedBy = "record")
+    @OneToOne(orphanRemoval = true,
+            cascade = CascadeType.PERSIST,
+            mappedBy = "record"
+    )
     private CoverArt coverArt;
 
     @Column
