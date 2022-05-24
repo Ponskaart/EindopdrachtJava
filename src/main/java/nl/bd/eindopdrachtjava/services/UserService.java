@@ -32,9 +32,10 @@ public class UserService implements UserDetailsService {
      */
     public User registerUser(UserRegistrationRequest userRegistrationRequest) throws ResourceAlreadyExistsException {
         if (userExists(userRegistrationRequest)) {
-            throw new ResourceAlreadyExistsException(messageService.userAlreadyExists(
-                    userRegistrationRequest.getUsername()));
+            throw new ResourceAlreadyExistsException(
+                    messageService.userAlreadyExists(userRegistrationRequest.getUsername()));
         }
+
         User user = createUser(userRegistrationRequest);
         return userRepository.save(user);
     }
@@ -42,7 +43,8 @@ public class UserService implements UserDetailsService {
     /**
      * Checks if User with given Id exists and updates user.
      */
-    public User updateUser(UserRegistrationRequest userRegistrationRequest, Long userId) throws ResourceNotFoundException {
+    public User updateUser(UserRegistrationRequest userRegistrationRequest, Long userId)
+            throws ResourceNotFoundException {
         return userRepository.findById(userId).map(user -> updatedUser(userRegistrationRequest, user))
                 .orElseThrow(() -> new ResourceNotFoundException(messageService.userIdNotFound(userId)));
     }
@@ -82,11 +84,9 @@ public class UserService implements UserDetailsService {
         if (userRegistrationRequest.getUsername() != null) {
             user.setUsername(userRegistrationRequest.getUsername());
         }
-
         if (userRegistrationRequest.getPassword() != null) {
             user.setPassword(bCryptPasswordEncoder.encode(userRegistrationRequest.getPassword()));
         }
-
         if (userRegistrationRequest.getRole() != null) {
             user.setRole(userRegistrationRequest.getRole());
         }

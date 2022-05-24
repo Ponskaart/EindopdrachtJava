@@ -83,7 +83,6 @@ public class RecordService {
             throw new ResourceAlreadyExistsException(messageService.recordAlreadyExists(
                     recordRegistrationRequest.getTitle(),
                     recordRegistrationRequest.getArtistName()));
-
         } else {
             if (artistExist(recordRegistrationRequest)) {
                 Record record = createRecord(recordRegistrationRequest);
@@ -131,7 +130,7 @@ public class RecordService {
      * Creates record to use in the registerRecord Method.
      */
     private Record createRecord(RecordRegistrationRequest recordRegistrationRequest) {
-        Record record = Record.builder()
+        return Record.builder()
                 .artist(artistRepository.findByArtistName(recordRegistrationRequest.getArtistName()).get())
                 .title(recordRegistrationRequest.getTitle())
                 .genre(recordRegistrationRequest.getGenre())
@@ -142,7 +141,6 @@ public class RecordService {
                 .price(recordRegistrationRequest.getPrice())
                 .qtyInStock(recordRegistrationRequest.getQtyInStock())
                 .build();
-        return record;
     }
 
     /**
@@ -168,38 +166,31 @@ public class RecordService {
         if (recordRegistrationRequest.getArtistName() != null) {
             record.setArtist(artistRepository.findByArtistName(recordRegistrationRequest.getArtistName()).get());
         }
-
         if (recordRegistrationRequest.getTitle() != null) {
             record.setTitle(recordRegistrationRequest.getTitle());
         }
-
         if (recordRegistrationRequest.getGenre() != null) {
             record.setGenre(recordRegistrationRequest.getGenre());
         }
-
         if (recordRegistrationRequest.getLabel() != null) {
             record.setLabel(recordRegistrationRequest.getLabel());
         }
-
         if (recordRegistrationRequest.getColor() != null) {
             record.setColor(recordRegistrationRequest.getColor());
         }
-
         if (recordRegistrationRequest.getYear() != 0) {
             record.setYear(recordRegistrationRequest.getYear());
         }
-
         if (recordRegistrationRequest.getCountry() != null) {
             record.setCountry(recordRegistrationRequest.getCountry());
         }
-
         if (recordRegistrationRequest.getPrice() != 0.0) {
             record.setPrice(recordRegistrationRequest.getPrice());
         }
-
         if (recordRegistrationRequest.getQtyInStock() != 0) {
             record.setQtyInStock(recordRegistrationRequest.getQtyInStock());
         }
+
         return recordRepository.save(record);
     }
 

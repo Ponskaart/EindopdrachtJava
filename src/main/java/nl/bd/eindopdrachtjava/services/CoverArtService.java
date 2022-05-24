@@ -50,8 +50,8 @@ public class CoverArtService {
      */
     public ByteArrayResource retrieveCoverArt(Long recordId) throws ResourceNotFoundException {
         if (recordRepository.findById(recordId).isPresent()) {
-            CoverArt coverArt = coverArtRepository.findCoverArtByRecordId(recordId).orElseThrow(() ->
-                    new ResourceNotFoundException(messageService.coverArtNotFound()));
+            CoverArt coverArt = coverArtRepository.findCoverArtByRecordId(recordId)
+                    .orElseThrow(() -> new ResourceNotFoundException(messageService.coverArtNotFound()));
             return new ByteArrayResource(coverArt.getContent());
         } else {
             throw new ResourceNotFoundException(messageService.recordIdNotFound(recordId));
@@ -76,13 +76,15 @@ public class CoverArtService {
         CoverArt coverArt = new CoverArt();
         coverArt.setContent(multipartImage.getBytes());
         coverArt.setRecord(recordRepository.findById(recordId).get());
+
         return coverArt;
     }
 
     /**
      * Validates and uploads an image to the database.
      */
-    private Record validateAndStore(MultipartFile multipartImage, Long recordId, String fileContentType) throws IOException {
+    private Record validateAndStore(MultipartFile multipartImage, Long recordId, String fileContentType)
+            throws IOException {
         if (contentTypes.contains(fileContentType)) {
             CoverArt coverArt = ValidatedImage(multipartImage, recordId);
             coverArtRepository.save(coverArt);
