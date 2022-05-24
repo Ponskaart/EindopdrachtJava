@@ -89,10 +89,8 @@ public class RecordService {
                 Record record = createRecord(recordRegistrationRequest);
                 return recordRepository.save(record);
             } else {
-                throw new ResourceNotFoundException(
-                        "Artist with name: " +
-                                recordRegistrationRequest.getArtistName() +
-                                ", does not exist");
+                throw new ResourceNotFoundException(messageService.artistNameNotFound(
+                        recordRegistrationRequest.getArtistName()));
             }
         }
     }
