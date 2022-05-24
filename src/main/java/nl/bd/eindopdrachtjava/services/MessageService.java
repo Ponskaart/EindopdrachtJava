@@ -4,7 +4,6 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class MessageService {
-
     public String recordIdNotFound(long recordId) {
         return String.format("Record with id %s was not found.", recordId) ;
     }
@@ -48,6 +47,18 @@ public class MessageService {
 
     public String artistIdNotFound(long artistId) {
         return String.format("Artist with id %s was not found.", artistId) ;
+    }
+
+    public String coverArtNotFound() {
+        return "No cover art was found.";
+    }
+
+    public String coverArtIdNotFound(long coverArtId) {
+        return String.format("Cover art with id %s was not found.", coverArtId) ;
+    }
+
+    public String invalidFileType() {
+        return "Only PNG files are accepted";
     }
 
 }

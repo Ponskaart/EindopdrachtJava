@@ -28,6 +28,7 @@ public class CoverArtService {
     private final CoverArtRepository coverArtRepository;
     private final RecordRepository recordRepository;
     private final RecordService recordService;
+    private final MessageService messageService;
 
     /**
      * Method saves an image to the database and returns the record object it belongs to if the file is a PNG.
@@ -38,10 +39,7 @@ public class CoverArtService {
         String fileContentType = multipartImage.getContentType();
 
         if (recordRepository.findById(recordId).isEmpty()) {
-            throw new ResourceNotFoundException(
-                    "Record with id " +
-                            recordId +
-                            ", does not exist");
+            throw new ResourceNotFoundException(messageService.recordIdNotFound(recordId));
         }
         return validateAndStore(multipartImage, recordId, fileContentType);
     }
@@ -53,13 +51,10 @@ public class CoverArtService {
     public ByteArrayResource retrieveCoverArt(Long recordId) throws ResourceNotFoundException {
         if (recordRepository.findById(recordId).isPresent()) {
             CoverArt coverArt = coverArtRepository.findCoverArtByRecordId(recordId).orElseThrow(() ->
-                    new ResourceNotFoundException("No cover art was found."));
+                    new ResourceNotFoundException(messageService.coverArtNotFound()));
             return new ByteArrayResource(coverArt.getContent());
         } else {
-            throw new ResourceNotFoundException(
-                    "Record with id " +
-                            recordId +
-                            ", was not found");
+            throw new ResourceNotFoundException(messageService.recordIdNotFound(recordId));
         }
     }
 
@@ -68,10 +63,7 @@ public class CoverArtService {
      */
     public void deleteCoverArt(Long coverArtId) {
         if (coverArtRepository.findById(coverArtId).isEmpty()) {
-            throw new ResourceNotFoundException(
-                    "CoverArt with id " +
-                            coverArtId +
-                            ", was not found");
+            throw new ResourceNotFoundException(messageService.coverArtIdNotFound(coverArtId));
         }
         coverArtRepository.deleteById(coverArtId);
     }
@@ -96,7 +88,7 @@ public class CoverArtService {
             coverArtRepository.save(coverArt);
             return recordService.updateCoverArt(recordId, coverArt.getCoverArtId());
         } else {
-            throw new InvalidFileException("Only PNG files are accepted");
+            throw new InvalidFileException(messageService.invalidFileType());
         }
     }
 }
