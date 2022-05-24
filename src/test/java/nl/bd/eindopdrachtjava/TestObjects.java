@@ -7,6 +7,9 @@ import nl.bd.eindopdrachtjava.models.requests.UserRegistrationRequest;
 import static nl.bd.eindopdrachtjava.models.enums.UserRole.ADMIN;
 import static nl.bd.eindopdrachtjava.models.enums.UserRole.CUSTOMER;
 
+/**
+ * Class only contains test objects
+ */
 public class TestObjects {
     public RecordRegistrationRequest createTestRecord1WithTestArtist1() {
         return new RecordRegistrationRequest(
