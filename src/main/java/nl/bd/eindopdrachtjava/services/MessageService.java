@@ -61,4 +61,18 @@ public class MessageService {
         return "Only PNG files are accepted";
     }
 
+    public String userNotFound() {
+        return "User does not exist";
+    }
+
+    public String userAlreadyExists(String username) {
+        return String.format("User with username: %s already exists!", username) ;
+    }
+
+    public String userIdNotFound(Long userId) {
+        return String.format("User with id %s was not found.", userId) ;
+    }
+
+
+
 }

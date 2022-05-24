@@ -14,9 +14,9 @@ import org.springframework.stereotype.Service;
 @AllArgsConstructor
 @Service
 public class UserService implements UserDetailsService {
-
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
+    private final MessageService messageService;
 
     /**
      * Loads user from the database if username exists.
@@ -24,7 +24,7 @@ public class UserService implements UserDetailsService {
     @Override
     public User loadUserByUsername(String username) throws UsernameNotFoundException {
         return userRepository.findByUsername(username)
-                .orElseThrow(() -> new UsernameNotFoundException("User does not exist!"));
+                .orElseThrow(() -> new UsernameNotFoundException(messageService.userNotFound()));
     }
 
     /**
@@ -32,10 +32,8 @@ public class UserService implements UserDetailsService {
      */
     public User registerUser(UserRegistrationRequest userRegistrationRequest) throws ResourceAlreadyExistsException {
         if (userExists(userRegistrationRequest)) {
-            throw new ResourceAlreadyExistsException(
-                    "User with username: " +
-                            userRegistrationRequest.getUsername() +
-                            " already exists!");
+            throw new ResourceAlreadyExistsException(messageService.userAlreadyExists(
+                    userRegistrationRequest.getUsername()));
         }
         User user = createUser(userRegistrationRequest);
         return userRepository.save(user);
@@ -54,10 +52,7 @@ public class UserService implements UserDetailsService {
      */
     public void deleteUser(Long userId) throws ResourceNotFoundException {
         if (userRepository.findById(userId).isEmpty()) {
-            throw new ResourceNotFoundException(
-                    "User with id " +
-                            userId +
-                            " was not found");
+            throw new ResourceNotFoundException(messageService.userIdNotFound(userId));
         }
         userRepository.deleteById(userId);
     }
