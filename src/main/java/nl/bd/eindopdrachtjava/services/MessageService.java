@@ -4,6 +4,9 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class MessageService {
+    /**
+     * Record related error messages
+     */
     public String recordIdNotFound(long recordId) {
         return String.format("Record with id %s was not found.", recordId) ;
     }
@@ -28,6 +31,9 @@ public class MessageService {
         return String.format("Record with name: %1s, and with artist: %2s, is already registered.", title, artistName) ;
     }
 
+    /**
+     * Artist related error messages
+     */
     public String artistNameNotFound(String artistName) {
         return String.format("No artist found with name: %s.", artistName) ;
     }
@@ -49,6 +55,9 @@ public class MessageService {
         return String.format("Artist with id %s was not found.", artistId) ;
     }
 
+    /**
+     * CoverArt related error messages
+     */
     public String coverArtNotFound() {
         return "No cover art was found.";
     }
@@ -61,6 +70,9 @@ public class MessageService {
         return "Only PNG files are accepted";
     }
 
+    /**
+     * User related error messages
+     */
     public String userNotFound() {
         return "User does not exist";
     }
@@ -72,7 +84,4 @@ public class MessageService {
     public String userIdNotFound(Long userId) {
         return String.format("User with id %s was not found.", userId) ;
     }
-
-
-
 }
