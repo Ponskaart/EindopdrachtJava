@@ -27,6 +27,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class ArtistIntegrationTests {
     public static final MediaType APPLICATION_JSON_UTF8 = new MediaType(MediaType.APPLICATION_JSON.getType(), MediaType.APPLICATION_JSON.getSubtype(), StandardCharsets.UTF_8);
     final ObjectMapper objectMapper = new ObjectMapper();
+    final TestObjects testObjects = new TestObjects();
+
     @Autowired
     private MockMvc mockMvc;
 
@@ -36,7 +38,7 @@ public class ArtistIntegrationTests {
     @Test
     public void registerArtistTest() throws Exception {
         //Arrange
-        ArtistRegistrationRequest artist1 = createTestArtist1();
+        ArtistRegistrationRequest artist1 = testObjects.createTestArtist1();
         String jsonBodyArtist1 = objectMapper.writeValueAsString(artist1);
 
         //Act
@@ -57,10 +59,6 @@ public class ArtistIntegrationTests {
      */
     @Test
     public void getAllArtistExceptionTest() throws Exception {
-        //Arrange
-
-        //Act
-
         //Assert
         this.mockMvc.perform(get("/recordstore/artists"))
                 .andDo(print())
@@ -73,7 +71,7 @@ public class ArtistIntegrationTests {
     @Test
     public void ArtistAlreadyExistsTest() throws Exception {
         //Arrange
-        ArtistRegistrationRequest artist1 = createTestArtist1();
+        ArtistRegistrationRequest artist1 = testObjects.createTestArtist1();
         String jsonBodyArtist1 = objectMapper.writeValueAsString(artist1);
 
         //Act
@@ -95,10 +93,10 @@ public class ArtistIntegrationTests {
     @Test
     public void getArtistByEstablishedTest() throws Exception {
         //Arrange
-        ArtistRegistrationRequest artist1 = createTestArtist1();
+        ArtistRegistrationRequest artist1 = testObjects.createTestArtist1();
         String jsonBodyArtist1 = objectMapper.writeValueAsString(artist1);
 
-        ArtistRegistrationRequest artist2 = createTestArtist2();
+        ArtistRegistrationRequest artist2 = testObjects.createTestArtist2();
         String jsonBodyArtist2 = objectMapper.writeValueAsString(artist2);
 
         //Act
@@ -124,10 +122,10 @@ public class ArtistIntegrationTests {
     @Test
     public void getArtistByInvalidEstablishedTest() throws Exception {
         //Arrange
-        ArtistRegistrationRequest artist1 = createTestArtist1();
+        ArtistRegistrationRequest artist1 = testObjects.createTestArtist1();
         String jsonBodyArtist1 = objectMapper.writeValueAsString(artist1);
 
-        ArtistRegistrationRequest artist2 = createTestArtist2();
+        ArtistRegistrationRequest artist2 = testObjects.createTestArtist2();
         String jsonBodyArtist2 = objectMapper.writeValueAsString(artist2);
 
         //Act
@@ -151,10 +149,10 @@ public class ArtistIntegrationTests {
     @Test
     public void getArtistArtistIdTest() throws Exception {
         //Arrange
-        ArtistRegistrationRequest artist1 = createTestArtist1();
+        ArtistRegistrationRequest artist1 = testObjects.createTestArtist1();
         String jsonBodyArtist1 = objectMapper.writeValueAsString(artist1);
 
-        ArtistRegistrationRequest artist2 = createTestArtist2();
+        ArtistRegistrationRequest artist2 = testObjects.createTestArtist2();
         String jsonBodyArtist2 = objectMapper.writeValueAsString(artist2);
 
         //Act
@@ -180,7 +178,7 @@ public class ArtistIntegrationTests {
     @Test
     public void getArtistInvalidArtistIdTest() throws Exception {
         //Arrange
-        ArtistRegistrationRequest artist1 = createTestArtist1();
+        ArtistRegistrationRequest artist1 = testObjects.createTestArtist1();
         String jsonBodyArtist1 = objectMapper.writeValueAsString(artist1);
 
         //Act
@@ -200,10 +198,10 @@ public class ArtistIntegrationTests {
     @Test
     public void getArtistArtistNameTest() throws Exception {
         //Arrange
-        ArtistRegistrationRequest artist1 = createTestArtist1();
+        ArtistRegistrationRequest artist1 = testObjects.createTestArtist1();
         String jsonBodyArtist1 = objectMapper.writeValueAsString(artist1);
 
-        ArtistRegistrationRequest artist2 = createTestArtist2();
+        ArtistRegistrationRequest artist2 = testObjects.createTestArtist2();
         String jsonBodyArtist2 = objectMapper.writeValueAsString(artist2);
 
         //Act
@@ -229,7 +227,7 @@ public class ArtistIntegrationTests {
     @Test
     public void getArtistInvalidArtistNameTest() throws Exception {
         //Arrange
-        ArtistRegistrationRequest artist1 = createTestArtist1();
+        ArtistRegistrationRequest artist1 = testObjects.createTestArtist1();
         String jsonBodyArtist1 = objectMapper.writeValueAsString(artist1);
 
         //Act
@@ -250,10 +248,10 @@ public class ArtistIntegrationTests {
     public void updateArtistTest() throws Exception {
         //Arrange
         //Artist 1 and update request
-        ArtistRegistrationRequest artist1 = createTestArtist1();
+        ArtistRegistrationRequest artist1 = testObjects.createTestArtist1();
         String jsonBodyArtist1 = objectMapper.writeValueAsString(artist1);
 
-        ArtistRegistrationRequest updatedArtist = updatedArtist();
+        ArtistRegistrationRequest updatedArtist = testObjects.updatedArtist();
         String jsonBodyUpdatedAtist = objectMapper.writeValueAsString(updatedArtist);
 
         //Act
@@ -280,10 +278,8 @@ public class ArtistIntegrationTests {
         //Arrange
         //Artist 1 and update request
 
-        ArtistRegistrationRequest updatedArtist = updatedArtist();
+        ArtistRegistrationRequest updatedArtist = testObjects.updatedArtist();
         String jsonBodyUpdatedAtist = objectMapper.writeValueAsString(updatedArtist);
-
-        //Act
 
         //Assert
         //Check if values actually changed
@@ -298,10 +294,10 @@ public class ArtistIntegrationTests {
     @Test
     public void deleteArtistByIdTest() throws Exception {
         //Arrange
-        ArtistRegistrationRequest artist1 = createTestArtist1();
+        ArtistRegistrationRequest artist1 = testObjects.createTestArtist1();
         String jsonBodyArtist1 = objectMapper.writeValueAsString(artist1);
 
-        ArtistRegistrationRequest artist2 = createTestArtist2();
+        ArtistRegistrationRequest artist2 = testObjects.createTestArtist2();
         String jsonBodyArtist2 = objectMapper.writeValueAsString(artist2);
 
         //Act
@@ -331,7 +327,7 @@ public class ArtistIntegrationTests {
     @Test
     public void deleteArtistByInvalidIdTest() throws Exception {
         //Arrange
-        ArtistRegistrationRequest artist1 = createTestArtist1();
+        ArtistRegistrationRequest artist1 = testObjects.createTestArtist1();
         String jsonBodyArtist1 = objectMapper.writeValueAsString(artist1);
 
         //Act
@@ -343,26 +339,5 @@ public class ArtistIntegrationTests {
         this.mockMvc.perform(delete("/recordstore/artists/" + 2))
                 .andDo(print())
                 .andExpect(status().isNotFound());
-    }
-
-    /**
-     * The following private methods contain registration requests for several artists for testing purposes.
-     */
-    private ArtistRegistrationRequest createTestArtist1() {
-        return new ArtistRegistrationRequest(
-                "Ben de Jager",
-                2001);
-    }
-
-    private ArtistRegistrationRequest createTestArtist2() {
-        return new ArtistRegistrationRequest(
-                "Ben de Knager",
-                2022);
-    }
-
-    private ArtistRegistrationRequest updatedArtist() {
-        return new ArtistRegistrationRequest(
-                "Bennardus IV, Hertog van Jagertopia",
-                1576);
     }
 }

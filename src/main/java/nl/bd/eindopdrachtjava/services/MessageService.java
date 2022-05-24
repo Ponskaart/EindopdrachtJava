@@ -8,7 +8,7 @@ public class MessageService {
      * Record related error messages
      */
     public String recordIdNotFound(long recordId) {
-        return String.format("Record with id %s was not found.", recordId) ;
+        return String.format("Record with id \"%s\" was not found.", recordId) ;
     }
 
     public String recordRepoEmpty() {
@@ -16,30 +16,30 @@ public class MessageService {
     }
 
     public String recordArtistIdNotFound(long artistId) {
-        return String.format("Record(s) with artistId %s were not found.", artistId) ;
+        return String.format("Record(s) with artistId \"%s\" were not found.", artistId) ;
     }
 
     public String recordTitleNotFound(String title) {
-        return String.format("Record with title: %s was not found.", title) ;
+        return String.format("Record with title: \"%s\" was not found.", title) ;
     }
 
     public String recordGenreNotFound(String genre) {
-        return String.format("No records found with genre: %s.", genre) ;
+        return String.format("No records found with genre: \"%s\".", genre) ;
     }
 
     public String recordAlreadyExists(String title, String artistName) {
-        return String.format("Record with name: %1s, and with artist: %2s, is already registered.", title, artistName) ;
+        return String.format("Record with name: \"%1s\", and with artist: \"%2s\", is already registered.", title, artistName) ;
     }
 
     /**
      * Artist related error messages
      */
     public String artistNameNotFound(String artistName) {
-        return String.format("No artist found with name: %s.", artistName) ;
+        return String.format("No artist found with name: \"%s\".", artistName) ;
     }
 
     public String artistAlreadyExists(String artistName, int established) {
-        return String.format("Artist with name: %1s, and with year established: %2s, is already registered.",
+        return String.format("Artist with name: \"%1s\", and with year established: \"%2s\", is already registered.",
                 artistName, established) ;
     }
 
@@ -48,11 +48,11 @@ public class MessageService {
     }
 
     public String artistEstablishedNotFound(int established) {
-        return String.format("No artist(s) were found with year of establishment: %s.", established) ;
+        return String.format("No artist(s) were found with year of establishment: \"%s\".", established) ;
     }
 
     public String artistIdNotFound(long artistId) {
-        return String.format("Artist with id %s was not found.", artistId) ;
+        return String.format("Artist with id \"%s\" was not found.", artistId) ;
     }
 
     /**
@@ -63,7 +63,7 @@ public class MessageService {
     }
 
     public String coverArtIdNotFound(long coverArtId) {
-        return String.format("Cover art with id %s was not found.", coverArtId) ;
+        return String.format("Cover art with id \"%s\" was not found.", coverArtId) ;
     }
 
     public String invalidFileType() {
@@ -78,10 +78,10 @@ public class MessageService {
     }
 
     public String userAlreadyExists(String username) {
-        return String.format("User with username: %s already exists!", username) ;
+        return String.format("User with username: \"%s\" already exists!", username) ;
     }
 
     public String userIdNotFound(Long userId) {
-        return String.format("User with id %s was not found.", userId) ;
+        return String.format("User with id \"%s\" was not found.", userId) ;
     }
 }
