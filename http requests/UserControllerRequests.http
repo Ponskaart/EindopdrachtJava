@@ -1,0 +1,36 @@
+###
+POST http://localhost:8080/recordstore/users/add
+Content-Type: application/json
+Authorization: Basic YWRtaW46VmVyeUdvb2RQYXNzd29yZA==
+
+{
+  "role": "CUSTOMER",
+  "username": "NewCustomer",
+  "password": "P4ssw0rd"
+}
+
+<> 2022-05-23T151230.200.json
+
+###
+PUT http://localhost:8080/recordstore/users/update/4
+Content-Type: application/json
+Authorization: Basic YWRtaW46VmVyeUdvb2RQYXNzd29yZA==
+
+{
+  "password": "PASSWORD"
+}
+
+<> 2022-05-23T151230-1.200.json
+
+###
+GET http://localhost:8080/recordstore/users/NewCustomer
+Accept: application/json
+Authorization: Basic YWRtaW46VmVyeUdvb2RQYXNzd29yZA==
+
+<> 2022-05-23T151231.200.json
+
+###
+DELETE http://localhost:8080/recordstore/users/4
+Authorization: Basic YWRtaW46VmVyeUdvb2RQYXNzd29yZA==
+
+<> 2022-05-23T151231.200.txt

@@ -14,9 +14,9 @@ import org.springframework.stereotype.Service;
 @AllArgsConstructor
 @Service
 public class UserService implements UserDetailsService {
-
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
+    private final MessageService messageService;
 
     /**
      * Loads user from the database if username exists.
@@ -24,7 +24,7 @@ public class UserService implements UserDetailsService {
     @Override
     public User loadUserByUsername(String username) throws UsernameNotFoundException {
         return userRepository.findByUsername(username)
-                .orElseThrow(() -> new UsernameNotFoundException("User does not exist!"));
+                .orElseThrow(() -> new UsernameNotFoundException(messageService.userNotFound()));
     }
 
     /**
@@ -33,10 +33,9 @@ public class UserService implements UserDetailsService {
     public User registerUser(UserRegistrationRequest userRegistrationRequest) throws ResourceAlreadyExistsException {
         if (userExists(userRegistrationRequest)) {
             throw new ResourceAlreadyExistsException(
-                    "User with username: " +
-                            userRegistrationRequest.getUsername() +
-                            " already exists!");
+                    messageService.userAlreadyExists(userRegistrationRequest.getUsername()));
         }
+
         User user = createUser(userRegistrationRequest);
         return userRepository.save(user);
     }
@@ -44,9 +43,10 @@ public class UserService implements UserDetailsService {
     /**
      * Checks if User with given Id exists and updates user.
      */
-    public User updateUser(UserRegistrationRequest userRegistrationRequest, Long userId) throws ResourceNotFoundException {
+    public User updateUser(UserRegistrationRequest userRegistrationRequest, Long userId)
+            throws ResourceNotFoundException {
         return userRepository.findById(userId).map(user -> updatedUser(userRegistrationRequest, user))
-                .orElseThrow(() -> new ResourceNotFoundException("User with id " + userId + " was not found"));
+                .orElseThrow(() -> new ResourceNotFoundException(messageService.userIdNotFound(userId)));
     }
 
     /**
@@ -54,10 +54,7 @@ public class UserService implements UserDetailsService {
      */
     public void deleteUser(Long userId) throws ResourceNotFoundException {
         if (userRepository.findById(userId).isEmpty()) {
-            throw new ResourceNotFoundException(
-                    "User with id " +
-                            userId +
-                            " was not found");
+            throw new ResourceNotFoundException(messageService.userIdNotFound(userId));
         }
         userRepository.deleteById(userId);
     }
@@ -87,11 +84,9 @@ public class UserService implements UserDetailsService {
         if (userRegistrationRequest.getUsername() != null) {
             user.setUsername(userRegistrationRequest.getUsername());
         }
-
         if (userRegistrationRequest.getPassword() != null) {
             user.setPassword(bCryptPasswordEncoder.encode(userRegistrationRequest.getPassword()));
         }
-
         if (userRegistrationRequest.getRole() != null) {
             user.setRole(userRegistrationRequest.getRole());
         }

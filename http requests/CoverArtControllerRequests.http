@@ -1,0 +1,51 @@
+###
+POST http://localhost:8080/recordstore/coverart/upload/1
+Authorization: Basic YWRtaW46VmVyeUdvb2RQYXNzd29yZA==
+Content-Type: multipart/form-data; boundary=--WebKitFormBoundary7MA4YWxkTrZu0gW
+
+----WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="multipartImage"; filename="CoverArt.png"
+Content-Type: image/png
+
+< src/main/resources/CoverArt.png
+----WebKitFormBoundary7MA4YWxkTrZu0gW--
+
+<> 2022-05-23T151224.200.json
+
+
+###
+GET http://localhost:8080/recordstore/coverart/download/1
+Authorization: Basic Q3VzdG9tZXI6RXZlbkJldHRlclBhc3N3b3Jk
+
+<> CoverArt-1.png
+
+
+###
+GET http://localhost:8080/recordstore/coverart/view/1
+Authorization: Basic Q3VzdG9tZXI6RXZlbkJldHRlclBhc3N3b3Jk
+Accept: image/png
+
+<> 2022-05-23T151224.200.png
+
+
+###
+PUT http://localhost:8080/recordstore/coverart/1
+Authorization: Basic YWRtaW46VmVyeUdvb2RQYXNzd29yZA==
+Content-Type: multipart/form-data; boundary=--WebKitFormBoundary7MA4YWxkTrZu0gW
+
+----WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="multipartImage"; filename="CoverArt.png"
+Content-Type: image/png
+
+< src/main/resources/CoverArt2.png
+----WebKitFormBoundary7MA4YWxkTrZu0gW--
+
+<> 2022-05-23T151225.200.json
+
+
+###
+DELETE http://localhost:8080/recordstore/coverart/2
+Authorization: Basic YWRtaW46VmVyeUdvb2RQYXNzd29yZA==
+
+<> 2022-05-23T151225.404.txt
+
