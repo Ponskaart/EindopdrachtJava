@@ -42,7 +42,10 @@ public class Artist {
      * accessed in the api.
      */
     @JsonIgnore
-    @OneToMany(mappedBy = "artist")
+    @OneToMany(
+            mappedBy = "artist",
+            cascade = CascadeType.ALL
+    )
     private Set<Record> records = new HashSet<>();
 
     public Artist(String artistName, int established) {
