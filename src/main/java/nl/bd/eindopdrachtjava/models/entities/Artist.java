@@ -39,7 +39,7 @@ public class Artist {
 
     /**
      * The @JsonIgnore annotation is used to prevent a recursive loop when the relationship between artist and record is
-     * accessed in the api.
+     * accessed in the api. CascadeType.ALL ensures no records of deleted artist remain in database.
      */
     @JsonIgnore
     @OneToMany(
